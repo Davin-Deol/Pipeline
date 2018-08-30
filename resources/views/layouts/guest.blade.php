@@ -218,7 +218,7 @@
 
         </div>
         <div class="footer-copyright text-center py-3" style="margin-top:1em;">© 2018 Copyright:
-            <a href="http://pipeline-listings.ca/"> Pipeline-Listings.ca</a> | <a href="{{ route('guest-cookiePolicy') }}">Cookie Policy</a>
+            <a href="http://pipeline-listings.ca/"> Pipeline-Listings.ca</a> | <a href="{{ route('guest-cookiePolicy') }}">Cookies Policy</a>
         </div>
     </footer>
 </body>
