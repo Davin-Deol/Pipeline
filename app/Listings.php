@@ -8,9 +8,12 @@ use Illuminate\Support\Facades\DB;
 class Listings extends Model
 {
     protected $table = 'Listings';
-    public $timestamps = false;
     protected $primaryKey = 'listingID';
     public $incrementing = false;
+    
+    const CREATED_AT = 'creationDate';
+    const UPDATED_AT = 'lastUpdated';
+    
     private $maps = ['users_usersId' => 'userId'];
     
     /**
