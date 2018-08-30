@@ -70,6 +70,7 @@ class UserController extends Controller
                         ->orWhere('introduction', 'LIKE', "%" . $searchKey . "%")
                         ->orWhere('additionalDetails', 'LIKE', "%" . $searchKey . "%");
                 })
+            ->orderBy('whenAdded', 'DESC')
             ->get();
         
         return view('user/browseListings', compact('data', 'listings'));
