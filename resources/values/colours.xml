@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <all>
+        <colourPrimary>#1b6cb0</colourPrimary>
+        <textColourOnPrimary>#ffffff</textColourOnPrimary>
+        <backgroundColourTransparency>0.2</backgroundColourTransparency>
+    </all>
+    <loggedOut>
+        <credits>
+            <backgroundColour>#000000</backgroundColour>
+        </credits>
+    </loggedOut>
+</resources>
