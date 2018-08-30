@@ -26,8 +26,8 @@ class CreateListingsTable extends Migration
             $table->decimal('priceBracketMax', 11, 2);
             $table->string('additionalDetails', 4095);
             $table->string('status', 63);
-            $table->dateTime('whenAdded');
             $table->string('userId', 63)->references('userId')->on('users');
+            $table->timestamps();
         });
     }
 
