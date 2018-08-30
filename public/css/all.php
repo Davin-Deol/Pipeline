@@ -39,13 +39,13 @@ h1 {
 }
 
 h2 {
-    font-size: 1.5em;
-    margin-top: 0;
-    font-weight: 300;
+    font-size: 2.5em;
 }
 
 h3 {
-    font-size: 2.5em;
+    font-size: 1.7em;
+    margin-top: 0;
+    font-weight: 300;
 }
 
 h4 {
@@ -414,7 +414,7 @@ if (!$detect->isMobile() || $detect->isTablet()) { ?>
     }
 
     h3 {
-        font-size: 2.5em;
+        font-size: 1.7em;
     }
 
     h4 {
