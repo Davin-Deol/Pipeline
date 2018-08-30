@@ -38,7 +38,7 @@
                     <b>Sub Category</b>
                     <select class="form-control" id="subCategory" name="subCategory">
                         @foreach ($interests as $interest)
-                            @if ($listing->category == $interest)
+                            @if ($listing->subCategory == $interest->interest)
                                 <option selected>{{ $interest['interest'] }}</option>
                             @else
                                 <option>{{ $interest['interest'] }}</option>
@@ -50,7 +50,7 @@
                     <b>Juristiction</b>
                     <select class="form-control" id="jurisdiction" name="jurisdiction">
                         @foreach ($jurisdictions as $jurisdiction)
-                            @if ($listing->jurisdiction == $jurisdiction)
+                            @if ($listing->jurisdiction == $jurisdiction->jurisdiction)
                                 <option selected>{{ $jurisdiction['jurisdiction'] }}</option>
                             @else
                                 <option>{{ $jurisdiction['jurisdiction'] }}</option>
@@ -62,7 +62,7 @@
                     <b>Investment Type</b>
                     <select class="form-control" id="investmentType" name="investmentType">
                         @foreach ($investmentTypes as $investmentType)
-                            @if ($listing->investmentType == $investmentType)
+                            @if ($listing->investmentType == $investmentType->investmentType)
                                 <option selected>{{ $investmentType['investmentType'] }}</option>
                             @else
                                 <option>{{ $investmentType['investmentType'] }}</option>
@@ -80,7 +80,7 @@
                 <div class="col-sm-4">
                     <select class="form-control" id="typeOfCurrency" name="typeOfCurrency">
                         @foreach ($currencies as $currency)
-                            @if ($listing->typeOfCurrency == $currency)
+                            @if ($listing->typeOfCurrency == $currency->currency)
                                 <option selected>{!! $currency['currency'] !!}</option>
                             @else
                                 <option>{!! $currency['currency'] !!}</option>
