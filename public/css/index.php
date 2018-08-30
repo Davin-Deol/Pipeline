@@ -30,6 +30,10 @@ h1 {
     font-size: 5em;
 }
 
+h2 {
+    font-weight: 300;
+}
+
 h3 {
     text-align: center;
 }

@@ -23,7 +23,7 @@
     @endif
         <div class="row">
             <div class="col-md-8">
-                <h2 style="margin: 0;">{{ $listing->name }}</h2>
+                <h3 style="margin: 0;">{{ $listing->name }}</h3>
             </div>
             <div class="col-md-4">
                 <p style="color:green;font-size:1.5em;font-weight:300;">{!! $listing->typeOfCurrency !!}{{ number_format($listing->priceBracketMin) }} - {{ number_format($listing->priceBracketMax) }}</p>

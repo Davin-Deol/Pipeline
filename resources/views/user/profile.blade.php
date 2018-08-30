@@ -52,7 +52,7 @@
                 <div class="col-xs-12">
                     @foreach ($statistics as $statistic => $datapoint)
                         <hr>
-                        <h2>{{ ucwords($statistic) }}</h2>
+                        <h3>{{ ucwords($statistic) }}</h3>
                         @foreach ($datapoint as $value)
                             <div class="row">
                                 <div class="col-xs-8">
