@@ -368,7 +368,7 @@ class UserController extends Controller
         return redirect()->route('user-manageAccount');
     }
     
-    public function createListing()
+    public function createListing(Request $request)
     {
         $data = array();
         
@@ -392,7 +392,13 @@ class UserController extends Controller
         
         $listingImages = array();
         
-        return view('user/listingForm', compact('data', 'listing', 'listingImages', 'currencies', 'interests', 'investmentTypes', 'jurisdictions'));
+        $lastInputsUsed = $request->cookie('listingForm_LastInputsUsed');
+        if ($lastInputsUsed !== null)
+        {
+            $lastInputsUsed = json_decode($lastInputsUsed);
+        }
+        
+        return view('user/listingForm', compact('data', 'listing', 'listingImages', 'currencies', 'interests', 'investmentTypes', 'jurisdictions', 'lastInputsUsed'));
     }
     
     public function saveListing(Request $request)
@@ -425,10 +431,17 @@ class UserController extends Controller
             $listing = UserController::verifyListing($data, $files);
             $request->session()->put('success', 'Successfuly saved listing');
         }
-        return redirect()->route('user-editListing', ['listingID' => $listing->listingID]);
+        return redirect()->route('user-editListing', ['listingID' => $listing->listingID])
+            ->withCookie(cookie()->forever('listingForm_LastInputsUsed', json_encode([
+                'category' => $data["category"],
+                'subCategory' => $data["subCategory"],
+                'jurisdiction' => $data["jurisdiction"],
+                'investmentType' => $data["investmentType"],
+                'typeOfCurrency' => $data["typeOfCurrency"]
+            ])));
     }
     
-    public function editListing($listingID)
+    public function editListing($listingID, Request $request)
     {
         $data = array();
         
@@ -457,8 +470,13 @@ class UserController extends Controller
             $listing->status = "draft";
             $listing->save();
         }
+        $lastInputsUsed = $request->cookie('listingForm_LastInputsUsed');
+        if ($lastInputsUsed !== null)
+        {
+            $lastInputsUsed = json_decode($lastInputsUsed);
+        }
         
-        return view('user/listingForm', compact('data', 'listing', 'listingImages', 'currencies', 'interests', 'investmentTypes', 'jurisdictions'));
+        return view('user/listingForm', compact('data', 'listing', 'listingImages', 'currencies', 'interests', 'investmentTypes', 'jurisdictions', 'lastInputsUsed'));
     }
     
     public function deleteListing(Request $request)
@@ -565,7 +583,14 @@ class UserController extends Controller
                 $request->session()->put('error', $validator->errors()->all());
             }
         }
-        return redirect()->route("user-editListing", ['listingID' => $listing->listingID]);
+        return redirect()->route("user-editListing", ['listingID' => $listing->listingID])
+            ->withCookie(cookie()->forever('listingForm_LastInputsUsed', json_encode([
+                'category' => $data["category"],
+                'subCategory' => $data["subCategory"],
+                'jurisdiction' => $data["jurisdiction"],
+                'investmentType' => $data["investmentType"],
+                'typeOfCurrency' => $data["typeOfCurrency"]
+            ])));
     }
     
     public function verifyListing($data, $files)

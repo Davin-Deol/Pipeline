@@ -28,6 +28,14 @@
                         @if ($listing->category == "Looking to Invest")
                             <option>Looking for Investments</option>
                             <option selected>Looking to Invest</option>
+                        @elseif ($lastInputsUsed !== null)
+                            @if ($lastInputsUsed->category == "Looking for Investments")
+                                <option selected>Looking for Investments</option>
+                                <option>Looking to Invest</option>
+                            @else
+                                <option>Looking for Investments</option>
+                                <option selected>Looking to Invest</option>
+                            @endif
                         @else
                             <option selected>Looking for Investments</option>
                             <option>Looking to Invest</option>
@@ -40,6 +48,12 @@
                         @foreach ($interests as $interest)
                             @if ($listing->subCategory == $interest->interest)
                                 <option selected>{{ $interest['interest'] }}</option>
+                            @elseif ($lastInputsUsed !== null)
+                                @if ($lastInputsUsed->subCategory == $interest->interest)
+                                    <option selected>{{ $interest['interest'] }}</option>
+                                @else
+                                    <option>{{ $interest['interest'] }}</option>
+                                @endif
                             @else
                                 <option>{{ $interest['interest'] }}</option>
                             @endif
@@ -52,6 +66,12 @@
                         @foreach ($jurisdictions as $jurisdiction)
                             @if ($listing->jurisdiction == $jurisdiction->jurisdiction)
                                 <option selected>{{ $jurisdiction['jurisdiction'] }}</option>
+                            @elseif ($lastInputsUsed !== null)
+                                @if ($lastInputsUsed->jurisdiction == $jurisdiction->jurisdiction)
+                                    <option selected>{{ $jurisdiction['jurisdiction'] }}</option>
+                                @else
+                                    <option>{{ $jurisdiction['jurisdiction'] }}</option>
+                                @endif
                             @else
                                 <option>{{ $jurisdiction['jurisdiction'] }}</option>
                             @endif
@@ -64,6 +84,12 @@
                         @foreach ($investmentTypes as $investmentType)
                             @if ($listing->investmentType == $investmentType->investmentType)
                                 <option selected>{{ $investmentType['investmentType'] }}</option>
+                            @elseif ($lastInputsUsed !== null)
+                                @if ($lastInputsUsed->investmentType == $investmentType->investmentType)
+                                    <option selected>{{ $investmentType['investmentType'] }}</option>
+                                @else
+                                    <option>{{ $investmentType['investmentType'] }}</option>
+                                @endif
                             @else
                                 <option>{{ $investmentType['investmentType'] }}</option>
                             @endif
@@ -82,6 +108,12 @@
                         @foreach ($currencies as $currency)
                             @if ($listing->typeOfCurrency == $currency->currency)
                                 <option selected>{!! $currency['currency'] !!}</option>
+                            @elseif ($lastInputsUsed !== null)
+                                @if ($lastInputsUsed->typeOfCurrency == $currency->currency)
+                                    <option selected>{!! $currency['currency'] !!}</option>
+                                @else
+                                    <option>{!! $currency['currency'] !!}</option>
+                                @endif
                             @else
                                 <option>{!! $currency['currency'] !!}</option>
                             @endif
