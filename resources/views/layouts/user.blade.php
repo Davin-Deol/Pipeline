@@ -123,7 +123,9 @@
                             </li>
                         @if (($user->type == "admin") || ($user->type == "demo-admin"))
                             <li class="dropdown">
-                                <a class="dropdown-toggle" data-toggle="dropdown" href="#">Admin<span class="caret"></span></a>
+                                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                    <span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Admin<span class="caret"></span>
+                                </a>
                                 <ul class="dropdown-menu">
                                     <li><a href="{{ route('admin-listingsPendingReview') }}">Listings Pending Review</a></li>
                                     <li><a href="{{ route('admin-requests') }}">Requests</a></li>
@@ -150,7 +152,11 @@
                                 <ul class="dropdown-menu">
                                     <li><a href="{{ route('user-profile') }}">Profile</a></li>
                                     <li><a href="{{ route('user-manageAccount') }}">Manage Account</a></li>
-                                    <li><a href="{{ route('user-logout') }}">Logout</a></li>
+                                    <li>
+                                        <a href="{{ route('user-logout') }}">
+                                            <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span> Logout
+                                        </a>
+                                    </li>
                                 </ul>
                             </li>
                         </ul>

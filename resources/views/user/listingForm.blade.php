@@ -1,10 +1,10 @@
 @extends('layouts.user') @section('content')
 <div class="col-lg-12">
     <div class="field">
-        @if ($user->userId)
-            <h1>Edit Listing</h1>
-        @else
+        @if ($data['newListing'])
             <h1>Create a New Listing</h1>
+        @else
+            <h1>Edit Listing</h1>
         @endif
 
         <form class="form-horizontal" action="" method="POST" enctype="multipart/form-data">
@@ -156,13 +156,19 @@
             @endif
             <div class="row">
                 <div class="col-sm-4">
-                    <button type="submit" class="button" formaction="{{ route('user-deleteListing') }}">Delete</button>
+                    <button type="submit" class="button" formaction="{{ route('user-deleteListing') }}">
+                        <span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Delete
+                    </button>
                 </div>
                 <div class="col-sm-4">
-                    <button type="submit" class="button" formaction="{{ route('user-saveListing') }}">Save</button>
+                    <button type="submit" class="button" formaction="{{ route('user-saveListing') }}">
+                        <span class="glyphicon glyphicon-floppy-save" aria-hidden="true"></span> Save
+                    </button>
                 </div>
                 <div class="col-sm-4">
-                    <button type="submit" class="button" formaction="{{ route('user-submitListingForReview') }}">Review</button>
+                    <button type="submit" class="button" formaction="{{ route('user-submitListingForReview') }}">
+                        <span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span> Review
+                    </button>
                 </div>
             </div>
         </form>

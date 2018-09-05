@@ -398,6 +398,8 @@ class UserController extends Controller
             $lastInputsUsed = json_decode($lastInputsUsed);
         }
         
+        $data["newListing"] = true;
+        
         return view('user/listingForm', compact('data', 'listing', 'listingImages', 'currencies', 'interests', 'investmentTypes', 'jurisdictions', 'lastInputsUsed'));
     }
     
@@ -475,6 +477,8 @@ class UserController extends Controller
         {
             $lastInputsUsed = json_decode($lastInputsUsed);
         }
+        
+        $data["newListing"] = false;
         
         return view('user/listingForm', compact('data', 'listing', 'listingImages', 'currencies', 'interests', 'investmentTypes', 'jurisdictions', 'lastInputsUsed'));
     }
@@ -689,7 +693,7 @@ class UserController extends Controller
             abort(404);
         }
         
-        if (($listing->status != "posted") && (Auth::user()->type != "admin") && (Auth::user()->userId != $listing->userId))
+        if (($listing->status != "posted") && ((Auth::user()->type != "admin") && (Auth::user()->type != "demo-admin")) && (Auth::user()->userId != $listing->userId))
         {
             return back();
         }

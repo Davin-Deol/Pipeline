@@ -17,21 +17,21 @@
             <div class="row">
                 @if ($user->location)
                     <div class="col-sm-6 col-xs-12">
-                        <p><img src="public/img/Icons/Location.png" style="width: 1.5em;"/> {{ $user->location }}</p><br />
+                        <p><span class="glyphicon glyphicon-map-marker secondary" aria-hidden="true"></span> {{ $user->location }}</p><br />
                         @php
                             $datetime1 = new DateTime($user->birthday);
                             $datetime2 = new DateTime();
                             $interval = $datetime1->diff($datetime2);
                         @endphp
-                        <p><img src="public/img/Icons/Birthday.png" style="width: 1.5em;"/> {{ $interval->format('%y years old') }}</p><br />
+                        <p><span class="glyphicon glyphicon-calendar secondary" aria-hidden="true"></span> {{ $interval->format('%y years old') }}</p><br />
                     </div>
                 @endif
 
                 @if ($user->birthday > 0)
                     <div class="col-sm-6 col-xs-12">
-                        <p><img src="{{ asset('public/img/Icons/Email.png') }}" style="width: 1.5em;"/> {{ $user->email }}</p><br />
+                        <p><span class="glyphicon glyphicon-envelope secondary" aria-hidden="true"></span> {{ $user->email }}</p><br />
                         @if ($user->linkedInURL)
-                            <p><a href="{{ $user->linkedInURL }}" target="_blank"><img src="{{ asset('public/img/Icons/LinkedInLogo.png') }}" style="width: 1.5em; height: 1.5em;"/> LinkedIn</a></p>
+                            <p><a href="{{ $user->linkedInURL }}" target="_blank"><img src="{{ asset('public/img/Icons/LinkedInLogo.png') }}" style="width: 1em; height: 1em;"/> LinkedIn</a></p>
                         @endif
                     </div>
                 @endif

@@ -7,7 +7,7 @@
                 <h4>How To Submit NDA:</h4>
             <div class="col-md-6">
                 <ol>
-                    <li>Print the NDA found <a href="NDA.php" target="_blank">here</a></li>
+                    <li>Print the NDA found <a href="{{ asset('public/img/NDAs/nda.pdf') }}" target="_blank">here</a></li>
                     <li>Sign it</li>
                     <li>Take a picture or scan the signed document</li>
                     <li>Upload the document here</li>
@@ -19,9 +19,15 @@
                     {{ csrf_field() }}
                     <b>Status: {{ ucwords($user->NDAStatus) }}</b>
                     <input type="file" id="NDA" name="NDA" accept="image/*">
-                    <label for="NDA">Upload NDA</label> @if ($user->NDAStatus == "submitted")
-                    <i style="float:right;">Last Updated: {{ $data['NDALastModified'] }}</i> @endif
-                    <button type="submit" class="btn btn-default button" name="submitNDA" style="margin-top:2%;">Submit NDA</button>
+                    <label for="NDA">
+                        <span class="glyphicon glyphicon-upload" aria-hidden="true"></span> Upload NDA
+                    </label>
+                    @if ($user->NDAStatus == "submitted")
+                        <i style="float:right;">Last Updated: {{ $data['NDALastModified'] }}</i>
+                    @endif
+                    <button type="submit" class="btn btn-default button" name="submitNDA" style="margin-top:2%;">
+                        <span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span> Submit NDA
+                    </button>
                 </form>
             </div>
         </div>
@@ -41,7 +47,9 @@
                 <b>Confirm Password</b>
                 <input type="password" class="form-control" id="confirm_password" name="confirm_password" placeholder="Confirm Password">
 
-                <button type="submit" class="btn btn-default button" name="submitChangePassword">Change Password</button>
+                <button type="submit" class="btn btn-default button" name="submitChangePassword">
+                    <span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span> Change Password
+                </button>
             </form>
 
         </div>
@@ -59,7 +67,9 @@
                                 <img style="border:1px solid black;margin-bottom:5%;" src="public/img/Profile-Images/Default-User-Profile-Image.png" width="100%" id="profileImageDisplay" />
                             @endif
                             <input type="file" id="profile_image" name="profile_image" accept="image/*">
-                            <label for="profile_image" style="margin-bottom:5%;">Change Profile Image</label>
+                            <label for="profile_image" style="margin-bottom:5%;">
+                                <span class="glyphicon glyphicon-upload" aria-hidden="true"></span> Change Profile Image
+                            </label>
                             <script>
                                 $("#profile_image").change(function() {
                                     if ($("#profile_image")[0].files.length)
@@ -96,7 +106,9 @@ We have the ability to operate and build any mining development zones you can th
                         <input type="text" class="form-control" id="linkedInURL" name="linkedInURL" placeholder="https://www.linkedin.com/in/joeycassklein/" value="{{ $user->linkedInURL }}">
                     </div>
                 </div>
-                <button type="submit" class="btn btn-default button" name="submitUpdateProfile">Update Profile</button>
+                <button type="submit" class="btn btn-default button" name="submitUpdateProfile">
+                    <span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span> Update Profile
+                </button>
             </form>
         </div>
     </div>

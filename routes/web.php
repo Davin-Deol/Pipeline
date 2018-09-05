@@ -47,8 +47,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/submitListingForApproval', 'UserController@submitListingForApproval')->name('user-submitListingForApproval');
     Route::post('/requestConnection', 'UserController@requestConnection')->name('user-requestConnection');
     Route::post('/cancelConnectionRequest', 'UserController@cancelConnectionRequest')->name('user-cancelConnectionRequest');
-    
-    
+        
     Route::group(['middleware' => 'AdminOnly'], function () {
         Route::get('/listingsPendingReview', 'AdminController@listingsPendingReview')->name('admin-listingsPendingReview');
         Route::post('/denyListing', 'AdminController@denyListing')->name('admin-denyListing');

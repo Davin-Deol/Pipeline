@@ -83,7 +83,7 @@
                                 </div>
                                 <span>Keep me signed in</span>
                             </label>
-                            <input type="submit" name="submitLogin" id="submitLogin" value="Login" class="button">
+                            <button type="submit" name="submitLogin" id="submitLogin" value="Login" class="button"><span class="glyphicon glyphicon-log-in" aria-hidden="true"></span> Login</button>
                         </div>
                     </form>
                     <button class="alternativeOptions" type="submit" name="requestInvitation" onclick="displayRequestInvitationForm()">Request Invitation</button>
@@ -138,7 +138,7 @@
                                 </div>
                             </div>
 
-                            <input type="submit" name="submitRequestInvitation" value="Send Request" class="button">
+                            <button type="submit" name="submitRequestInvitation" value="Send Request" class="button"><span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span> Submit</button>
                         </div>
                     </form>
                     <button class="alternativeOptions" type="submit" name="forgotPassword" onclick="displayForgotPassword()">Forgot Password</button>
@@ -161,7 +161,7 @@
                     <form class="cf" method="post" action="" id="forgotPasswordForm">
                         <div id="formBox">
                             <input type="email" id="forgotPasswordEmail" name="email" placeholder="Email" required>
-                            <input type="submit" name="submitForgotPassword" value="Submit Email" class="button">
+                            <button type="submit" name="submitForgotPassword" value="Submit Email" class="button"><span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span> Submit Email</button>
                         </div>
                     </form>
                     <button class="alternativeOptions" type="submit" name="requestInvitation" onclick="displayRequestInvitationForm()">Request Invitation</button>

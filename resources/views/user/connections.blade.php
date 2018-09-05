@@ -11,7 +11,9 @@
                     </div>
                     <div class="row">
                         <div class="col-xs-6">
-                            <button class="button" id="cancelButton">Cancel</button>
+                            <button class="button" id="cancelButton">
+                                <span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span> Cancel
+                            </button>
                         </div>
                         <div class="col-xs-6">
                             <button onclick="" id="confirmationButton" class="button"></button>
@@ -45,24 +47,36 @@
                 <div class="row">
                     @if (($connection->creatorId == $user->userId) and ($connection->status == "pending creator approval"))
                         <div class="col-xs-6">
-                            <button class="denyButton button">Deny</button>
+                            <button class="denyButton button">
+                                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Deny
+                            </button>
                         </div>
                         <div class="col-xs-6">
-                            <button class="approveButton button">Approve</button>
+                            <button class="approveButton button">
+                                <span class="glyphicon glyphicon-ok" aria-hidden="true"></span> Approve
+                            </button>
                         </div>
                     @elseif (($connection->creatorId != $user->userId) and ($connection->status == "pending creator approval"))
                         <div class="col-xs-6">
-                            <a class="button" href="{{ route('user-reviewListing', ['listingID' => $connection->listingId]) }}">Review</a>
+                            <a class="button" href="{{ route('user-reviewListing', ['listingID' => $connection->listingId]) }}">
+                                <span class="glyphicon glyphicon-search" aria-hidden="true"></span> Review
+                            </a>
                         </div>
                         <div class="col-xs-6">
-                            <button class="button" class="cancelConnectionRequest">Cancel Request</button>
+                            <button class="button" class="cancelConnectionRequest">
+                                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Cancel Request
+                            </button>
                         </div>
                     @else
                         <div class="col-xs-6">
-                            <a href="{{ route('user-reviewListing', ['listingID' => $connection->listingId]) }}" class="button">Review</a>
+                            <a href="{{ route('user-reviewListing', ['listingID' => $connection->listingId]) }}" class="button">
+                                <span class="glyphicon glyphicon-search" aria-hidden="true"></span> Review
+                            </a>
                         </div>
                         <div class="col-xs-6">
-                            <button class="deleteButton button" value="{{ $connection->listingId }}">Remove Connection</button>
+                            <button class="deleteButton button" value="{{ $connection->listingId }}">
+                                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Remove Connection
+                            </button>
                         </div>
                     @endif
                     <input type="hidden" class="creatorId" value="{{ $connection->creatorId }}" />
@@ -81,7 +95,7 @@
             $(document).ready(function() {
                 $(".cancelConnectionRequest").click(function() {
                     $("#confirmationModal").css("display", "block");
-                    $("#confirmationButton").html("Cancel Connection Request");
+                    $("#confirmationButton").html("<span class='glyphicon glyphicon-remove' aria-hidden='true'></span> Cancel Connection Request");
                     $("#confirmationButton").attr("onclick", "cancelConnectionRequest(this);");
                     $("#confirmationButton").attr("value", $(this).parent().parent().parent().attr("id"));
                     $("#confirmationMessage").text("Are you sure you want to cancel your connection request?");
@@ -89,7 +103,7 @@
                 
                 $(".deleteButton").click(function() {
                     $("#confirmationModal").css("display", "block");
-                    $("#confirmationButton").html("Delete");
+                    $("#confirmationButton").html("<span class='glyphicon glyphicon-remove' aria-hidden='true'></span> Delete");
                     $("#confirmationMessage").text("This action cannot be undone. Are you sure you want to cancel your connection?");
                     $("#confirmationButton").attr("onclick", "deleteConnection();");
                     
@@ -103,7 +117,7 @@
                 });
                 $(".denyButton").click(function() {
                     $("#confirmationModal").css("display", "block");
-                    $("#confirmationButton").html("Deny");
+                    $("#confirmationButton").html("<span class='glyphicon glyphicon-remove' aria-hidden='true'></span> Deny");
                     $("#confirmationMessage").text("Are you sure you want to deny this connection?");
                     $("#confirmationButton").attr("onclick", "denyConnection();");
                     
@@ -117,7 +131,7 @@
                 });
                 $(".approveButton").click(function() {
                     $("#confirmationModal").css("display", "block");
-                    $("#confirmationButton").html("Approve");
+                    $("#confirmationButton").html("<span class='glyphicon glyphicon-ok' aria-hidden='true'></span> Approve");
                     $("#confirmationMessage").text("Are you sure you want to approve this connection?");
                     $("#confirmationButton").attr("onclick", "approveConnection();");
                     

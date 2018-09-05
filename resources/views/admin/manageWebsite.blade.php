@@ -24,7 +24,9 @@
         </div>
         <div class="row">
             <div class="col-lg-12">
-                <button type="button" class="button" id="updateTheme">Update Theme</button>
+                <button type="button" class="button" id="updateTheme">
+                    <span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span> Update Theme
+                </button>
             </div>
         </div>
     </form>
@@ -38,7 +40,9 @@
                 <b>Row One Image</b>
                 <img id="RowOneImage" src="{{ $data['indexImages'][0] }}" width="100%">
                 <input type="file" id="rowOneImage" name="rowOneImage" accept="image/*">
-                <label for="rowOneImage">Change Image</label>
+                <label for="rowOneImage">
+                    <span class="glyphicon glyphicon-upload" aria-hidden="true"></span> Change Image
+                </label>
             </div>
             <div class="col-lg-8 col-md-6 col-sm-6">
                 <b>Row One Header</b>
@@ -61,12 +65,16 @@
                 <b>Row Two Image</b>
                 <img id="RowTwoImage" src="{{ $data['indexImages'][1] }}" width="100%">
                 <input type="file" id="rowTwoImage" name="rowTwoImage" accept="image/*">
-                <label for="rowTwoImage">Change Image</label>
+                <label for="rowTwoImage">
+                    <span class="glyphicon glyphicon-upload" aria-hidden="true"></span> Change Image
+                </label>
             </div>
         </div>
         <div class="row">
             <div class="col-lg-12">
-                <button type="button" class="button" id="updateHomepage">Update Homepage</button>
+                <button type="button" class="button" id="updateHomepage">
+                    <span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span> Update Homepage
+                </button>
             </div>
         </div>
     </form>
@@ -80,7 +88,9 @@
             <input type="color" class="form-control" id="backgroundColour" name="backgroundColour" value="{{ $data['creditsBackgroundColour'] }}"/>
         </div>
         <textarea class="form-control" rows="10" id="creditsBody" name="creditsBody">{{ stripslashes(htmlspecialchars_decode($data['credits'], ENT_NOQUOTES)) }}</textarea>
-        <button type="button" class="button" id="updateCredits">Update Credits</button>
+        <button type="button" class="button" id="updateCredits">
+            <span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span> Update Credits
+        </button>
     </form>
 </div>
 
@@ -88,7 +98,9 @@
     <h1>Update Cookie Policy</h1>
     <form class="form-horizontal" id="updateCookiesForm" enctype="multipart/form-data">
         <textarea class="form-control" rows="10" id="cookie" name="cookie">{{ stripslashes(htmlspecialchars_decode($data['cookies'], ENT_NOQUOTES)) }}</textarea>
-        <button type="button" class="button" id="updateCookies">Update Cookie Policy</button>
+        <button type="button" class="button" id="updateCookies">
+            <span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span> Update Cookie Policy
+        </button>
     </form>
 </div>
 
@@ -103,9 +115,13 @@
 
     <form class="form-horizontal" id="updateNDAForm" enctype="multipart/form-data">
         <input type="file" id="NDA" name="NDA" accept="application/pdf">
-        <label for="NDA">Upload NDA</label>
+        <label for="NDA">
+            <span class="glyphicon glyphicon-upload" aria-hidden="true"></span> Upload NDA
+        </label>
         <i style="float:right;">Last Modified: {{ date("F d Y H:i:s", filemtime('public/img/NDAs/nda.pdf')) }}</i>
-        <button type="button" class="button" id="updateNDA">Update NDA</button>
+        <button type="button" class="button" id="updateNDA">
+            <span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span> Update NDA
+        </button>
     </form>
 </div>
 <script>

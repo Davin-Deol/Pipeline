@@ -23,7 +23,9 @@
             <div class="row field" id="{{ $listing->listingID }}">
                 @include('include.listingSummary')
                 <div class="col-xs-12">
-                    <a href="{{ route('user-reviewListing', ['listingID' => $listing->listingID]) }}" class="button">Review</a>
+                    <a href="{{ route('user-reviewListing', ['listingID' => $listing->listingID]) }}" class="button">
+                        <span class="glyphicon glyphicon-search" aria-hidden="true"></span> Review
+                    </a>
                 </div>
             </div>
         @endforeach
