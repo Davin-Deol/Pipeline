@@ -181,9 +181,6 @@ input[type=file]+label {
     background-color: rgb(0,0,0); /* Fallback color */
     background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
     font-weight: 400;
-}
-
-.modal span {
     font-size: 1.2em;
 }
 
@@ -250,7 +247,9 @@ input[type=file]+label {
     position: relative;
 }
 
-
+.glyphicon.secondary {
+    color: rgb(<?php echo $colourPrimary; ?>);
+}
 
 
 
@@ -264,7 +263,6 @@ input:focus{
 input, select, textarea {
     border: none;
     border-bottom: 1px solid #EEE;
-    font-size: 1.2em;
     width: 100%;
     margin-bottom: 10px;
 }

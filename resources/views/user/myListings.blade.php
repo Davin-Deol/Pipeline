@@ -11,7 +11,9 @@
                     </div>
                     <div class="row">
                         <div class="col-xs-6">
-                            <button type="button" class="button" id="cancelButton">Cancel</button>
+                            <button type="button" class="button" id="cancelButton">
+                                <span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span> Cancel
+                            </button>
                         </div>
                         <div class="col-xs-6">
                             <a id="confirmationButtonLink"><button type="button" class="button" id="confirmationButton"></button></a>
@@ -36,16 +38,24 @@
                 @include('include.listingSummary')
                 <div class="col-xs-4">
                     @if ($listing->status == "draft")
-                        <a href="{{ route('user-editListing', ['listingID' => $listing->listingID]) }}" class="button">Edit</a>
+                        <a href="{{ route('user-editListing', ['listingID' => $listing->listingID]) }}" class="button">
+                            <span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Edit
+                    </a>
                     @else
-                        <button type="button" class="editButton button confirmationTriggerButton" value="{{ $listing->listingID }}">Edit</button>
+                        <button type="button" class="editButton button confirmationTriggerButton" value="{{ $listing->listingID }}">
+                            <span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Edit
+                    </button>
                     @endif
                 </div>
                 <div class="col-xs-4">
-                    <a href="{{ route('user-reviewListing', ['listingID' => $listing->listingID]) }}" class="button">Review</a>
+                    <a href="{{ route('user-reviewListing', ['listingID' => $listing->listingID]) }}" class="button">
+                        <span class="glyphicon glyphicon-search" aria-hidden="true"></span> Review
+                    </a>
                 </div>
                 <div class="col-xs-4">
-                    <button type="button" class="deleteButton button" value="{{ $listing->listingID }}">Delete</button>
+                    <button type="button" class="deleteButton button" value="{{ $listing->listingID }}">
+                        <span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Delete
+                    </button>
                 </div>
             </div>
         @endforeach

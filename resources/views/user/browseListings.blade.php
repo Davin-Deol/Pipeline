@@ -6,7 +6,9 @@
                 <div class="row">
                     @if ($listing->userId == $user->userId)
                         <div class="col-xs-6">
-                            <a href="{{ route('user-reviewListing', ['listingID' => $listing->listingID]) }}" class="btn btn-default button">Review</a>
+                            <a href="{{ route('user-reviewListing', ['listingID' => $listing->listingID]) }}" class="btn btn-default button">
+                                <span class="glyphicon glyphicon-search" aria-hidden="true"></span> Review
+                            </a>
                         </div>
                         <div class="col-xs-6">
                             <button type="button" class="discardListing btn btn-default button" name="Discard" value="{{ $listing->listingID }}">Discard &rarr;</button>
@@ -16,7 +18,9 @@
                             <button type="button" class="saveListing btn btn-default button" name="Save" value="{{ $listing->listingID }}">&larr; Save</button>
                         </div>
                         <div class="col-xs-4">
-                            <a href="{{ route('user-reviewListing', ['listingID' => $listing->listingID]) }}" class="btn btn-default button">Review</a>
+                            <a href="{{ route('user-reviewListing', ['listingID' => $listing->listingID]) }}" class="btn btn-default button">
+                                <span class="glyphicon glyphicon-search" aria-hidden="true"></span> Review
+                            </a>
                         </div>
                         <div class="col-xs-4">
                             <button type="button" class="discardListing btn btn-default button" name="Discard" value="{{ $listing->listingID }}">Discard &rarr;</button>

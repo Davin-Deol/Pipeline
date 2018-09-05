@@ -24,7 +24,9 @@
                 </div>
                 <div class="row">
                     <div class="col-xs-6">
-                        <button class="button" id="cancelButton">Cancel</button>
+                        <button class="button" id="cancelButton">
+                            <span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span> Cancel
+                        </button>
                     </div>
                     <div class="col-xs-6">
                         <button class="button" value="{{ $listing->listingID }}" id="confirmationButton"></button>
@@ -101,10 +103,14 @@
                 @if ($listing->status == "draft" and $listing->userId == $user->userId and $user->type != "admin")
                     <div class="row">
                         <div class="col-xs-4">
-                            <a href="{{ route('user-editListing', ['listingID' => $listing->listingID]) }}" class="button">Edit</a>
+                            <a href="{{ route('user-editListing', ['listingID' => $listing->listingID]) }}" class="button">
+                                <span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Edit
+                            </a>
                         </div>
                         <div class="col-xs-4">
-                            <button type="submit" class="button" formaction="{{ route('user-deleteListing') }}"> Delete</button>
+                            <button type="submit" class="button" formaction="{{ route('user-deleteListing') }}">
+                                <span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Delete
+                            </button>
                         </div>
                         <div class="col-xs-4">
                             <button type="submit" class="button" formaction="{{ route('user-submitListingForApproval') }}">Submit</button>
@@ -113,57 +119,83 @@
                 @elseif ($listing->status == "draft" and $listing->userId == $user->userId and $user->type == "admin")
                     <div class="row">
                         <div class="col-xs-4">
-                            <a href="{{ route('user-editListing', ['listingID' => $listing->listingID]) }}" class="button">Edit</a>
+                            <a href="{{ route('user-editListing', ['listingID' => $listing->listingID]) }}" class="button">
+                                <span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Edit
+                            </a>
                         </div>
                         <div class="col-xs-4">
-                            <button type="button" class="button" id="postButton">Post</button>
+                            <button type="button" class="button" id="postButton">
+                                <span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span> Post
+                            </button>
                         </div>
                         <div class="col-xs-4">
-                            <button id="removeButton" type="button" class="button">Delete</button>
+                            <button id="removeButton" type="button" class="button">
+                                <span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Delete
+                            </button>
                         </div>
                     </div>
                 @elseif ($listing->status == "submitted" and $listing->userId != $user->userId and $user->type == "admin")
                     <div class="row">
                         <div class="col-xs-4">
-                            <button type="button" class="button" id="denyButton">Deny</button>
+                            <button type="button" class="button" id="denyButton">
+                                <span class="glyphicon glyphicon-remove-sign" aria-hidden="true"></span> Deny
+                            </button>
                         </div>
                         <div class="col-xs-4">
-                            <a href="{{ route('user-editListing', ['listingID' => $listing->listingID]) }}" class="btn button">Edit</a>
+                            <a href="{{ route('user-editListing', ['listingID' => $listing->listingID]) }}" class="btn button">
+                                <span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Edit
+                            </a>
                         </div>
                         <div class="col-xs-4">
-                            <button type="button" class="button" id="postButton">Approve</button>
+                            <button type="button" class="button" id="postButton">
+                                <span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span> Approve
+                            </button>
                         </div>
                     </div>
                 @elseif ($listing->status == "posted" and $listing->userId != $user->userId)
                     <div class="row">
                         <div class="col-xs-6">
                             @if ($data['userHasSentAConnectionRequest'])
-                                <button type="button" class="button" style="font-size:0.9em;" id="cancelOrSendRequestConnection">Cancel Request Connection</button>
+                                <button type="button" class="button" style="font-size:0.9em;" id="cancelOrSendRequestConnection">
+                                    <span class="glyphicon glyphicon-minus-sign" aria-hidden="true"></span> Cancel Request Connection
+                            </button>
                             @else
-                                <button type="button" class="button" style="font-size:0.9em;" id="cancelOrSendRequestConnection">Request Connection</button>
+                                <button type="button" class="button" style="font-size:0.9em;" id="cancelOrSendRequestConnection">
+                                    <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span> Request Connection
+                            </button>
                             @endif
                         </div>
                         <div class="col-xs-6">
                             @if ($data['userHasSavedThisListing'])
-                                <button id="saveUnsaveButton" type="button" class="button" value="{{ $listing->listingID }}">Unsave</button>
+                                <button id="saveUnsaveButton" type="button" class="button" value="{{ $listing->listingID }}">
+                                    <span class="glyphicon glyphicon-star" aria-hidden="true"></span> Unsave
+                            </button>
                             @else
-                                <button id="saveUnsaveButton" type="button" class="button" value="{{ $listing->listingID }}">Save</button>
+                                <button id="saveUnsaveButton" type="button" class="button" value="{{ $listing->listingID }}">
+                                    <span class="glyphicon glyphicon-star-empty" aria-hidden="true"></span> Save
+                            </button>
                             @endif
                         </div>
                     </div>
                 @elseif ((($listing->userId == $user->userId) || ($user->type == "admin" and $listing->status != "submitted")) and ($listing->status != "draft"))
                     <div class="row">
                         <div class="col-xs-6">
-                            <button id="editButton" type="button" class="button">Edit</button>
+                            <button id="editButton" type="button" class="button">
+                                <span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Edit
+                            </button>
                         </div>
                         <div class="col-xs-6">
-                            <button id="removeButton" type="button" class="button">Delete</button>
+                            <button id="removeButton" type="button" class="button">
+                                <span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Delete
+                            </button>
                         </div>
                     </div>
                 @endif
                 <div class="row">
                     <div class="col-xs-12">
-                        <button type="button" class="button" name="Back" onclick="window.history.back()">Back</button>
+                        <button type="button" class="button" name="Back" onclick="window.history.back()">
+                            <span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span> Back
+                        </button>
                     </div>
                 </div>
             </form>
@@ -188,7 +220,7 @@
                 if (response)
                 {
                     displaySuccessModal(response);
-                    $("#cancelOrSendRequestConnection").text("Cancel Connection Request");
+                    $("#cancelOrSendRequestConnection").html("<span class='glyphicon glyphicon-minus-sign' aria-hidden='true'></span> Cancel Connection Request");
                 }
                 else
                 {
@@ -215,7 +247,7 @@
                 if (response)
                 {
                     displaySuccessModal(response);
-                    $("#cancelOrSendRequestConnection").text("Request Connection");
+                    $("#cancelOrSendRequestConnection").html("<span class='glyphicon glyphicon-plus-sign' aria-hidden='true'></span> Request Connection");
                 }
                 else
                 {
@@ -353,36 +385,39 @@
         });
         $("#denyButton").click(function() {
             $("#confirmationModal").css("display", "block");
-            $("#confirmationButton").html("Deny");
+            $("#confirmationButton").html("<span class='glyphicon glyphicon-remove-sign' aria-hidden='true'></span> Deny");
             $("#confirmationButton").attr("onclick", "denyListing(this);");
             $("#confirmationMessage").text("Are you sure you want to deny this?");
         });
         $("#postButton").click(function() {
             $("#confirmationModal").css("display", "block");
-            $("#confirmationButton").html("Post");
+            $("#confirmationButton").html("<span class='glyphicon glyphicon-ok-sign' aria-hidden='true'></span> Post");
             $("#confirmationButton").attr("onclick", "postListing(this);");
             $("#confirmationMessage").text("Are you sure you want to post this?");
             $("#messageTextArea").css("display", "none");
         });
         $("#editButton").click(function() {
             $("#confirmationModal").css("display", "block");
-            $("#confirmationButton").html("Edit");
+            $("#confirmationButton").html("<span class='glyphicon glyphicon-edit' aria-hidden='true'></span> Edit");
             $("#confirmationButton").attr("onclick", "editListing(this);");
             $("#confirmationMessage").text("Are you sure you want to edit this? Doing so will remove the listing from being public and it will need to be resubmitted.");
             $("#messageTextArea").css("display", "none");
         });
+    
+        var connectionSent = true;
+        
         $("#cancelOrSendRequestConnection").click(function() {
             $("#confirmationModal").css("display", "block");
             
             if ($("#cancelOrSendRequestConnection").text() == "Request Connection")
             {
-                $("#confirmationButton").html("Send Request");
+                $("#confirmationButton").html("<span class='glyphicon glyphicon-plus-sign' aria-hidden='true'></span> Send Request");
                 $("#confirmationButton").attr("onclick", "sendRequest(this);");
                 $("#confirmationMessage").text("Are you sure you want to establish a connection with the creator of this listing?");
             }
             else
             {
-                $("#confirmationButton").html("Cancel Connection Request");
+                $("#confirmationButton").html("<span class='glyphicon glyphicon-minus-sign' aria-hidden='true'></span> Cancel Connection Request");
                 $("#confirmationButton").attr("onclick", "cancelConnectionRequest(this);");
                 $("#confirmationMessage").text("Are you sure you want to cancel your connection request?");
             }
@@ -391,26 +426,34 @@
         });
         $("#removeButton").click(function() {
             $("#confirmationModal").css("display", "block");
-            $("#confirmationButton").html("Remove");
+            $("#confirmationButton").html("<span class='glyphicon glyphicon-trash' aria-hidden='true'></span> Remove");
             $("#confirmationButton").attr("onclick", "deleteListing(this);");
             $("#confirmationMessage").text("Are you sure you want to delete this? Doing so will remove the listing permanently.");
             $("#messageTextArea").css("display", "none");
         });
         $("#cancelButton").click(function() {
-            $("#confirmationModal").css("display", "none");
+            closeAllModals();
         });
+    
+        @if ($data['userHasSavedThisListing'])
+            var isSaved = true;
+        @else
+            var isSaved = false;
+        @endif
+        
         $("#saveUnsaveButton").click(function() {
             var saveOrUnsaveURL;
             var savedListingId = $(this).attr("value");
-            if ($(this).text() == "Save") {
+            if (isSaved) {
+                displayLoadingModal("Removing listing...");
+                $(this).html("<span class='glyphicon glyphicon-star-empty' aria-hidden='true'></span> Save");
+                saveOrUnsaveURL = "{{ route('user-removeSavedListing')}}";
+            } else {
                 displayLoadingModal("Saving listing...");
                 saveOrUnsaveURL = "{{ route('user-saveUsersListing') }}";
-                $(this).html("Unsave");
-            } else if ($(this).text() == "Unsave") {
-                displayLoadingModal("Removing listing...");
-                $(this).text("Save");
-                saveOrUnsaveURL = "{{ route('user-removeSavedListing')}}";
+                $(this).html("<span class='glyphicon glyphicon-star' aria-hidden='true'></span> Unsave");
             }
+                isSaved = !isSaved;
             $.ajax({
                 type: "POST",
                 url: saveOrUnsaveURL,
@@ -423,7 +466,7 @@
                 success: function(response) {
                     if (response)
                     {
-                        displaySuccessModal(response);
+                        closeAllModals();
                     }
                     else
                     {
