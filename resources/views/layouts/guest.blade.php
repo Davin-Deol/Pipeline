@@ -188,15 +188,13 @@
             </ul>
             <hr style="width:100%;">
             <div class="row mt-3">
-                <div class="col-md-4 col-lg-4 col-xl-4 mx-auto mb-4">
+                <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4 mx-auto mb-4">
                     <h6 class="text-uppercase font-weight-bold">{{ config('app.name') }}</h6>
-                    <hr class="header">
                     <p>Bringing People, Projects, Resources and Capital Together</p>
-
+                    <hr class="visible-sm visible-xs">
                 </div>
-                <div class="col-md-4 col-lg-4 col-xl-4 mx-auto mb-4">
+                <div class="col-sm-6 col-md-4 col-lg-4 col-xl-4 mx-auto mb-4">
                     <h6 class="text-uppercase font-weight-bold">Useful links</h6>
-                    <hr class="header">
                     <p>
                         <a href="{{ route('guest-home') }}#howItWorksSection">
                             {{ $data['index_rowOne_header'] }}
@@ -210,12 +208,12 @@
                     <p>
                         <a href="{{ route('guest-credits') }}">Credits</a>
                     </p>
-
+                    <hr class="visible-xs">
                 </div>
-                <div class="col-md-4 col-lg-4 col-xl-4 mx-auto mb-md-0 mb-4">
+                <div class="col-sm-6 col-md-4 col-lg-4 col-xl-4 mx-auto mb-md-0 mb-4">
                     <h6 class="text-uppercase font-weight-bold">Contact</h6>
-                    <hr class="header">
                     <p><img src="{{ asset('public/img/Index/Email-Icon.png') }}" style="width: 1.3em; margin-right: 0.3em; margin-top: -0.2em;" />daniel@pipeline-listings.com</p>
+                    <hr class="visible-xs">
                 </div>
             </div>
 
