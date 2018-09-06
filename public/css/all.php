@@ -54,15 +54,9 @@ h4 {
 
 footer h6 {
     font-size: 1.3em;
-    margin-top: 10%;
 }
 footer hr {
     border-top: 2px solid white;
-}
-footer hr.header {
-    width: 15%;
-    margin-top: 0px;
-    margin-bottom: 0.5em;
 }
 .page-footer p {
     width: 100%;

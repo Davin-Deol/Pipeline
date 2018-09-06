@@ -397,6 +397,7 @@ class AdminController extends UserController
         $data["rowTwoBody"] = stripslashes(htmlspecialchars_decode($stringsXML->loggedOut->index->rowTwo->body));
         $data["credits"] =  $stringsXML->loggedOut->credits->body;
         $data["cookies"] =  $stringsXML->loggedOut->cookies;
+        $data["termsAndConditions"] =  $stringsXML->loggedOut->termsAndConditions;
         
         return view('admin/manageWebsite', compact('data'));
     }
@@ -540,6 +541,29 @@ class AdminController extends UserController
                 $stringsXML->asXml('./resources/values/strings.xml');
 
                 return "Updated the Cookies policy.";
+            }
+        }
+    }
+    
+    public function updateTermsAndConditions(Request $request)
+    {
+        if ($request->isMethod('post'))
+        {
+            $data = array();
+            $data["termsAndConditions"] = $request->input('termsAndConditions');
+            $validator = Validator::make($request->all(),
+                [
+                    'termsAndConditions' => 'required',
+                ]
+            );
+            if (!$validator->fails())
+            {   
+                $data["termsAndConditions"] = str_replace('\r\n', "\n", $data["termsAndConditions"]);
+                $stringsXML = simplexml_load_file('./resources/values/strings.xml');
+                $stringsXML->loggedOut->termsAndConditions = htmlspecialchars($data["termsAndConditions"], ENT_NOQUOTES);
+                $stringsXML->asXml('./resources/values/strings.xml');
+
+                return "Updated the terms and conditions.";
             }
         }
     }
