@@ -269,7 +269,7 @@ var nicEditorConfig = bkClass.extend({
 		'hr' : {name : __('Horizontal Rule'), command : 'insertHorizontalRule', noActive : true}
 	},
 	iconsPath : './public/js/nicEdit/nicEditorIcons.gif',
-	buttonList : ['save','bold','italic','underline','left','center','right','justify','ol','ul','fontSize','fontFamily','fontFormat','indent','outdent','image','upload','link','unlink','forecolor','bgcolor'],
+	buttonList : ['save','bold','italic','underline','left','center','right','justify','ol','ul','fontSize',/*'fontFamily',*/'fontFormat','indent','outdent','image','upload','link','unlink','forecolor','bgcolor'],
 	iconList : {"bgcolor":1,"forecolor":2,"bold":3,"center":4,"hr":5,"indent":6,"italic":7,"justify":8,"left":9,"ol":10,"outdent":11,"removeformat":12,"right":13,"save":23,"strikethrough":15,"subscript":16,"superscript":17,"ul":18,"underline":19,"link":20,"unlink":21,"close":22,"arrow":24}
 	
 });
@@ -1047,7 +1047,7 @@ nicEditors.registerPlugin(nicButtonTips);
 var nicSelectOptions = {
 	buttons : {
 		'fontSize' : {name : __('Select Font Size'), type : 'nicEditorFontSizeSelect', command : 'fontsize'},
-		'fontFamily' : {name : __('Select Font Family'), type : 'nicEditorFontFamilySelect', command : 'fontname'},
+		/*'fontFamily' : {name : __('Select Font Family'), type : 'nicEditorFontFamilySelect', command : 'fontname'},*/
 		'fontFormat' : {name : __('Select Font Format'), type : 'nicEditorFontFormatSelect', command : 'formatBlock'}
 	}
 };
@@ -1065,7 +1065,7 @@ var nicEditorSelect = bkClass.extend({
 		this.contain = new bkElement('div').setStyle({width: '90px', height : '20px', cursor : 'pointer', overflow: 'hidden'}).addClass('selectContain').addEvent('click',this.toggle.closure(this)).appendTo(this.margin);
 		this.items = new bkElement('div').setStyle({overflow : 'hidden', zoom : 1, border: '1px solid #ccc', paddingLeft : '3px', backgroundColor : '#fff'}).appendTo(this.contain);
 		this.control = new bkElement('div').setStyle({overflow : 'hidden', 'float' : 'right', height: '18px', width : '16px'}).addClass('selectControl').setStyle(this.ne.getIcon('arrow',options)).appendTo(this.items);
-		this.txt = new bkElement('div').setStyle({overflow : 'hidden', 'float' : 'left', width : '66px', height : '14px', marginTop : '1px', fontFamily : 'sans-serif', textAlign : 'center', fontSize : '12px'}).addClass('selectTxt').appendTo(this.items);
+		this.txt = new bkElement('div').setStyle({overflow : 'hidden', 'float' : 'left', width : '66px', height : '14px', marginTop : '1px', /*fontFamily : 'sans-serif',*/ textAlign : 'center', fontSize : '12px'}).addClass('selectTxt').appendTo(this.items);
 		
 		if(!window.opera) {
 			this.contain.onmousedown = this.control.onmousedown = this.txt.onmousedown = bkLib.cancelEvent;
@@ -1151,6 +1151,7 @@ var nicEditorFontSizeSelect = nicEditorSelect.extend({
 	}
 });
 
+/*
 var nicEditorFontFamilySelect = nicEditorSelect.extend({
 	sel : {'Helvetica Neue' : 'Helvetica Neue', 'arial' : 'Arial','georgia' : 'Georgia', 'helvetica' : 'Helvetica', 'impact' : 'Impact', 'times new roman' : 'Times', 'trebuchet ms' : 'Trebuchet', 'verdana' : 'Verdana'},
 	
@@ -1161,6 +1162,7 @@ var nicEditorFontFamilySelect = nicEditorSelect.extend({
 		}
 	}
 });
+*/
 
 var nicEditorFontFormatSelect = nicEditorSelect.extend({
 		sel : {'p' : 'Paragraph', 'pre' : 'Pre', 'h6' : 'Heading&nbsp;6', 'h5' : 'Heading&nbsp;5', 'h4' : 'Heading&nbsp;4', 'h3' : 'Heading&nbsp;3', 'h2' : 'Heading&nbsp;2', 'h1' : 'Heading&nbsp;1'},
