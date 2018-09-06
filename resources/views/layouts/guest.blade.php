@@ -30,15 +30,16 @@
                                 <a href="{{ route('guest-home') }}#aboutSection">
                                         {{ $data['index_rowTwo_header'] }}<span class="sr-only"></span></a>
                             </li>
-                            <li onclick="displayLoginForm()">
-                                <a>
-                                        Login<span class="sr-only"></span>
-                                    </a>
-                            </li>
+                        </ul>
+                        
+                        <ul class="nav navbar-nav navbar-right">
                             <li onclick="displayRequestInvitationForm()">
                                 <a>
-                                    Request Invitation<span class="sr-only"></span>
+                                    <span class="glyphicon glyphicon-user" aria-hidden="true"></span> Request Invitation<span class="sr-only"></span>
                                 </a>
+                            </li>
+                            <li onclick="displayLoginForm()">
+                                <a><span class="glyphicon glyphicon-log-in" aria-hidden="true"></span> Login<span class="sr-only"></span></a>
                             </li>
                         </ul>
                     </div>
@@ -83,7 +84,9 @@
                                 </div>
                                 <span>Keep me signed in</span>
                             </label>
-                            <button type="submit" name="submitLogin" id="submitLogin" value="Login" class="button"><span class="glyphicon glyphicon-log-in" aria-hidden="true"></span> Login</button>
+                            <button type="submit" name="submitLogin" id="submitLogin" value="Login" class="button">
+                                <span class="glyphicon glyphicon-log-in" aria-hidden="true"></span> Login
+                            </button>
                         </div>
                     </form>
                     <button class="alternativeOptions" type="submit" name="requestInvitation" onclick="displayRequestInvitationForm()">Request Invitation</button>

@@ -141,15 +141,10 @@ class UserController extends Controller
     {
         $data = array();
         $data['title'] = "Profile";
-        /*
-        print("<pre>");
-        print_r(\Config::get('session'));
-        print("</pre>");
-        return "";
-        */
+        
         $statistics = array(
-            'Number Of Listings' => Listings::getUsersListingsStatistics(Auth::user()->userId),
-            'Number Of Connections' => Connections::getUsersConnectionsStatistics(Auth::user()->userId),
+            'Listings' => Listings::getUsersListingsStatistics(Auth::user()->userId),
+            'Connections' => Connections::getUsersConnectionsStatistics(Auth::user()->userId),
         );
         
         return view('user/profile', compact('user', 'data', 'statistics'));

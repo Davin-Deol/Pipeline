@@ -109,9 +109,29 @@
                         <span class="navbar-brand">{{ $data['title'] }}</span>
                     </div>
                     <div class="collapse navbar-collapse" id="items">
-                        <ul class="nav navbar-nav mr-auto" id="nav">
+                        <ul class="nav navbar-nav" id="nav">
                             <li><a href="{{ route('user-browseListings') }}">Browse Listings<span class="sr-only"></span></a></li>
                             <li><a href="{{ route('user-savedListings') }}">Saved Listings</a></li>
+                        </ul>
+                        <ul class="nav navbar-nav">
+                            <li>
+                                <form method="post" action="{{ route('user-browseListings') }}" class="navbar-form navbar-left">
+                                    {{ csrf_field() }}
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" placeholder="Search" name="searchKey" id="searchKey" 
+                                               value=@if (Session::has('searchKey'))
+                                                    "{{ Session::get('searchKey') }}"
+                                               @endif>
+                                        <div class="input-group-btn">
+                                            <button class="btn btn-default" type="submit">
+                                            <i class="glyphicon glyphicon-search"></i>
+                                        </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </li>
+                        </ul>
+                        <ul class="nav navbar-nav navbar-right">
                             <li class="dropdown">
                                 <a class="dropdown-toggle" data-toggle="dropdown" href="#">My Listings
                             <span class="caret"></span></a>
@@ -121,19 +141,19 @@
                                     <li><a href="{{ route('user-createListing') }}">Create Listing</a></li>
                                 </ul>
                             </li>
-                        @if (($user->type == "admin") || ($user->type == "demo-admin"))
-                            <li class="dropdown">
-                                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                                    <span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Admin<span class="caret"></span>
-                                </a>
-                                <ul class="dropdown-menu">
-                                    <li><a href="{{ route('admin-listingsPendingReview') }}">Listings Pending Review</a></li>
-                                    <li><a href="{{ route('admin-requests') }}">Requests</a></li>
-                                    <li><a href="{{ route('admin-ndasPendingReview') }}">NDAs Pending Review</a></li>
-                                    <li><a href="{{ route('admin-manageWebsite') }}">Manage Website</a></li>
-                                </ul>
-                            </li>
-                        @endif
+                            @if (($user->type == "admin") || ($user->type == "demo-admin"))
+                                <li class="dropdown">
+                                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                        <span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Admin<span class="caret"></span>
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="{{ route('admin-listingsPendingReview') }}">Listings Pending Review</a></li>
+                                        <li><a href="{{ route('admin-requests') }}">Requests</a></li>
+                                        <li><a href="{{ route('admin-ndasPendingReview') }}">NDAs Pending Review</a></li>
+                                        <li><a href="{{ route('admin-manageWebsite') }}">Manage Website</a></li>
+                                    </ul>
+                                </li>
+                            @endif
                             <li class="dropdown">
                                 <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                                     <table>
@@ -160,20 +180,6 @@
                                 </ul>
                             </li>
                         </ul>
-                        <form method="post" action="{{ route('user-browseListings') }}" class="navbar-form navbar-left">
-                            {{ csrf_field() }}
-                            <div class="input-group">
-                                <input type="text" class="form-control" placeholder="Search" name="searchKey" id="searchKey" 
-                                       value=@if (Session::has('searchKey'))
-                                            "{{ Session::get('searchKey') }}"
-                                       @endif>
-                                <div class="input-group-btn">
-                                    <button class="btn btn-default" type="submit">
-                                    <i class="glyphicon glyphicon-search"></i>
-                                </button>
-                                </div>
-                            </div>
-                        </form>
                     </div>
                 </div>
             </nav>
