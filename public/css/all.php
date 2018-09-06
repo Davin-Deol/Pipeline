@@ -340,6 +340,41 @@ label {
     background-position: center;
     background-repeat: no-repeat;
 }
+
+.navbar {
+    background-color: rgb(<?php echo $colourPrimary; ?>);
+    border: transparent;
+    font-size: 1.1em;
+    font-family: futura;
+    color: <?php echo $textColourOnPrimary; ?>;
+}
+.navbar .navbar-brand {
+    color: <?php echo $textColourOnPrimary; ?>;
+}
+.navbar .navbar-nav>li>a {
+    color: <?php echo $textColourOnPrimary; ?>;
+    cursor: pointer;
+}
+.navbar-nav>.open>a,
+.navbar-nav>.open>a:focus,
+.navbar-nav>.open>a:hover,
+.navbar-nav .open .dropdown-menu>li>a:hover {
+    color: rgb(<?php echo $colourPrimary; ?>);
+    background-color: <?php echo $textColourOnPrimary; ?>;
+}
+
+.navbar .navbar-nav>li>a:focus,
+.navbar .navbar-nav>li>a:hover {
+    color: <?php echo $textColourOnPrimary; ?>;
+    background-color: rgb(<?php echo $colourPrimary; ?>);
+}
+
+.navbar-nav .open .dropdown-menu>li>a {
+    color: <?php echo $textColourOnPrimary; ?>;
+}
+.navbar-nav>li>.dropdown-menu {
+    background-color:  rgb(<?php echo $colourPrimary; ?>);
+}
 .nav>li>a>img {
     width: 2em;
     height: 2em;
@@ -348,56 +383,9 @@ label {
     border-radius: 100%;
     background-color: rgb(<?php echo $colourPrimary; ?>);
 }
-.nav>li {
-    font-size: 1.1em;
-    font-family: futura;
-}
-.navbar .navbar-toggle .icon-bar {
-    background-color: <?php echo $textColourOnPrimary; ?>;
-}
-.navbar .navbar-toggle:focus .icon-bar, .navbar .navbar-toggle:hover .icon-bar {
-    background-color: rgb(<?php echo $colourPrimary; ?>);
-}
-.container-fluid>.navbar-header {
-    color: <?php echo $textColourOnPrimary; ?>;
-}
-.navbar .navbar-brand {
-    color: <?php echo $textColourOnPrimary; ?>;
-}
-.navbar {
-    background-color: rgb(<?php echo $colourPrimary; ?>);
-    border: transparent;
-}
-.navbar .navbar-nav>li>a {
-    color: <?php echo $textColourOnPrimary; ?>;
-}
-.navbar .navbar-toggle:focus, .navbar .navbar-toggle:hover {
-    background-color: <?php echo $textColourOnPrimary; ?>;
-}
-.navbar .navbar-toggle {
-    border-color: <?php echo $textColourOnPrimary; ?>;
-}
-.navbar .navbar-nav>.open>a, .navbar .navbar-nav>.open>a:focus, .navbar .navbar-nav>.open>a:hover {
-    color: rgb(<?php echo $colourPrimary; ?>);
-    background-color: <?php echo $textColourOnPrimary; ?>;
-}
-.navbar .navbar-nav>li>a:focus, .navbar .navbar-nav>li>a:hover {
-    color: <?php echo $textColourOnPrimary; ?>;
-    background-color: rgb(<?php echo $colourPrimary; ?>);
-}
-.navbar .navbar-nav .open .dropdown-menu>li>a {
-    color: <?php echo $textColourOnPrimary; ?>;
-}
-.navbar-nav>li>.dropdown-menu {
-    background-color:  rgb(<?php echo $colourPrimary; ?>);
-}
-.navbar .navbar-nav .open .dropdown-menu>li>a:hover {
-    background-color:  <?php echo $textColourOnPrimary; ?>;
-    color: rgb(<?php echo $colourPrimary; ?>);
-}
-.navbar .navbar-brand:focus, .navbar .navbar-brand:hover {
-    color: <?php echo $textColourOnPrimary; ?>;
-}
+
+
+
 <?php
 $detect = new Mobile_Detect;
 if (!$detect->isMobile() || $detect->isTablet()) { ?>

@@ -45,7 +45,7 @@
 <script src="{{ asset('public/slick-1.8.0/slick/slick.js') }}"></script>
 <script>
     $(document).ready(function() {
-        $("#nav").linkUnderlineAnim({
+        $(".nav").linkUnderlineAnim({
             "speed": 300,
             "color": "#FFF",
             "thickness": 2,
