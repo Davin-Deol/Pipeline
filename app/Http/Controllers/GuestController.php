@@ -72,6 +72,26 @@ class GuestController extends Controller
         return view('guest/credits', compact('data', 'listOfInterests'));
     }
     
+    public function termsAndConditions()
+    {
+        $coloursXML = simplexml_load_file('./resources/values/colours.xml');
+        $stringsXML = simplexml_load_file('./resources/values/strings.xml');
+        
+        $data = array();
+        $listOfInterests = array();
+        
+        $data["title"] = "Credits";
+        $data["backgroundColour"] = $coloursXML->loggedOut->credits->backgroundColour;
+        
+        $data["index_rowOne_header"] = $stringsXML->loggedOut->index->rowOne->title;
+        $data["index_rowTwo_header"] = $stringsXML->loggedOut->index->rowTwo->title;
+        $listOfInterests = $this->interests->where('interest', '!=' , 'None of the Above');
+        
+        $data["termsAndConditions"] = stripslashes(htmlspecialchars_decode($stringsXML->loggedOut->termsAndConditions));
+        
+        return view('guest/termsAndConditions', compact('data', 'listOfInterests'));
+    }
+    
     /**
      * This method takes the user's entered email and passwords and tests to see if they're valid. If they are then 
      * it returns the name of the user, otherwise it'll return false.

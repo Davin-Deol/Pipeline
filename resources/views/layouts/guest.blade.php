@@ -205,9 +205,6 @@
                             {{ $data['index_rowTwo_header'] }}
                         </a>
                     </p>
-                    <p>
-                        <a href="{{ route('guest-credits') }}">Credits</a>
-                    </p>
                     <hr class="visible-xs">
                 </div>
                 <div class="col-sm-6 col-md-4 col-lg-4 col-xl-4 mx-auto mb-md-0 mb-4">
@@ -219,7 +216,7 @@
 
         </div>
         <div class="footer-copyright text-center py-3" style="margin-top:1em;">© 2018 Copyright:
-            <a href="http://pipeline-listings.ca/"> Pipeline-Listings.ca</a> | <a href="{{ route('guest-cookiePolicy') }}">Cookies</a>
+            <a href="http://pipeline-listings.ca/"> Pipeline-Listings.ca</a> | <a href="{{ route('guest-credits') }}">Credits</a> | <a href="{{ route('guest-cookiePolicy') }}">Cookies</a> | <a href="{{ route('guest-termsAndConditions') }}">Terms and Conditions</a>
         </div>
     </footer>
 </body>

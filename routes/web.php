@@ -13,6 +13,7 @@
 
 Route::get('/', 'GuestController@home')->name('guest-home');
 Route::get('/credits', 'GuestController@credits')->name('guest-credits');
+Route::get('/termsAndConditions', 'GuestController@termsAndConditions')->name('guest-termsAndConditions');
 Route::post('/guestLogin', 'GuestController@login')->name('guest-login');
 Route::post('/forgotPassword', 'GuestController@forgotPassword')->name('guest-forgotPassword');
 Route::post('/requestInvitation', 'GuestController@requestInvitation')->name('guest-requestInvitation');
@@ -63,6 +64,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('/updateHomepage', 'AdminController@updateHomepage')->name('admin-updateHomepage');
         Route::post('/updateCredits', 'AdminController@updateCredits')->name('admin-updateCredits');
         Route::post('/updateCookie', 'AdminController@updateCookie')->name('admin-updateCookie');
+        Route::post('/updateTermsAndConditions', 'AdminController@updateTermsAndConditions')->name('admin-updateTermsAndConditions');
         Route::post('/updateNDA', 'AdminController@updateNDA')->name('admin-updateNDA');
     });
     
