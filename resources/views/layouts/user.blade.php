@@ -138,7 +138,7 @@
                                 <ul class="dropdown-menu">
                                     <li><a href="{{ route('user-myListings') }}">View Listings</a></li>
                                     <li><a href="{{ route('user-connections') }}">Connections</a></li>
-                                    <li><a href="{{ route('user-createListing') }}">Create Listing</a></li>
+                                    <li><a href="{{ route('user-listingForm') }}">Create Listing</a></li>
                                 </ul>
                             </li>
                             @if (($user->type == "admin") || ($user->type == "demo-admin"))

@@ -363,28 +363,50 @@ class UserController extends Controller
         return redirect()->route('user-manageAccount');
     }
     
-    public function createListing(Request $request)
+    public function listingForm($listingID = null, Request $request)
     {
         $data = array();
-        
-        $data["title"] = "Create Listing";
+        $data["title"] = "Listing Form";
         $currencies = $this->currency->all();
         $interests = $this->interest->all();
         $investmentTypes = $this->investmentType->all();
         $jurisdictions = $this->jurisdiction->all();
         
-        $listing = new Listings();
-        $listing->category = "";
-        $listing->subCategory = "";
-        $listing->name = "";
-        $listing->introduction = "";
-        $listing->jurisdiction = "";
-        $listing->investmentType = "";
-        $listing->typeOfCurrency = "";
-        $listing->priceBracketMin = "";
-        $listing->priceBracketMax = "";
-        $listing->additionalDetails = "";
-        
+        if ($listingID)
+        {
+            $listing = Listings::find($listingID);
+            if (is_null($listing))
+            {
+                abort(404);
+            }
+            else if ((Auth::user()->type != "admin") && (Auth::user()->userId != $listing->userId))
+            {
+                return back();
+            }
+            
+            if ((Auth::user()->type != "admin") || ((Auth::user()->type == "admin") && (Auth::user()->userId == $listing->userId)))
+            {
+                $listing->status = "draft";
+                $listing->save();
+            }
+            
+            $listingImages = ListingToImages::findByListingID($listingID);
+        }
+        else
+        {
+            $listing = new Listings();
+            $listing->listingID = "";
+            $listing->category = "";
+            $listing->subCategory = "";
+            $listing->name = "";
+            $listing->introduction = "";
+            $listing->jurisdiction = "";
+            $listing->investmentType = "";
+            $listing->typeOfCurrency = "";
+            $listing->priceBracketMin = "";
+            $listing->priceBracketMax = "";
+            $listing->additionalDetails = "";
+        }
         $listingImages = array();
         
         $lastInputsUsed = $request->cookie('listingForm_LastInputsUsed');
@@ -392,8 +414,6 @@ class UserController extends Controller
         {
             $lastInputsUsed = json_decode($lastInputsUsed);
         }
-        
-        $data["newListing"] = true;
         
         return view('user/listingForm', compact('data', 'listing', 'listingImages', 'currencies', 'interests', 'investmentTypes', 'jurisdictions', 'lastInputsUsed'));
     }
@@ -426,8 +446,18 @@ class UserController extends Controller
             
             $files = $request->files->all();
             $listing = UserController::verifyListing($data, $files);
-            $request->session()->put('success', 'Successfuly saved listing');
+            //$request->session()->put('success', 'Successfuly saved listing');
+        
+            return response($listing->listingID)->withCookie(cookie()->forever('listingForm_LastInputsUsed', json_encode([
+                'category' => $data["category"],
+                'subCategory' => $data["subCategory"],
+                'jurisdiction' => $data["jurisdiction"],
+                'investmentType' => $data["investmentType"],
+                'typeOfCurrency' => $data["typeOfCurrency"]
+            ])));
         }
+        
+        /*
         return redirect()->route('user-editListing', ['listingID' => $listing->listingID])
             ->withCookie(cookie()->forever('listingForm_LastInputsUsed', json_encode([
                 'category' => $data["category"],
@@ -436,46 +466,7 @@ class UserController extends Controller
                 'investmentType' => $data["investmentType"],
                 'typeOfCurrency' => $data["typeOfCurrency"]
             ])));
-    }
-    
-    public function editListing($listingID, Request $request)
-    {
-        $data = array();
-        
-        $data["title"] = "Edit Listing";
-        $currencies = $this->currency->all();
-        $interests = $this->interest->all();
-        $investmentTypes = $this->investmentType->all();
-        $jurisdictions = $this->jurisdiction->all();
-        
-        $listing = Listings::find($listingID);
-        
-        if (is_null($listing))
-        {
-            abort(404);
-        }
-        
-        if ((Auth::user()->type != "admin") && (Auth::user()->userId != $listing->userId))
-        {
-            return back();
-        }
-        
-        $listingImages = ListingToImages::findByListingID($listingID);
-        
-        if ((Auth::user()->type != "admin") || ((Auth::user()->type == "admin") && (Auth::user()->userId == $listing->userId)))
-        {
-            $listing->status = "draft";
-            $listing->save();
-        }
-        $lastInputsUsed = $request->cookie('listingForm_LastInputsUsed');
-        if ($lastInputsUsed !== null)
-        {
-            $lastInputsUsed = json_decode($lastInputsUsed);
-        }
-        
-        $data["newListing"] = false;
-        
-        return view('user/listingForm', compact('data', 'listing', 'listingImages', 'currencies', 'interests', 'investmentTypes', 'jurisdictions', 'lastInputsUsed'));
+        */
     }
     
     public function deleteListing(Request $request)

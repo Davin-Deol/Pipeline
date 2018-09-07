@@ -38,7 +38,7 @@
                 @include('include.listingSummary')
                 <div class="col-xs-4">
                     @if ($listing->status == "draft")
-                        <a href="{{ route('user-editListing', ['listingID' => $listing->listingID]) }}" class="button">
+                        <a href="{{ route('user-listingForm', ['listingID' => $listing->listingID]) }}" class="button">
                             <span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Edit
                     </a>
                     @else
@@ -63,7 +63,7 @@
         <div class="row field" style="display: none;" id="outOfListings">
             <div class="col-lg-12" style="text-align: center;">
                 <h1>You have no listings at this time</h1>
-                <a href="{{ route('user-createListing') }}"><h4>Click here to make one</h4></a>
+                <a href="{{ route('user-listingForm') }}"><h4>Click here to make one</h4></a>
             </div>
         </div>
         <script>
@@ -139,7 +139,7 @@
         <div class="row field">
             <div class="col-lg-12" style="text-align: center;">
                 <h1>You have no listings at this time</h1>
-                <a href="{{ route('user-createListing') }}"><h4>Click here to make one</h4></a>
+                <a href="{{ route('user-listingForm') }}"><h4>Click here to make one</h4></a>
             </div>
         </div>
     @endif

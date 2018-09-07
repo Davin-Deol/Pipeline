@@ -103,7 +103,7 @@
                 @if ($listing->status == "draft" and $listing->userId == $user->userId and $user->type != "admin")
                     <div class="row">
                         <div class="col-xs-4">
-                            <a href="{{ route('user-editListing', ['listingID' => $listing->listingID]) }}" class="button">
+                            <a href="{{ route('user-listingForm', ['listingID' => $listing->listingID]) }}" class="button">
                                 <span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Edit
                             </a>
                         </div>
@@ -119,7 +119,7 @@
                 @elseif ($listing->status == "draft" and $listing->userId == $user->userId and $user->type == "admin")
                     <div class="row">
                         <div class="col-xs-4">
-                            <a href="{{ route('user-editListing', ['listingID' => $listing->listingID]) }}" class="button">
+                            <a href="{{ route('user-listingForm', ['listingID' => $listing->listingID]) }}" class="button">
                                 <span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Edit
                             </a>
                         </div>
@@ -142,7 +142,7 @@
                             </button>
                         </div>
                         <div class="col-xs-4">
-                            <a href="{{ route('user-editListing', ['listingID' => $listing->listingID]) }}" class="btn button">
+                            <a href="{{ route('user-listingForm', ['listingID' => $listing->listingID]) }}" class="btn button">
                                 <span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Edit
                             </a>
                         </div>
@@ -339,7 +339,7 @@
     
     function editListing(element)
     {
-        $(location).attr('href', "{{ route('user-editListing', ['listingID' => $listing->listingID]) }}");
+        $(location).attr('href', "{{ route('user-listingForm', ['listingID' => $listing->listingID]) }}");
     }
     $(document).ready(function() {
         var images = [@foreach ($listingImages as $listingImage)

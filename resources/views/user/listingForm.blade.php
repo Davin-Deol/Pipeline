@@ -1,13 +1,9 @@
 @extends('layouts.user') @section('content')
 <div class="col-lg-12">
     <div class="field">
-        @if ($data['newListing'])
-            <h1>Create a New Listing</h1>
-        @else
-            <h1>Edit Listing</h1>
-        @endif
+        <h1>Listing Form</h1>
 
-        <form class="form-horizontal" action="" method="POST" enctype="multipart/form-data">
+        <form class="form-horizontal" action="" method="POST" enctype="multipart/form-data" id="listingForm">
             {{ csrf_field() }}
             <div class="row">
                 <div class="col-xs-12">
@@ -61,7 +57,7 @@
                     </select>
                 </div>
                 <div class="col-lg-3 col-sm-6">
-                    <b>Juristiction</b>
+                    <b>Jurisdiction</b>
                     <select class="form-control" id="jurisdiction" name="jurisdiction">
                         @foreach ($jurisdictions as $jurisdiction)
                             @if ($listing->jurisdiction == $jurisdiction->jurisdiction)
@@ -151,9 +147,7 @@
                     @endforeach
                 @endif
             </div>
-            @if ($listing->listingID)
-                <input type="hidden" name="listingID" id="listingID" value="{{ $listing->listingID }}" />
-            @endif
+            <input type="hidden" name="listingID" id="listingID" value="{{ $listing->listingID }}" />
             <div class="row">
                 <div class="col-sm-4">
                     <button type="submit" class="button" formaction="{{ route('user-deleteListing') }}">
@@ -161,7 +155,7 @@
                     </button>
                 </div>
                 <div class="col-sm-4">
-                    <button type="submit" class="button" formaction="{{ route('user-saveListing') }}">
+                    <button type="button" class="button" id="SaveButton">
                         <span class="glyphicon glyphicon-floppy-save" aria-hidden="true"></span> Save
                     </button>
                 </div>
@@ -174,59 +168,88 @@
         </form>
     </div>
 </div>
-        <script>
-            var files = [];
-            var fileNumber = 0;
-            
-            $( window ).resize(function() {
-                $(".image").height($(".image").parent().width());
-            });
-            
-            $(document).ready(function() {
-                $(".image").height($(".image").parent().width());
-                
-                function resetListener() {
-                    $("#photos").change(function() {
-                        $('label[for="' + $(this).attr("id") + '"]').css("visibility", "hidden");
-                        $('label[for="' + $(this).attr("id") + '"]').css("display", "none");
-                        jQuery(this).attr("id", fileNumber);
-                        jQuery(this).attr("class", fileNumber);
-                        jQuery(this).css("display", "none");
-                        $("#fileInputs").append("<input type=\"file\" id=\"photos\" name=\"files[]\" accept=\"image/*\"><label for=\"photos\">Add Image</label>");
-                        var url = URL.createObjectURL(event.target.files[0]);
-                        $('#images').append("<div class=\"image " + fileNumber + " col-sm-3 col-xs-6\" style=\"position:relative;display:inline-block;\"><img src=\"" + url + "\" alt=\"Image Unavailable\" style=\"width:95%; margin:2% 2.5%;\" class=\"" + fileNumber + "\"><button id=\"" + fileNumber + "\" class=\"remove " + fileNumber + "\" type=\"button\" style=\"position:absolute;top:2%;right:2.5%;background-color:black;color:white;border-width:medium;\">X</button></div>");
-                        ++fileNumber;
-                        previewsAdded();
-                        resetListener();
-                    });
-                }
+<script>
+    var files = [];
+    var fileNumber = 0;
+
+    $( window ).resize(function() {
+        $(".image").height($(".image").parent().width());
+    });
+
+    $(document).ready(function() {
+        $(".image").height($(".image").parent().width());
+
+        function resetListener() {
+            $("#photos").change(function() {
+                $('label[for="' + $(this).attr("id") + '"]').css("visibility", "hidden");
+                $('label[for="' + $(this).attr("id") + '"]').css("display", "none");
+                jQuery(this).attr("id", fileNumber);
+                jQuery(this).attr("class", fileNumber);
+                jQuery(this).css("display", "none");
+                $("#fileInputs").append("<input type=\"file\" id=\"photos\" name=\"files[]\" accept=\"image/*\"><label for=\"photos\">Add Image</label>");
+                var url = URL.createObjectURL(event.target.files[0]);
+                $('#images').append("<div class=\"image " + fileNumber + " col-sm-3 col-xs-6\" style=\"position:relative;display:inline-block;\"><img src=\"" + url + "\" alt=\"Image Unavailable\" style=\"width:95%; margin:2% 2.5%;\" class=\"" + fileNumber + "\"><button id=\"" + fileNumber + "\" class=\"remove " + fileNumber + "\" type=\"button\" style=\"position:absolute;top:2%;right:2.5%;background-color:black;color:white;border-width:medium;\">X</button></div>");
+                ++fileNumber;
+                previewsAdded();
                 resetListener();
-                $(".delete").click(function() {
-                    var btn_id = $(this).attr("id");
-                    var imagefile = btn_id;
-                    var listingID = $("#listingID").val();
-                    $.ajax({
-                        type: "POST",
-                        url: "{{ route('user-deleteListingImage') }}",
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        },
-                        data: {
-                            image: imagefile,
-                            listingID: listingID
-                        },
-                        success: function(response) {
-                            $("." + imagefile.substr(0, imagefile.indexOf('.'))).remove();
-                        }
-                    });
-                });
             });
+        }
+        resetListener();
+        $(".delete").click(function() {
+            var btn_id = $(this).attr("id");
+            var imagefile = btn_id;
+            var listingID = $("#listingID").val();
+            $.ajax({
+                type: "POST",
+                url: "{{ route('user-deleteListingImage') }}",
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                data: {
+                    image: imagefile,
+                    listingID: listingID
+                },
+                success: function(response) {
+                    $("." + imagefile.substr(0, imagefile.indexOf('.'))).remove();
+                }
+            });
+        });
+        
+        $("#SaveButton").click(function() {
+            displayLoadingModal("Saving listing...");
+            
+            $.ajax({
+                type: "POST",
+                url: "{{ route('user-saveListing') }}",
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                data: new FormData($('#listingForm')[0]),
+                processData: false, 
+                contentType: false, 
+                success: function(response) {
+                    if (response)
+                    {
+                        $("#listingID").val(response);
+                        closeAllModals();
+                    }
+                    else
+                    {
+                        displayErrorModal("Failed to save listing. Please try again later.");
+                    }
+                },
+                error: function() {
+                    displayErrorModal("Failed to save listing. Please try again later.");
+                }
+            });
+        });
+    });
 
-            function previewsAdded() {
-                $(".remove").click(function() {
-                    $("." + $(this).attr("id")).remove();
-                });
-            }
+    function previewsAdded() {
+        $(".remove").click(function() {
+            $("." + $(this).attr("id")).remove();
+        });
+    }
 
-        </script>
+</script>
 @endsection
