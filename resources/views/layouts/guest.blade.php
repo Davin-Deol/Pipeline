@@ -35,7 +35,7 @@
                         <ul class="nav navbar-nav navbar-right">
                             <li onclick="displayRequestInvitationForm()">
                                 <a>
-                                    <span class="glyphicon glyphicon-user" aria-hidden="true"></span> Request Invitation<span class="sr-only"></span>
+                                    <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> Request Invitation<span class="sr-only"></span>
                                 </a>
                             </li>
                             <li onclick="displayLoginForm()">
@@ -141,7 +141,7 @@
                                 </div>
                             </div>
 
-                            <button type="submit" name="submitRequestInvitation" value="Send Request" class="button"><span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span> Submit</button>
+                            <button type="submit" name="submitRequestInvitation" value="Send Request" class="button"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> Request Invitation</button>
                         </div>
                     </form>
                     <button class="alternativeOptions" type="submit" name="forgotPassword" onclick="displayForgotPassword()">Forgot Password</button>
