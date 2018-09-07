@@ -85,6 +85,7 @@ footer hr {
 .footer-copyright {
     background-color: rgb(<?php echo convertHexToRGB($colourPrimary, true); ?>);
     padding: 1.5em 40px;
+    margin-top: 2.5em;
 }
 
 .allTextSections {

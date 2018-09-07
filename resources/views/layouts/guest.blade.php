@@ -215,7 +215,7 @@
             </div>
 
         </div>
-        <div class="footer-copyright text-center py-3" style="margin-top:1em;">© 2018 Copyright:
+        <div class="footer-copyright text-center py-3">© 2018 Copyright:
             <a href="http://pipeline-listings.ca/"> Pipeline-Listings.ca</a> | <a href="{{ route('guest-credits') }}">Credits</a> | <a href="{{ route('guest-cookiePolicy') }}">Cookies</a> | <a href="{{ route('guest-termsAndConditions') }}">Terms and Conditions</a>
         </div>
     </footer>
