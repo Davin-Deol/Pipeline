@@ -2,18 +2,26 @@
     header("Content-type: text/css; charset: UTF-8");
     require_once("Mobile-Detect-2.8.26/Mobile_Detect.php");
 
-    function convertHexToRGB($hex)
+    function convertHexToRGB($hex, $dark = false)
     {
         $hex      = str_replace('#', '', $hex);
         $length   = strlen($hex);
         $rgb['r'] = hexdec($length == 6 ? substr($hex, 0, 2) : ($length == 3 ? str_repeat(substr($hex, 0, 1), 2) : 0));
         $rgb['g'] = hexdec($length == 6 ? substr($hex, 2, 2) : ($length == 3 ? str_repeat(substr($hex, 1, 1), 2) : 0));
         $rgb['b'] = hexdec($length == 6 ? substr($hex, 4, 2) : ($length == 3 ? str_repeat(substr($hex, 2, 1), 2) : 0));
+        
+        if ($dark)
+        {
+            $rgb['r'] = $rgb['r'] * 0.75;
+            $rgb['g'] = $rgb['g'] * 0.75;
+            $rgb['b'] = $rgb['b'] * 0.75;
+        }
+        
         return $rgb['r'] . "," . $rgb['g'] . "," . $rgb['b'];
     }
 
     $xml = simplexml_load_file('../../resources/values/colours.xml');
-    $colourPrimary = convertHexToRGB($xml->all->colourPrimary);
+    $colourPrimary = $xml->all->colourPrimary;
     $textColourOnPrimary = $xml->all->textColourOnPrimary;
     $backgroundColourTransparency = $xml->all->backgroundColourTransparency;
 ?>
@@ -25,7 +33,7 @@ html, body {
 }
 
 html {
-    background: linear-gradient(180deg, rgba(<?php echo $colourPrimary . "," . $backgroundColourTransparency; ?>), rgba(<?php echo $colourPrimary . "," . $backgroundColourTransparency; ?>)), url("../img/Background-Images/2.jpg") repeat;
+    background: linear-gradient(180deg, rgba(<?php echo convertHexToRGB($colourPrimary) . "," . $backgroundColourTransparency; ?>), rgba(<?php echo $colourPrimary . "," . $backgroundColourTransparency; ?>)), url("../img/Background-Images/2.jpg") repeat;
     background-size: cover;
     background-attachment: fixed;
     background-repeat: no-repeat;
@@ -52,6 +60,14 @@ h4 {
     font-size: 1.1em;
 }
 
+footer {
+    padding-top: 40px;
+}
+
+hr.dark {
+    border-top: 2px solid rgb(<?php echo convertHexToRGB($colourPrimary, true); ?>);
+}
+
 footer h6 {
     font-size: 1.3em;
 }
@@ -66,6 +82,11 @@ footer hr {
     color: white;
 }
 
+.footer-copyright {
+    background-color: rgb(<?php echo convertHexToRGB($colourPrimary, true); ?>);
+    padding: 1.5em 40px;
+}
+
 .allTextSections {
     padding: 7% 0;
 }
@@ -77,7 +98,7 @@ footer hr {
 
 .textSectionsWithDarkBackground {
     color: #FFFFFF;
-    background-color: rgb(<?php echo $colourPrimary; ?>);
+    background-color: <?php echo $colourPrimary; ?>;
 }
 
 .icon {
@@ -104,7 +125,7 @@ footer hr {
 
 .button {
     color: <?php echo $textColourOnPrimary; ?>;
-    background-color: rgb(<?php echo $colourPrimary; ?>);
+    background-color: <?php echo $colourPrimary; ?>;
     cursor: pointer;
     border-radius: 10px;
     height: auto;
@@ -134,9 +155,9 @@ input[type=file] {
 
 input[type=file]+label {
     text-align: center;
-    color: rgb(<?php echo $colourPrimary; ?>);
+    color: <?php echo $colourPrimary; ?>;
     background-color: white;
-    border: 2px solid rgb(<?php echo $colourPrimary; ?>);
+    border: 2px solid <?php echo $colourPrimary; ?>;
     font-size: 1em;
     padding: 10px 0;
     font-weight: 400;
@@ -223,7 +244,7 @@ input[type=file]+label {
 .closeImage {
     font-size: 1em;
     position: absolute;
-    color:rgb(<?php echo $colourPrimary; ?>);
+    color:<?php echo $colourPrimary; ?>;
     font-size: 3em;
     font-weight: 900;
     top: 37%;
@@ -242,7 +263,7 @@ input[type=file]+label {
 }
 
 .glyphicon.secondary {
-    color: rgb(<?php echo $colourPrimary; ?>);
+    color: <?php echo $colourPrimary; ?>;
 }
 
 
@@ -278,7 +299,7 @@ label {
   stroke-dashoffset: 166;
   stroke-width: 2;
   stroke-miterlimit: 10;
-  stroke: rgb(<?php echo $colourPrimary; ?>);
+  stroke: <?php echo $colourPrimary; ?>;
   fill: none;
   animation: stroke 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
 }
@@ -292,7 +313,7 @@ label {
   stroke: #fff;
   stroke-miterlimit: 10;
   margin: 10% auto;
-  box-shadow: inset 0px 0px 0px rgb(<?php echo $colourPrimary; ?>);
+  box-shadow: inset 0px 0px 0px <?php echo $colourPrimary; ?>;
   animation: fill .4s ease-in-out .4s forwards, scale .3s ease-in-out .9s both;
 }
 
@@ -318,7 +339,7 @@ label {
 }
 @keyframes fill {
   100% {
-    box-shadow: inset 0px 0px 0px 30px rgb(<?php echo $colourPrimary; ?>);
+    box-shadow: inset 0px 0px 0px 30px <?php echo $colourPrimary; ?>;
   }
 }
 
@@ -329,14 +350,14 @@ label {
     margin-top: -0.4em;
     margin-right: 0.7em;
     border-radius: 100%;
-    background-color: rgb(<?php echo $colourPrimary; ?>);
+    background-color: <?php echo $colourPrimary; ?>;
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
 }
 
 .navbar {
-    background-color: rgb(<?php echo $colourPrimary; ?>);
+    background-color: <?php echo $colourPrimary; ?>;
     border: transparent;
     font-size: 1.1em;
     font-family: futura;
@@ -353,21 +374,21 @@ label {
 .navbar-nav>.open>a:focus,
 .navbar-nav>.open>a:hover,
 .navbar-nav .open .dropdown-menu>li>a:hover {
-    color: rgb(<?php echo $colourPrimary; ?>);
+    color: <?php echo $colourPrimary; ?>;
     background-color: <?php echo $textColourOnPrimary; ?>;
 }
 
 .navbar .navbar-nav>li>a:focus,
 .navbar .navbar-nav>li>a:hover {
     color: <?php echo $textColourOnPrimary; ?>;
-    background-color: rgb(<?php echo $colourPrimary; ?>);
+    background-color: <?php echo $colourPrimary; ?>;
 }
 
 .navbar-nav .open .dropdown-menu>li>a {
     color: <?php echo $textColourOnPrimary; ?>;
 }
 .navbar-nav>li>.dropdown-menu {
-    background-color:  rgb(<?php echo $colourPrimary; ?>);
+    background-color:  <?php echo $colourPrimary; ?>;
 }
 .nav>li>a>img {
     width: 2em;
@@ -375,7 +396,7 @@ label {
     margin-top: -0.4em;
     margin-right: 0.7em;
     border-radius: 100%;
-    background-color: rgb(<?php echo $colourPrimary; ?>);
+    background-color: <?php echo $colourPrimary; ?>;
 }
 
 

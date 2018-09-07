@@ -176,7 +176,7 @@
 
 
 
-    <footer class="page-footer font-small unique-color-dark mt-4 allTextSections textSectionsWithDarkBackground">
+    <footer class="page-footer font-small unique-color-dark mt-4 textSectionsWithDarkBackground">
         <div class="container text-center text-md-left mt-5" id="footer">
             <ul class="list-unstyled list-inline text-center py-2">
                 <li class="list-inline-item">
@@ -191,7 +191,7 @@
                 <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4 mx-auto mb-4">
                     <h6 class="text-uppercase font-weight-bold">{{ config('app.name') }}</h6>
                     <p>Bringing People, Projects, Resources and Capital Together</p>
-                    <hr class="visible-sm visible-xs">
+                    <hr class="visible-sm visible-xs dark">
                 </div>
                 <div class="col-sm-6 col-md-4 col-lg-4 col-xl-4 mx-auto mb-4">
                     <h6 class="text-uppercase font-weight-bold">Useful links</h6>
@@ -205,12 +205,12 @@
                             {{ $data['index_rowTwo_header'] }}
                         </a>
                     </p>
-                    <hr class="visible-xs">
+                    <hr class="visible-xs dark">
                 </div>
                 <div class="col-sm-6 col-md-4 col-lg-4 col-xl-4 mx-auto mb-md-0 mb-4">
                     <h6 class="text-uppercase font-weight-bold">Contact</h6>
                     <p><img src="{{ asset('public/img/Index/Email-Icon.png') }}" style="width: 1.3em; margin-right: 0.3em; margin-top: -0.2em;" />daniel@pipeline-listings.com</p>
-                    <hr class="visible-xs">
+                    <hr class="visible-xs dark">
                 </div>
             </div>
 
