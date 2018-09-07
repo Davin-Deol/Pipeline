@@ -33,7 +33,7 @@ html, body {
 }
 
 html {
-    background: linear-gradient(180deg, rgba(<?php echo convertHexToRGB($colourPrimary) . "," . $backgroundColourTransparency; ?>), rgba(<?php echo $colourPrimary . "," . $backgroundColourTransparency; ?>)), url("../img/Background-Images/2.jpg") repeat;
+    background: linear-gradient(180deg, rgba(<?php echo convertHexToRGB($colourPrimary) . "," . $backgroundColourTransparency; ?>), rgba(<?php echo convertHexToRGB($colourPrimary) . "," . $backgroundColourTransparency; ?>)), url("../img/Background-Images/2.jpg") repeat;
     background-size: cover;
     background-attachment: fixed;
     background-repeat: no-repeat;
