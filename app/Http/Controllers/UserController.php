@@ -498,31 +498,30 @@ class UserController extends Controller
                 }
             }
             
-            $result = "success";
-            $responseData = $listing->listingID;
-            
-            if ($forReview)
+            $validator = Validator::make($request->all(),
+                [
+                    'name' => 'required|max:127',
+                    'intro' => 'required|max:511',
+                    'category' => 'required|max:63',
+                    'subCategory' => 'required|max:31',
+                    'jurisdiction' => 'required|max:85',
+                    'investmentType' => 'required|max:31',
+                    'typeOfCurrency' => 'required|max:10',
+                    'minPrice' => 'required|numeric|min:0|max:99999999999',
+                    'maxPrice' => 'required|numeric|gte:minPrice|min:0|max:99999999999',
+                    'details' => 'max:4095',
+                ]
+            );
+
+            if (!$validator->fails())
             {
-                $validator = Validator::make($request->all(),
-                    [
-                        'name' => 'required|max:127',
-                        'intro' => 'required|max:511',
-                        'category' => 'required|max:63',
-                        'subCategory' => 'required|max:31',
-                        'jurisdiction' => 'required|max:85',
-                        'investmentType' => 'required|max:31',
-                        'typeOfCurrency' => 'required|max:10',
-                        'minPrice' => 'required|numeric|min:0|max:99999999999',
-                        'maxPrice' => 'required|numeric|gte:minPrice|min:0|max:99999999999',
-                        'details' => 'required|max:4095',
-                    ]
-                );
-                
-                if ($validator->fails())
-                {
-                    $result = "fail";
-                    $responseData = $validator->errors()->messages();
-                }
+                $result = "success";
+                $responseData = $listing->listingID;
+            }
+            else
+            {
+                $result = "fail";
+                $responseData = $validator->errors()->messages();
             }
             
             return response()

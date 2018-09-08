@@ -253,7 +253,14 @@
                     }
                     else
                     {
-                        displayErrorModal(response["data"]);
+                        $(".validationError").html("");
+                        $(".validationError").css("display", "none");
+                        displayErrorModal("Failed to submit listing");
+                        for (var data in response["data"])
+                        {
+                            $("#" + data + "ValidationError").html(response["data"][data])
+                            $("#" + data + "ValidationError").css("display", "block");
+                        }
                     }
                 },
                 error: function() {
@@ -293,15 +300,6 @@
                             $("#" + data + "ValidationError").html(response["data"][data])
                             $("#" + data + "ValidationError").css("display", "block");
                         }
-                        /*
-                        for (var i = 0; i < L; i++) {
-                            var obj = response["data"][i];
-                            for (var j in obj) {
-                                $("#" + j + "ValidationError").html(response["data"][j])
-                                $("#" + j + "ValidationError").css("display", "block");
-                            }
-                        }
-                        */
                     }
                 },
                 error: function() {
