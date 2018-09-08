@@ -406,8 +406,8 @@ class UserController extends Controller
             $listing->priceBracketMin = "";
             $listing->priceBracketMax = "";
             $listing->additionalDetails = "";
+            $listingImages = array();
         }
-        $listingImages = array();
         
         $lastInputsUsed = $request->cookie('listingForm_LastInputsUsed');
         if ($lastInputsUsed !== null)
