@@ -45,7 +45,7 @@ class UserController extends Controller
     {
         if ($request->isMethod('post'))
         {
-            $request->session()->put('searchKey', $request->input("searchKey"));
+            $request->session()->flash('searchKey', $request->input("searchKey"));
         }
     }
     
@@ -59,7 +59,7 @@ class UserController extends Controller
         if ($request->isMethod('post'))
         {
             $searchKey = $request->input("searchKey");
-            $request->session()->put('searchKey', $searchKey);
+            $request->session()->flash('searchKey', $searchKey);
             $data["searchKeyUsed"] = $searchKey;
         }
         
@@ -225,16 +225,16 @@ class UserController extends Controller
                         }
                     }
 
-                    $request->session()->put('success', 'Successfuly submitted NDA');
+                    $request->session()->flash('success', 'Successfuly submitted NDA');
                 }
                 else
                 {
-                    $request->session()->put('error', ['Failed to upload file']);
+                    $request->session()->flash('error', 'Failed to upload file');
                 }
             }
             else
             {
-                $request->session()->put('error', $validator->errors()->all());
+                $request->session()->flash('error', $validator->errors()->all());
             }
         }
         
@@ -269,17 +269,17 @@ class UserController extends Controller
                     $hashedPassword = password_hash($data["new_pass"], PASSWORD_DEFAULT, ['cost' => 9]);
                     Auth::user()->password = $hashedPassword;
                     Auth::user()->save();
-                    $request->session()->put('password', $data["new_pass"]);
-                    $request->session()->put('success', 'Updated password');
+                    $request->session()->flash('password', $data["new_pass"]);
+                    $request->session()->flash('success', 'Updated password');
                 }
                 else
                 {
-                    $request->session()->put('error', ['Incorrect password was provided']);
+                    $request->session()->flash('error', ['Incorrect password was provided']);
                 }
             }
             else
             {
-                $request->session()->put('error', $validator->errors()->all());
+                $request->session()->flash('error', $validator->errors()->all());
             }
         }
         return redirect()->route('user-manageAccount');
@@ -353,11 +353,11 @@ class UserController extends Controller
                 $user->bio = $data["bio"];
                 $user->linkedInURL = $data["linkedInURL"];
                 $user->save();
-                $request->session()->put('success', "Successfuly updated profile. If you entered a profile image that isn't being displayed, you may need to clear your cache.");
+                $request->session()->flash('success', "Successfuly updated profile. If you entered a profile image that isn't being displayed, you may need to clear your cache.");
             }
             else
             {
-                $request->session()->put('error', $validator->errors()->all());
+                $request->session()->flash('error', $validator->errors()->all());
             }
         }
         return redirect()->route('user-manageAccount');
@@ -437,67 +437,6 @@ class UserController extends Controller
             $data["maxPrice"] = ($request->input('maxPrice') !== null) ? $request->input('maxPrice') : 0;
             $data["details"] = ($request->input('details') !== null) ? $request->input('details') : '';
             
-            if ($request->input('listingID'))
-            {
-                $data["listingID"] = $request->input('listingID');
-                $listing = Listings::find($data["listingID"]);
-                if (Auth::user()->type != "admin")
-                {
-                    $listing->status = "draft";
-                }
-            }
-            else
-            {
-                $listing = new Listings();
-                $listing->listingID = Guid::create();
-                $listing->userId = Auth::user()->userId;
-                $listing->status = "draft";
-                mkdir("public/img/Listing-Images/" . $listing->userId . "/" . $listing->listingID);
-            }
-
-            $listing->name = $data["name"];
-            $listing->category = $data["category"];
-            $listing->subCategory = $data["subCategory"];
-            $listing->introduction = $data["intro"];
-            $listing->jurisdiction = $data["jurisdiction"];
-            $listing->investmentType = $data["investmentType"];
-            $listing->typeOfCurrency = htmlentities($data["typeOfCurrency"]);
-            $listing->priceBracketMin = $data["minPrice"];
-            $listing->priceBracketMax = $data["maxPrice"];
-            $listing->additionalDetails = $data["details"];
-            $listing->save();
-
-            $numberOfImagesForListing = ListingToImages::getNumberOfImagesForListing($listing->listingID);
-            $remainingNumberOfImagesAllowed = 9 - ((int) $numberOfImagesForListing->get('numberOfImages'));
-            $numberOfImagesAdded = 0;
-
-            $files = $request->files->all();
-            if (count($files))
-            {
-                foreach ($files["files"] as $file)
-                {
-                    if ($numberOfImagesAdded < $remainingNumberOfImagesAllowed)
-                    {
-                        if ($file->isValid())
-                        {
-                            $listingToImages = new ListingToImages();
-                            $listingToImages->listingID = $listing->listingID;
-                            $listingToImages->image = Guid::create() . "." . $file->guessExtension();
-
-                            $listingImagePath = "public/img/Listing-Images/" . $listing->userId . "/" . $listing->listingID . "/" . $listingToImages->image;
-
-                            if (!is_dir("public/img/Listing-Images/" . $listing->userId . "/" . $listing->listingID . "/")) {
-                                mkdir("public/img/Listing-Images/" . $listing->userId . "/" . $listing->listingID . "/", 0777, true);
-                            }
-
-                            move_uploaded_file($file, $listingImagePath);
-                            $numberOfImagesAdded++;
-                            $listingToImages->save();
-                        }
-                    }
-                }
-            }
-            
             $validator = Validator::make($request->all(),
                 [
                     'name' => 'required|max:127',
@@ -512,9 +451,69 @@ class UserController extends Controller
                     'details' => 'max:4095',
                 ]
             );
-
+            
             if (!$validator->fails())
             {
+                if ($request->input('listingID'))
+                {
+                    $data["listingID"] = $request->input('listingID');
+                    $listing = Listings::find($data["listingID"]);
+                    if (Auth::user()->type != "admin")
+                    {
+                        $listing->status = "draft";
+                    }
+                }
+                else
+                {
+                    $listing = new Listings();
+                    $listing->listingID = Guid::create();
+                    $listing->userId = Auth::user()->userId;
+                    $listing->status = "draft";
+                    mkdir("public/img/Listing-Images/" . $listing->userId . "/" . $listing->listingID);
+                }
+
+                $listing->name = $data["name"];
+                $listing->category = $data["category"];
+                $listing->subCategory = $data["subCategory"];
+                $listing->introduction = $data["intro"];
+                $listing->jurisdiction = $data["jurisdiction"];
+                $listing->investmentType = $data["investmentType"];
+                $listing->typeOfCurrency = htmlentities($data["typeOfCurrency"]);
+                $listing->priceBracketMin = $data["minPrice"];
+                $listing->priceBracketMax = $data["maxPrice"];
+                $listing->additionalDetails = $data["details"];
+                $listing->save();
+
+                $numberOfImagesForListing = ListingToImages::getNumberOfImagesForListing($listing->listingID);
+                $remainingNumberOfImagesAllowed = 9 - ((int) $numberOfImagesForListing->get('numberOfImages'));
+                $numberOfImagesAdded = 0;
+
+                $files = $request->files->all();
+                if (count($files))
+                {
+                    foreach ($files["files"] as $file)
+                    {
+                        if ($numberOfImagesAdded < $remainingNumberOfImagesAllowed)
+                        {
+                            if ($file->isValid())
+                            {
+                                $listingToImages = new ListingToImages();
+                                $listingToImages->listingID = $listing->listingID;
+                                $listingToImages->image = Guid::create() . "." . $file->guessExtension();
+
+                                $listingImagePath = "public/img/Listing-Images/" . $listing->userId . "/" . $listing->listingID . "/" . $listingToImages->image;
+
+                                if (!is_dir("public/img/Listing-Images/" . $listing->userId . "/" . $listing->listingID . "/")) {
+                                    mkdir("public/img/Listing-Images/" . $listing->userId . "/" . $listing->listingID . "/", 0777, true);
+                                }
+
+                                move_uploaded_file($file, $listingImagePath);
+                                $numberOfImagesAdded++;
+                                $listingToImages->save();
+                            }
+                        }
+                    }
+                }
                 $result = "success";
                 $responseData = $listing->listingID;
             }
@@ -564,7 +563,7 @@ class UserController extends Controller
                 {
                     if ($request->input('dontSetSessionVariable') === null)
                     {
-                        $request->session()->put('success', 'Successfuly deleted listing.');
+                        $request->session()->flash('success', 'Successfuly deleted listing.');
                     }
                 }
                 else
@@ -587,7 +586,7 @@ class UserController extends Controller
                         });
                     }
                     
-                    $request->session()->put('success', 'Successfuly deleted listing and the creator was notified.');
+                    $request->session()->flash('success', 'Successfuly deleted listing and the creator was notified.');
                 }
                 
                 return redirect()->route('user-myListings');
@@ -684,12 +683,12 @@ class UserController extends Controller
                         });
                     }
                     
-                    $request->session()->put('success', 'Successfuly posted listing and the creator was notified.');
+                    $request->session()->flash('success', 'Successfuly posted listing and the creator was notified.');
                     //return route('<list of listings pending review>');
                 }
                 else
                 {
-                    $request->session()->put('success', 'Successfuly posted listing.');
+                    $request->session()->flash('success', 'Successfuly posted listing.');
                     return route('user-myListings');
                 }
             }
@@ -731,7 +730,7 @@ class UserController extends Controller
                     });
                 }
                 
-                $request->session()->put('success', 'Successfuly submitted listing. You will be notified of the result via email.');
+                $request->session()->flash('success', 'Successfuly submitted listing. You will be notified of the result via email.');
             }
         }
         return redirect()->route('user-myListings');
@@ -1012,19 +1011,19 @@ class UserController extends Controller
                     
                     if (($creator->NDAStatus != "approved") && ($interestedParty->NDAStatus != "approved"))
                     {
-                        $request->session()->put('success', 'Before this connection can be sent to admin for approval, both parties have to upload their signed NDA. Once the NDAs have been approved, this connection will automatically be sent to admin.');
+                        $request->session()->flash('success', 'Before this connection can be sent to admin for approval, both parties have to upload their signed NDA. Once the NDAs have been approved, this connection will automatically be sent to admin.');
                         
                         $whoNeedsToSign = "both parties need to upload their signed NDA";
                     }
                     else if ($interestedParty->NDAStatus != "approved")
                     {
-                        $request->session()->put('success', 'Before this connection can be sent to admin for approval, the party that sent the request will have to upload their signed NDA. Once the NDA has been approved, this connection will automatically be sent to admin.');
+                        $request->session()->flash('success', 'Before this connection can be sent to admin for approval, the party that sent the request will have to upload their signed NDA. Once the NDA has been approved, this connection will automatically be sent to admin.');
                         
                         $whoNeedsToSign = "you need to upload your signed NDA";
                     }
                     else
                     {
-                        $request->session()->put('success', 'Before this connection can be sent to admin for approval, you the creator have to upload your signed NDA. Once your NDA has been approved, this connection will automatically be sent to admin.');
+                        $request->session()->flash('success', 'Before this connection can be sent to admin for approval, you the creator have to upload your signed NDA. Once your NDA has been approved, this connection will automatically be sent to admin.');
                         
                         $whoNeedsToSign = "the creator of the listing needs to upload their signed NDA";
                     }

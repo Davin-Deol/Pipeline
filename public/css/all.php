@@ -194,16 +194,29 @@ input[type=file]+label {
     display: none;
     position: fixed; /* Stay in place */
     z-index: 2; /* Sit on top */
-    padding-top: 2em; /* Location of the box */
+    /* padding-top: 2em; Location of the box */
     padding-bottom: 2em; /* Location of the box */
     left: 0;
     top: 0;
     height: 100%; /* Full height */
     overflow: auto; /* Enable scroll if needed */
-    background-color: rgb(0,0,0); /* Fallback color */
-    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    /* background-color: rgb(0,0,0); Fallback color */
+    /* background-color: rgba(0,0,0,0.4); Black w/ opacity */
     font-weight: 400;
     font-size: 1.2em;
+    border 2px solid transparent;
+}
+
+#successModalContent {
+    color: #3c763d;
+    background-color: #dff0d8;
+    border-color: #d6e9c6;
+}
+
+#errorModalContent {
+    color: #a94442;
+    background-color: #f2dede;
+    border-color: #ebccd1;
 }
 
 .modal .button {
@@ -404,6 +417,10 @@ label {
     margin-right: 0.7em;
     border-radius: 100%;
     background-color: <?php echo $colourPrimary; ?>;
+}
+.navbar-toggle,
+.icon-bar {
+    border: 1px solid <?php echo $textColourOnPrimary; ?>;
 }
 
 

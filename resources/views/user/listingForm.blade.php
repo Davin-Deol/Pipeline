@@ -262,7 +262,7 @@
                         else
                         {
                             $("#listingID").val(response["data"]);
-                            closeAllModals();
+                            displaySuccessModal("Saved listing");
                             ChangeUrl("Listing Form", "{{ route('user-listingForm') }}/" + response["data"]);
                         }
                     }
