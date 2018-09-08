@@ -6,7 +6,7 @@
     <script src="{{ asset('public/js/jquery.ui.touch-punch.js') }}"></script>
     <script>
         var fadeDuration = 1000;
-        var modalDisplayDuration = 1500;
+        var modalDisplayDuration = 1200;
         
         function closeAllModals()
         {

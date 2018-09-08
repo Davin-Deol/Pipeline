@@ -174,6 +174,9 @@ class UserController extends Controller
     
     public function submitNDA(Request $request)
     {
+        $result = "";
+        $responseData = "";
+        
         if (($request->isMethod('post')) && (Auth::user()->NDAStatus != "approved"))
         {
             $validator = Validator::make($request->all(),
@@ -183,10 +186,10 @@ class UserController extends Controller
             );
             if (!$validator->fails())
             {
-                if (($request->hasFile('NDA')) && ($request->NDAName->isValid()))
+                if (($request->hasFile('NDA')) && ($request->NDA->isValid()))
                 {
                     $user = Auth::user();
-                    $imageFileType = $request->NDAName->extension();
+                    $imageFileType = $request->NDA->extension();
                     $firstSubmission = is_null($user->NDA);
 
                     $user->NDA = $user->userId . "." . $imageFileType;
@@ -204,7 +207,7 @@ class UserController extends Controller
                             }
                         }
                     }
-                    move_uploaded_file($request->NDAName, $NDAPath);
+                    move_uploaded_file($request->NDA, $NDAPath);
 
                     if ($firstSubmission)
                     {
@@ -225,24 +228,34 @@ class UserController extends Controller
                         }
                     }
 
-                    $request->session()->flash('success', 'Successfuly submitted NDA');
+                    $result = "success";
+                    $seconds = filemtime("public/img/NDAs/" . Auth::user()->NDA);
+                    $responseData = StringFormatter::getDifferenceBetweenDateTimeAndNow($seconds);
                 }
                 else
                 {
-                    $request->session()->flash('error', 'Failed to upload file');
+                    $result = "fail";
+                    $responseData = "Failed to upload file";
                 }
             }
             else
             {
-                $request->session()->flash('error', $validator->errors()->all());
+                $result = "fail";
+                $responseData = $validator->errors()->messages();
             }
         }
         
-        return redirect()->route('user-manageAccount');
+        return response()
+            ->json([
+                'result' => $result,
+                'data' => $responseData
+            ]);
     }
     
     public function submitChangePassword(Request $request)
     {
+        $result = "";
+        $responseData = "";
         if ($request->isMethod('post')) 
         {
             $data = array();
@@ -269,24 +282,31 @@ class UserController extends Controller
                     $hashedPassword = password_hash($data["new_pass"], PASSWORD_DEFAULT, ['cost' => 9]);
                     Auth::user()->password = $hashedPassword;
                     Auth::user()->save();
-                    $request->session()->flash('password', $data["new_pass"]);
-                    $request->session()->flash('success', 'Updated password');
+                    $result = "success";
                 }
                 else
                 {
-                    $request->session()->flash('error', ['Incorrect password was provided']);
+                    $result = "fail";
+                    $responseData = ['current_password' => ["Incorrect password was provided"]];
                 }
             }
             else
             {
-                $request->session()->flash('error', $validator->errors()->all());
+                $result = "fail";
+                $responseData = $validator->errors()->messages();
             }
         }
-        return redirect()->route('user-manageAccount');
+        return response()
+            ->json([
+                'result' => $result,
+                'data' => $responseData
+            ]);
     }
     
     public function submitUpdateAccount(Request $request)
     {
+        $result = "";
+        $responseData = "";
         if ($request->isMethod('post')) 
         {
             $data = array();
@@ -353,14 +373,19 @@ class UserController extends Controller
                 $user->bio = $data["bio"];
                 $user->linkedInURL = $data["linkedInURL"];
                 $user->save();
-                $request->session()->flash('success', "Successfuly updated profile. If you entered a profile image that isn't being displayed, you may need to clear your cache.");
+                $result = "success";
             }
             else
             {
-                $request->session()->flash('error', $validator->errors()->all());
+                $result = "fail";
+                $responseData = $validator->errors()->messages();
             }
         }
-        return redirect()->route('user-manageAccount');
+        return response()
+            ->json([
+                'result' => $result,
+                'data' => $responseData
+            ]);
     }
     
     public function listingForm($listingID = null, Request $request)
