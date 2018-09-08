@@ -232,12 +232,12 @@
             });
         });
         
-        $("#SaveButton").click(function() {
+        function submitForm(url, forReview)
+        {
             displayLoadingModal("Saving listing...");
-            
             $.ajax({
                 type: "POST",
-                url: "{{ route('user-saveListing') }}",
+                url: url,
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
@@ -245,16 +245,29 @@
                 processData: false, 
                 contentType: false, 
                 success: function(response) {
+                    $(".validationError").each(function(index) {
+                        $(this).html("");
+                        $(this).css("display", "none");
+                    });
                     if (response["result"] == "success")
                     {
-                        $("#listingID").val(response["data"]);
-                        closeAllModals();
-                        ChangeUrl("Listing Form", "{{ route('user-listingForm') }}/" + response["data"])
+                        if (forReview)
+                        {
+                            @if ($listing->listingID)
+                                window.location.replace("{{ route('user-reviewListing', ['listingID' => $listing->listingID]) }}");
+                            @else
+                                window.location.replace("{{ route('user-reviewListing', ['listingID' => $listing->listingID]) }}/" + response["data"]);
+                            @endif
+                        }
+                        else
+                        {
+                            $("#listingID").val(response["data"]);
+                            closeAllModals();
+                            ChangeUrl("Listing Form", "{{ route('user-listingForm') }}/" + response["data"]);
+                        }
                     }
                     else
                     {
-                        $(".validationError").html("");
-                        $(".validationError").css("display", "none");
                         displayErrorModal("Failed to submit listing");
                         for (var data in response["data"])
                         {
@@ -264,48 +277,19 @@
                     }
                 },
                 error: function() {
-                    displayErrorModal("Failed to save listing. Please try again later.");
+                    displayErrorModal(failMessage);
                 }
             });
+        }
+        
+        $("#SaveButton").click(function() {
+            var url = "{{ route('user-saveListing') }}";
+            submitForm(url, false);
         });
         
         $("#reviewButton").click(function() {
-            displayLoadingModal("Saving listing...");
-            
-            $.ajax({
-                type: "POST",
-                url: "{{ route('user-saveListing', ['forReview' => true]) }}",
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                data: new FormData($('#listingForm')[0]),
-                processData: false, 
-                contentType: false, 
-                success: function(response) {
-                    if (response["result"] == "success")
-                    {
-                        @if ($listing->listingID)
-                            window.location.replace("{{ route('user-reviewListing', ['listingID' => $listing->listingID]) }}");
-                        @else
-                            window.location.replace("{{ route('user-reviewListing', ['listingID' => $listing->listingID]) }}/" + response);
-                        @endif
-                    }
-                    else
-                    {
-                        $(".validationError").html("");
-                        $(".validationError").css("display", "none");
-                        displayErrorModal("Failed to submit listing");
-                        for (var data in response["data"])
-                        {
-                            $("#" + data + "ValidationError").html(response["data"][data])
-                            $("#" + data + "ValidationError").css("display", "block");
-                        }
-                    }
-                },
-                error: function() {
-                    displayErrorModal("Failed to save listing. Please try again later.");
-                }
-            });
+            var url = "{{ route('user-saveListing', ['forReview' => true]) }}";
+            submitForm(url, true);
         });
     });
 
