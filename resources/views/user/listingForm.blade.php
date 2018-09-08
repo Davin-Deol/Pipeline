@@ -175,7 +175,14 @@
     $( window ).resize(function() {
         $(".image").height($(".image").parent().width());
     });
-
+    
+    function ChangeUrl(title, url) {
+        if (typeof (history.pushState) != "undefined") {
+            var obj = { Title: title, Url: url };
+            history.pushState(obj, obj.Title, obj.Url);
+        }
+    }
+    
     $(document).ready(function() {
         $(".image").height($(".image").parent().width());
 
@@ -232,6 +239,7 @@
                     {
                         $("#listingID").val(response);
                         closeAllModals();
+                        ChangeUrl("Listing Form", "{{ route('user-listingForm') }}/" + response)
                     }
                     else
                     {
