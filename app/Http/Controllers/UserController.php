@@ -418,11 +418,13 @@ class UserController extends Controller
         return view('user/listingForm', compact('data', 'listing', 'listingImages', 'currencies', 'interests', 'investmentTypes', 'jurisdictions', 'lastInputsUsed'));
     }
     
-    public function saveListing(Request $request)
+    public function saveListing($forReview = false, Request $request)
     {
         if ($request->isMethod('post')) 
         {
             $data = array();
+            $result = "";
+            $responseData = "";
         
             $data["name"] = $request->input('name');
             $data["intro"] = ($request->input('intro') !== null) ? $request->input('intro') : '';
@@ -438,35 +440,109 @@ class UserController extends Controller
             if ($request->input('listingID'))
             {
                 $data["listingID"] = $request->input('listingID');
+                $listing = Listings::find($data["listingID"]);
+                if (Auth::user()->type != "admin")
+                {
+                    $listing->status = "draft";
+                }
             }
             else
             {
-                $data["listingID"] = "";
+                $listing = new Listings();
+                $listing->listingID = Guid::create();
+                $listing->userId = Auth::user()->userId;
+                $listing->status = "draft";
+                mkdir("public/img/Listing-Images/" . $listing->userId . "/" . $listing->listingID);
+            }
+
+            $listing->name = $data["name"];
+            $listing->category = $data["category"];
+            $listing->subCategory = $data["subCategory"];
+            $listing->introduction = $data["intro"];
+            $listing->jurisdiction = $data["jurisdiction"];
+            $listing->investmentType = $data["investmentType"];
+            $listing->typeOfCurrency = htmlentities($data["typeOfCurrency"]);
+            $listing->priceBracketMin = $data["minPrice"];
+            $listing->priceBracketMax = $data["maxPrice"];
+            $listing->additionalDetails = $data["details"];
+            $listing->save();
+
+            $numberOfImagesForListing = ListingToImages::getNumberOfImagesForListing($listing->listingID);
+            $remainingNumberOfImagesAllowed = 9 - ((int) $numberOfImagesForListing->get('numberOfImages'));
+            $numberOfImagesAdded = 0;
+
+            $files = $request->files->all();
+            if (count($files))
+            {
+                foreach ($files["files"] as $file)
+                {
+                    if ($numberOfImagesAdded < $remainingNumberOfImagesAllowed)
+                    {
+                        if ($file->isValid())
+                        {
+                            $listingToImages = new ListingToImages();
+                            $listingToImages->listingID = $listing->listingID;
+                            $listingToImages->image = Guid::create() . "." . $file->guessExtension();
+
+                            $listingImagePath = "public/img/Listing-Images/" . $listing->userId . "/" . $listing->listingID . "/" . $listingToImages->image;
+
+                            if (!is_dir("public/img/Listing-Images/" . $listing->userId . "/" . $listing->listingID . "/")) {
+                                mkdir("public/img/Listing-Images/" . $listing->userId . "/" . $listing->listingID . "/", 0777, true);
+                            }
+
+                            move_uploaded_file($file, $listingImagePath);
+                            $numberOfImagesAdded++;
+                            $listingToImages->save();
+                        }
+                    }
+                }
             }
             
-            $files = $request->files->all();
-            $listing = UserController::verifyListing($data, $files);
-            //$request->session()->put('success', 'Successfuly saved listing');
-        
-            return response($listing->listingID)->withCookie(cookie()->forever('listingForm_LastInputsUsed', json_encode([
-                'category' => $data["category"],
-                'subCategory' => $data["subCategory"],
-                'jurisdiction' => $data["jurisdiction"],
-                'investmentType' => $data["investmentType"],
-                'typeOfCurrency' => $data["typeOfCurrency"]
-            ])));
+            $result = "success";
+            $responseData = $listing->listingID;
+            
+            if ($forReview)
+            {
+                $validator = Validator::make($request->all(),
+                    [
+                        'name' => 'required|max:127',
+                        'intro' => 'required|max:511',
+                        'category' => 'required|max:63',
+                        'subCategory' => 'required|max:31',
+                        'jurisdiction' => 'required|max:85',
+                        'investmentType' => 'required|max:31',
+                        'typeOfCurrency' => 'required|max:10',
+                        'minPrice' => 'required|numeric|min:0|max:99999999999',
+                        'maxPrice' => 'required|numeric|gte:minPrice|min:0|max:99999999999',
+                        'details' => 'required|max:4095',
+                    ]
+                );
+                
+                if ($validator->fails())
+                {
+                    $result = "fail";
+                    $responseData = $validator->errors()->messages();
+                }
+            }
+            
+            return response()
+                ->json([
+                    'result' => $result,
+                    'data' => $responseData
+                ])->withCookie(cookie()->forever('listingForm_LastInputsUsed', json_encode([
+                    'category' => $data["category"],
+                    'subCategory' => $data["subCategory"],
+                    'jurisdiction' => $data["jurisdiction"],
+                    'investmentType' => $data["investmentType"],
+                    'typeOfCurrency' => $data["typeOfCurrency"]
+                ])));
         }
         
-        /*
-        return redirect()->route('user-editListing', ['listingID' => $listing->listingID])
-            ->withCookie(cookie()->forever('listingForm_LastInputsUsed', json_encode([
-                'category' => $data["category"],
-                'subCategory' => $data["subCategory"],
-                'jurisdiction' => $data["jurisdiction"],
-                'investmentType' => $data["investmentType"],
-                'typeOfCurrency' => $data["typeOfCurrency"]
-            ])));
-        */
+        return response()
+                ->json([
+                    'result' => 'fail',
+                    'data' => "Failed to save listing. Please try again later."
+                ]);
     }
     
     public function deleteListing(Request $request)
@@ -515,136 +591,9 @@ class UserController extends Controller
                     $request->session()->put('success', 'Successfuly deleted listing and the creator was notified.');
                 }
                 
-                return route('user-myListings');
+                return redirect()->route('user-myListings');
             }
         }
-    }
-    
-    public function submitListingForReview(Request $request)
-    {
-        if ($request->isMethod('post')) 
-        {
-            $data = array();
-        
-            $data["name"] = $request->input('name');
-            $data["intro"] = ($request->input('intro') !== null) ? $request->input('intro') : '';
-            $data["category"] = $request->input('category');
-            $data["subCategory"] = $request->input('subCategory');
-            $data["jurisdiction"] = $request->input('jurisdiction');
-            $data["investmentType"] = $request->input('investmentType');
-            $data["typeOfCurrency"] = $request->input('typeOfCurrency');
-            $data["minPrice"] = ($request->input('minPrice') !== null) ? $request->input('minPrice') : 0;
-            $data["maxPrice"] = ($request->input('maxPrice') !== null) ? $request->input('maxPrice') : 0;
-            $data["details"] = ($request->input('details') !== null) ? $request->input('details') : '';
-            
-            if ($request->input('listingID'))
-            {
-                $data["listingID"] = $request->input('listingID');
-            }
-            else
-            {
-                $data["listingID"] = "";
-            }
-            
-            $files = $request->files->all();
-            $listing = UserController::verifyListing($data, $files);
-            
-            $validator = Validator::make($request->all(),
-                [
-                    'name' => 'required|max:127',
-                    'intro' => 'required|max:511',
-                    'category' => 'required|max:63',
-                    'subCategory' => 'required|max:31',
-                    'jurisdiction' => 'required|max:85',
-                    'investmentType' => 'required|max:31',
-                    'typeOfCurrency' => 'required|max:10',
-                    'minPrice' => 'required|numeric|min:0|max:99999999999',
-                    'maxPrice' => 'required|numeric|gte:minPrice|min:0|max:99999999999',
-                    'details' => 'required|max:4095',
-                ]
-            );
-            if (!$validator->fails())
-            {
-                
-                return redirect()->route("user-reviewListing", ['listingID' => $listing->listingID]);
-            }
-            else
-            {
-                $request->session()->put('error', $validator->errors()->all());
-            }
-        }
-        return redirect()->route("user-editListing", ['listingID' => $listing->listingID])
-            ->withCookie(cookie()->forever('listingForm_LastInputsUsed', json_encode([
-                'category' => $data["category"],
-                'subCategory' => $data["subCategory"],
-                'jurisdiction' => $data["jurisdiction"],
-                'investmentType' => $data["investmentType"],
-                'typeOfCurrency' => $data["typeOfCurrency"]
-            ])));
-    }
-    
-    public function verifyListing($data, $files)
-    {
-        if ($data["listingID"] != "")
-        {
-            $listing = Listings::find($data["listingID"]);
-            if (Auth::user()->type != "admin")
-            {
-                $listing->status = "draft";
-            }
-        }
-        else
-        {
-            $listing = new Listings();
-            $listing->listingID = Guid::create();
-            $listing->userId = Auth::user()->userId;
-            $listing->status = "draft";
-            mkdir("public/img/Listing-Images/" . $listing->userId . "/" . $listing->listingID);
-        }
-
-        $listing->name = $data["name"];
-        $listing->category = $data["category"];
-        $listing->subCategory = $data["subCategory"];
-        $listing->introduction = $data["intro"];
-        $listing->jurisdiction = $data["jurisdiction"];
-        $listing->investmentType = $data["investmentType"];
-        $listing->typeOfCurrency = htmlentities($data["typeOfCurrency"]);
-        $listing->priceBracketMin = $data["minPrice"];
-        $listing->priceBracketMax = $data["maxPrice"];
-        $listing->additionalDetails = $data["details"];
-        $listing->save();
-
-        $numberOfImagesForListing = ListingToImages::getNumberOfImagesForListing($listing->listingID);
-        $remainingNumberOfImagesAllowed = 9 - ((int) $numberOfImagesForListing->get('numberOfImages'));
-        $numberOfImagesAdded = 0;
-
-        if (count($files))
-        {
-            foreach ($files["files"] as $file)
-            {
-                if ($numberOfImagesAdded < $remainingNumberOfImagesAllowed)
-                {
-                    if ($file->isValid())
-                    {
-                        $listingToImages = new ListingToImages();
-                        $listingToImages->listingID = $listing->listingID;
-                        $listingToImages->image = Guid::create() . "." . $file->guessExtension();
-
-                        $listingImagePath = "public/img/Listing-Images/" . $listing->userId . "/" . $listing->listingID . "/" . $listingToImages->image;
-
-                        if (!is_dir("public/img/Listing-Images/" . $listing->userId . "/" . $listing->listingID . "/")) {
-                            mkdir("public/img/Listing-Images/" . $listing->userId . "/" . $listing->listingID . "/", 0777, true);
-                        }
-
-                        move_uploaded_file($file, $listingImagePath);
-                        $numberOfImagesAdded++;
-                        $listingToImages->save();
-                    }
-                }
-            }
-        }
-        
-        return $listing;
     }
     
     public function deleteListingImage(Request $request)

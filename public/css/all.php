@@ -124,6 +124,12 @@ footer hr {
     text-align: center;
 }
 
+.validationError {
+    color: #D00;
+    font-size: 0.8em;
+    display: none;
+}
+
 .button {
     color: <?php echo $textColourOnPrimary; ?>;
     background-color: <?php echo $colourPrimary; ?>;

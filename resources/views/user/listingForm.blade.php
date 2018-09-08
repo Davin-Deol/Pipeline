@@ -9,12 +9,14 @@
                 <div class="col-xs-12">
                     <b>Name</b>
                     <input type="text" class="form-control" id="name" name="name" placeholder="Name" value="{{ $listing->name }}" maxlength="127" />
+                    <i class="validationError" id="nameValidationError"></i>
                 </div>
             </div>
             <div class="row">
                 <div class="col-xs-12">
                     <b>Introduction</b>
                     <textarea type="text" class="form-control" id="intro" rows="5" name="intro" placeholder="Introduction" maxlength="511">{{ $listing->introduction }}</textarea>
+                    <i class="validationError" id="introValidationError"></i>
                 </div>
             </div>
             <div class="row">
@@ -37,6 +39,7 @@
                             <option>Looking to Invest</option>
                         @endif
                     </select>
+                    <i class="validationError" id="categoryValidationError"></i>
                 </div>
                 <div class="col-lg-3 col-sm-6">
                     <b>Sub Category</b>
@@ -55,6 +58,7 @@
                             @endif
                         @endforeach
                     </select>
+                    <i class="validationError" id="subCategoryValidationError"></i>
                 </div>
                 <div class="col-lg-3 col-sm-6">
                     <b>Jurisdiction</b>
@@ -73,6 +77,7 @@
                             @endif
                         @endforeach
                     </select>
+                    <i class="validationError" id="jurisdictionValidationError"></i>
                 </div>
                 <div class="col-lg-3 col-sm-6">
                     <b>Investment Type</b>
@@ -91,6 +96,7 @@
                             @endif
                         @endforeach
                     </select>
+                    <i class="validationError" id="investmentTypeValidationError"></i>
                 </div>
             </div>
             <div class="row">
@@ -115,12 +121,15 @@
                             @endif
                         @endforeach
                     </select>
+                    <i class="validationError" id="typeOfCurrencyValidationError"></i>
                 </div>
                 <div class="col-sm-4">
                     <input type="number" class="form-control priceBracket" id="minPrice" name="minPrice" value="{{ $listing->priceBracketMin }}" min="0" max="99999999999" placeholder="min" />
+                    <i class="validationError" id="minPriceValidationError"></i>
                 </div>
                 <div class="col-sm-4">
                     <input type="number" class="form-control priceBracket" id="maxPrice" name="maxPrice" value="{{ $listing->priceBracketMax }}" min="0" max="99999999999" placeholder="max" />
+                    <i class="validationError" id="maxPriceValidationError"></i>
                 </div>
             </div>
 
@@ -128,6 +137,7 @@
                 <div class="col-lg-12">
                     <b>Details</b>
                     <textarea type="text" class="form-control" id="details" rows="5" name="details" placeholder="Additional Details" maxlength="4095">{{ $listing->additionalDetails }}</textarea>
+                    <i class="validationError" id="detailsValidationError"></i>
                 </div>
             </div>
             <div class="row">
@@ -160,7 +170,7 @@
                     </button>
                 </div>
                 <div class="col-sm-4">
-                    <button type="submit" class="button" formaction="{{ route('user-submitListingForReview') }}">
+                    <button type="button" class="button" id="reviewButton">
                         <span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span> Review
                     </button>
                 </div>
@@ -235,15 +245,63 @@
                 processData: false, 
                 contentType: false, 
                 success: function(response) {
-                    if (response)
+                    if (response["result"] == "success")
                     {
-                        $("#listingID").val(response);
+                        $("#listingID").val(response["data"]);
                         closeAllModals();
-                        ChangeUrl("Listing Form", "{{ route('user-listingForm') }}/" + response)
+                        ChangeUrl("Listing Form", "{{ route('user-listingForm') }}/" + response["data"])
                     }
                     else
                     {
-                        displayErrorModal("Failed to save listing. Please try again later.");
+                        displayErrorModal(response["data"]);
+                    }
+                },
+                error: function() {
+                    displayErrorModal("Failed to save listing. Please try again later.");
+                }
+            });
+        });
+        
+        $("#reviewButton").click(function() {
+            displayLoadingModal("Saving listing...");
+            
+            $.ajax({
+                type: "POST",
+                url: "{{ route('user-saveListing', ['forReview' => true]) }}",
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                data: new FormData($('#listingForm')[0]),
+                processData: false, 
+                contentType: false, 
+                success: function(response) {
+                    if (response["result"] == "success")
+                    {
+                        @if ($listing->listingID)
+                            window.location.replace("{{ route('user-reviewListing', ['listingID' => $listing->listingID]) }}");
+                        @else
+                            window.location.replace("{{ route('user-reviewListing', ['listingID' => $listing->listingID]) }}/" + response);
+                        @endif
+                    }
+                    else
+                    {
+                        $(".validationError").html("");
+                        $(".validationError").css("display", "none");
+                        displayErrorModal("Failed to submit listing");
+                        for (var data in response["data"])
+                        {
+                            $("#" + data + "ValidationError").html(response["data"][data])
+                            $("#" + data + "ValidationError").css("display", "block");
+                        }
+                        /*
+                        for (var i = 0; i < L; i++) {
+                            var obj = response["data"][i];
+                            for (var j in obj) {
+                                $("#" + j + "ValidationError").html(response["data"][j])
+                                $("#" + j + "ValidationError").css("display", "block");
+                            }
+                        }
+                        */
                     }
                 },
                 error: function() {
