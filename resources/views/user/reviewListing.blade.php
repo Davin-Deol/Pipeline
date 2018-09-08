@@ -152,6 +152,32 @@
                             </button>
                         </div>
                     </div>
+                @elseif (($listing->userId == $user->userId) and ($listing->status != "draft"))
+                    <div class="row">
+                        <div class="col-xs-6">
+                            <button id="editButton" type="button" class="button">
+                                <span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Edit
+                            </button>
+                        </div>
+                        <div class="col-xs-6">
+                            <button id="removeButton" type="button" class="button">
+                                <span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Delete
+                            </button>
+                        </div>
+                    </div>
+                @elseif ($user->type == "admin" and $listing->status != "submitted")
+                    <div class="row">
+                        <div class="col-xs-6">
+                            <a href="{{ route('user-listingForm', ['listingID' => $listing->listingID]) }}"><button type="button" class="button">
+                                <span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Edit
+                            </button></a>
+                        </div>
+                        <div class="col-xs-6">
+                            <button id="removeButton" type="button" class="button">
+                                <span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Delete
+                            </button>
+                        </div>
+                    </div>
                 @elseif ($listing->status == "posted" and $listing->userId != $user->userId)
                     <div class="row">
                         <div class="col-xs-6">
@@ -175,19 +201,6 @@
                                     <span class="glyphicon glyphicon-star-empty" aria-hidden="true"></span> Save
                             </button>
                             @endif
-                        </div>
-                    </div>
-                @elseif ((($listing->userId == $user->userId) || ($user->type == "admin" and $listing->status != "submitted")) and ($listing->status != "draft"))
-                    <div class="row">
-                        <div class="col-xs-6">
-                            <button id="editButton" type="button" class="button">
-                                <span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Edit
-                            </button>
-                        </div>
-                        <div class="col-xs-6">
-                            <button id="removeButton" type="button" class="button">
-                                <span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Delete
-                            </button>
                         </div>
                     </div>
                 @endif

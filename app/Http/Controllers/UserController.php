@@ -709,7 +709,7 @@ class UserController extends Controller
                     }
                     
                     $request->session()->flash('success', 'Successfuly posted listing and the creator was notified.');
-                    //return route('<list of listings pending review>');
+                    return route('admin-listingsPendingReview');
                 }
                 else
                 {
