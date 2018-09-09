@@ -92,10 +92,16 @@
             
             $(".reviewImageMain").height($(".reviewImageMain").width());
             
-            @if (Session::has('success'))
-                displaySuccessModal("{{ Session::get('success') }}");
-            @elseif (Session::has('error'))
-                displayErrorModal("{{ Session::get('error') }}");
+            @if ((Session::has('success')) or (Session::has('error')))
+                @if (Session::has('success'))
+                    displaySuccessModal("{{ Session::get('success') }}");
+                @elseif (Session::has('error'))
+                    displayErrorModal("{{ Session::get('error') }}");
+                @endif
+                @php
+                    Session::forget('success');
+                    Session::forget('error');
+                @endphp
             @endif
         });
     </script>

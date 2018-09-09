@@ -59,7 +59,7 @@ class UserController extends Controller
         if ($request->isMethod('post'))
         {
             $searchKey = $request->input("searchKey");
-            $request->session()->flash('searchKey', $searchKey);
+            $request->session()->put('searchKey', $searchKey);
             $data["searchKeyUsed"] = $searchKey;
         }
         
@@ -570,6 +570,7 @@ class UserController extends Controller
     
     public function deleteListing(Request $request)
     {
+        $flashSessionData = "";
         if ($request->isMethod('post')) 
         {
             $data = array();
@@ -588,7 +589,7 @@ class UserController extends Controller
                 {
                     if ($request->input('dontSetSessionVariable') === null)
                     {
-                        $request->session()->flash('success', 'Successfuly deleted listing.');
+                        $flashSessionData = 'Successfuly deleted listing.';
                     }
                 }
                 else
@@ -611,9 +612,9 @@ class UserController extends Controller
                         });
                     }
                     
-                    $request->session()->flash('success', 'Successfuly deleted listing and the creator was notified.');
+                    $flashSessionData = 'Successfuly deleted listing and the creator was notified.';
                 }
-                
+                $request->session()->put('success', $flashSessionData);
                 return redirect()->route('user-myListings');
             }
         }
@@ -708,12 +709,12 @@ class UserController extends Controller
                         });
                     }
                     
-                    $request->session()->flash('success', 'Successfuly posted listing and the creator was notified.');
+                    $request->session()->put('success', 'Successfuly posted listing and the creator was notified.');
                     return route('admin-listingsPendingReview');
                 }
                 else
                 {
-                    $request->session()->flash('success', 'Successfuly posted listing.');
+                    $request->session()->put('success', 'Successfuly posted listing.');
                     return route('user-myListings');
                 }
             }
@@ -755,7 +756,7 @@ class UserController extends Controller
                     });
                 }
                 
-                $request->session()->flash('success', 'Successfuly submitted listing. You will be notified of the result via email.');
+                $request->session()->put('success', 'Successfuly submitted listing. You will be notified of the result via email.');
             }
         }
         return redirect()->route('user-myListings');
@@ -1036,19 +1037,19 @@ class UserController extends Controller
                     
                     if (($creator->NDAStatus != "approved") && ($interestedParty->NDAStatus != "approved"))
                     {
-                        $request->session()->flash('success', 'Before this connection can be sent to admin for approval, both parties have to upload their signed NDA. Once the NDAs have been approved, this connection will automatically be sent to admin.');
+                        $request->session()->put('success', 'Before this connection can be sent to admin for approval, both parties have to upload their signed NDA. Once the NDAs have been approved, this connection will automatically be sent to admin.');
                         
                         $whoNeedsToSign = "both parties need to upload their signed NDA";
                     }
                     else if ($interestedParty->NDAStatus != "approved")
                     {
-                        $request->session()->flash('success', 'Before this connection can be sent to admin for approval, the party that sent the request will have to upload their signed NDA. Once the NDA has been approved, this connection will automatically be sent to admin.');
+                        $request->session()->put('success', 'Before this connection can be sent to admin for approval, the party that sent the request will have to upload their signed NDA. Once the NDA has been approved, this connection will automatically be sent to admin.');
                         
                         $whoNeedsToSign = "you need to upload your signed NDA";
                     }
                     else
                     {
-                        $request->session()->flash('success', 'Before this connection can be sent to admin for approval, you the creator have to upload your signed NDA. Once your NDA has been approved, this connection will automatically be sent to admin.');
+                        $request->session()->put('success', 'Before this connection can be sent to admin for approval, you the creator have to upload your signed NDA. Once your NDA has been approved, this connection will automatically be sent to admin.');
                         
                         $whoNeedsToSign = "the creator of the listing needs to upload their signed NDA";
                     }

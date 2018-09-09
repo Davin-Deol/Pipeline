@@ -22,6 +22,7 @@ class AdminOnly
         {
             if (($user->type == "admin") || ($user->type == "demo-admin"))
             {
+                $request->session()->reflash();
                 return $next($request);
             }
         }
