@@ -5,6 +5,8 @@
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script src="{{ asset('public/js/jquery.ui.touch-punch.js') }}"></script>
     <script>
+        var fadeDuration = 1000;
+        var modalDisplayDuration = 1200;
         
         function closeAllModals()
         {
@@ -21,19 +23,25 @@
         function displaySuccessModal(message)
         {
             closeAllModals();
-            $("#successOrErrorMessageModal").css("display", "block");
-            $("#successOrErrorMessageModalContent").css('background-color', '#aaffaa');
-            $("#modalMessageSuccess").text(message);
-            $("#modalMessageError").text("");
+            $("#successMessageModal").css("display", "block");
+            $("#successMessage").text(message);
+            setTimeout(function() {
+                $( "#successMessageModal" ).fadeOut(fadeDuration, function() {
+                    // Animation complete.
+                });
+            }, modalDisplayDuration);
         }
         
         function displayErrorModal(message)
         {
             closeAllModals();
-            $("#successOrErrorMessageModal").css("display", "block");
-            $("#successOrErrorMessageModalContent").css('background-color', '#ffaaaa');
-            $("#modalMessageError").text(message);
-            $("#modalMessageSuccess").text("");
+            $("#errorMessageModal").css("display", "block");
+            $("#errorMessage").text(message);
+            setTimeout(function() {
+                $( "#errorMessageModal" ).fadeOut(fadeDuration, function() {
+                    // Animation complete.
+                });
+            }, modalDisplayDuration);
         }
         
         $(document).ready(function() {
@@ -60,16 +68,9 @@
                 });
             });
             
-            if ($("#modalMessageError").text().trim().length > 0) {
-                $("#successOrErrorMessageModal").css('display', 'inline');
-                $("#successOrErrorMessageModalContent").css('background-color', '#ffaaaa');
-            } else if ($("#modalMessageSuccess").text().trim().length > 0) {
-                $("#successOrErrorMessageModal").css('display', 'inline');
-                $("#successOrErrorMessageModalContent").css('background-color', '#aaffaa');
-            }
-            
             window.onclick = function(event) {
-                if ((event.target == document.getElementById('successOrErrorMessageModal'))
+                if ((event.target == document.getElementById('successMessageModal'))
+                    || (event.target == document.getElementById('errorMessageModal'))
                     || (event.target == document.getElementById('confirmationModal'))) {
                     closeAllModals();
                 }
@@ -90,6 +91,18 @@
             });
             
             $(".reviewImageMain").height($(".reviewImageMain").width());
+            
+            @if ((Session::has('success')) or (Session::has('error')))
+                @if (Session::has('success'))
+                    displaySuccessModal("{{ Session::get('success') }}");
+                @elseif (Session::has('error'))
+                    displayErrorModal("{{ Session::get('error') }}");
+                @endif
+                @php
+                    Session::forget('success');
+                    Session::forget('error');
+                @endphp
+            @endif
         });
     </script>
 </head>
@@ -138,10 +151,11 @@
                                 <ul class="dropdown-menu">
                                     <li><a href="{{ route('user-myListings') }}">View Listings</a></li>
                                     <li><a href="{{ route('user-connections') }}">Connections</a></li>
-                                    <li><a href="{{ route('user-createListing') }}">Create Listing</a></li>
+                                    <li><a href="{{ route('user-listingForm') }}">
+                                            <span class="glyphicon glyphicon-plus-sign"></span> Create Listing</a></li>
                                 </ul>
                             </li>
-                            @if (($user->type == "admin") || ($user->type == "demo-admin"))
+                            @if ((Auth::user()->type == "admin") || (Auth::user()->type == "demo-admin"))
                                 <li class="dropdown">
                                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                                         <span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Admin<span class="caret"></span>
@@ -159,7 +173,7 @@
                                     <table>
                                         <tr>
                                             <td>
-                                            @if ($user->profileImage)
+                                            @if (Auth::user()->profileImage)
                                                 <div class="profileImage" style="background-image: url('{{ asset('public/img/Profile-Images/' . $user->profileImage) }}');"></div>
                                             @else
                                                 <div class="profileImage" style="background-image: url('{{ asset('public/img/Profile-Images/Default-User-Profile-Image_White.png') }}');"></div>
@@ -202,26 +216,22 @@
                 </div>
             </div>
         </div>
-        <div id="successOrErrorMessageModal" class="modal row">
+        <div id="successMessageModal" class="modal row">
             <!-- Modal content -->
-            <div id="successOrErrorMessageModalContent" class="modal-content col-md-6 col-sm-8 col-xs-10">
+            <div id="successModalContent" class="modal-content col-md-6 col-sm-8 col-xs-10">
                 <span class="close">&times;</span>
-                <span id="modalMessageSuccess">
-                    @if (Session::has('success'))
-                        {{ Session::get('success') }}
-                        {{ Session::forget('success') }}
-                    @endif
-                </span>
-                <span id="modalMessageError">
-                    @if (Session::has('error'))
-                        <ul>
-                        @foreach (Session::get('error') as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                        </ul>
-                        {{ Session::forget('error') }}
-                    @endif
-                </span>
+                <div id="modalMessageSuccess">
+                    <span class="glyphicon glyphicon-ok-sign"></span> <span id="successMessage"></span>
+                </div>
+            </div>
+        </div>
+        <div id="errorMessageModal" class="modal row">
+            <!-- Modal content -->
+            <div id="errorModalContent" class="modal-content col-md-6 col-sm-8 col-xs-10">
+                <span class="close">&times;</span>
+                <div id="modalMessageError">
+                    <span class="glyphicon glyphicon-remove-sign"></span> <span id="errorMessage"></span>
+                </div>
             </div>
         </div>
     </div>

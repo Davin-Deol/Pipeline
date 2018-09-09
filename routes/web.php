@@ -37,11 +37,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/deleteConnection', 'UserController@deleteConnection')->name('user-deleteConnection');
     Route::post('/denyConnection', 'UserController@denyConnection')->name('user-denyConnection');
     Route::post('/approveConnection', 'UserController@approveConnection')->name('user-approveConnection');
-    Route::get('/createListing', 'UserController@createListing')->name('user-createListing');
+    Route::get('/listingForm/{listingID?}', 'UserController@listingForm')->name('user-listingForm');
     Route::post('/deleteListing', 'UserController@deleteListing')->name('user-deleteListing');
-    Route::post('/saveListing', 'UserController@saveListing')->name('user-saveListing');
-    Route::post('/submitListingForReview', 'UserController@submitListingForReview')->name('user-submitListingForReview');
-    Route::get('/editListing/{listingID}', 'UserController@editListing')->name('user-editListing');
+    Route::post('/saveListing/{forReview?}', 'UserController@saveListing')->name('user-saveListing');
     Route::post('/deleteListingImage', 'UserController@deleteListingImage')->name('user-deleteListingImage');
     Route::get('/reviewListing/{listingID}', 'UserController@reviewListing')->name('user-reviewListing');
     Route::post('/postListing', 'UserController@postListing')->name('user-postListing');

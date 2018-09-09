@@ -103,7 +103,7 @@
                 @if ($listing->status == "draft" and $listing->userId == $user->userId and $user->type != "admin")
                     <div class="row">
                         <div class="col-xs-4">
-                            <a href="{{ route('user-editListing', ['listingID' => $listing->listingID]) }}" class="button">
+                            <a href="{{ route('user-listingForm', ['listingID' => $listing->listingID]) }}" class="button">
                                 <span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Edit
                             </a>
                         </div>
@@ -119,7 +119,7 @@
                 @elseif ($listing->status == "draft" and $listing->userId == $user->userId and $user->type == "admin")
                     <div class="row">
                         <div class="col-xs-4">
-                            <a href="{{ route('user-editListing', ['listingID' => $listing->listingID]) }}" class="button">
+                            <a href="{{ route('user-listingForm', ['listingID' => $listing->listingID]) }}" class="button">
                                 <span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Edit
                             </a>
                         </div>
@@ -142,13 +142,39 @@
                             </button>
                         </div>
                         <div class="col-xs-4">
-                            <a href="{{ route('user-editListing', ['listingID' => $listing->listingID]) }}" class="btn button">
+                            <a href="{{ route('user-listingForm', ['listingID' => $listing->listingID]) }}" class="btn button">
                                 <span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Edit
                             </a>
                         </div>
                         <div class="col-xs-4">
                             <button type="button" class="button" id="postButton">
                                 <span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span> Approve
+                            </button>
+                        </div>
+                    </div>
+                @elseif (($listing->userId == $user->userId) and ($listing->status != "draft"))
+                    <div class="row">
+                        <div class="col-xs-6">
+                            <button id="editButton" type="button" class="button">
+                                <span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Edit
+                            </button>
+                        </div>
+                        <div class="col-xs-6">
+                            <button id="removeButton" type="button" class="button">
+                                <span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Delete
+                            </button>
+                        </div>
+                    </div>
+                @elseif ($user->type == "admin" and $listing->status != "submitted")
+                    <div class="row">
+                        <div class="col-xs-6">
+                            <a href="{{ route('user-listingForm', ['listingID' => $listing->listingID]) }}"><button type="button" class="button">
+                                <span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Edit
+                            </button></a>
+                        </div>
+                        <div class="col-xs-6">
+                            <button id="removeButton" type="button" class="button">
+                                <span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Delete
                             </button>
                         </div>
                     </div>
@@ -175,19 +201,6 @@
                                     <span class="glyphicon glyphicon-star-empty" aria-hidden="true"></span> Save
                             </button>
                             @endif
-                        </div>
-                    </div>
-                @elseif ((($listing->userId == $user->userId) || ($user->type == "admin" and $listing->status != "submitted")) and ($listing->status != "draft"))
-                    <div class="row">
-                        <div class="col-xs-6">
-                            <button id="editButton" type="button" class="button">
-                                <span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Edit
-                            </button>
-                        </div>
-                        <div class="col-xs-6">
-                            <button id="removeButton" type="button" class="button">
-                                <span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Delete
-                            </button>
                         </div>
                     </div>
                 @endif
@@ -339,7 +352,7 @@
     
     function editListing(element)
     {
-        $(location).attr('href', "{{ route('user-editListing', ['listingID' => $listing->listingID]) }}");
+        $(location).attr('href', "{{ route('user-listingForm', ['listingID' => $listing->listingID]) }}");
     }
     $(document).ready(function() {
         var images = [@foreach ($listingImages as $listingImage)

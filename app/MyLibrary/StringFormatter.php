@@ -9,7 +9,7 @@ class StringFormatter
         $dtT = new \DateTime("@$seconds");
         $interval = $dtF->diff($dtT);
         $result = "";
-        if ($interval->y > 0)
+        if ($interval->y > 1)
         { 
             $result = $dtF->diff($dtT)->format('%y years ago');
         }
@@ -17,7 +17,7 @@ class StringFormatter
         { 
             $result = $dtF->diff($dtT)->format('%y year ago');
         }
-        else if ($interval->m > 0)
+        else if ($interval->m > 1)
         { 
             $result = $dtF->diff($dtT)->format('%m months ago');
         }
@@ -25,7 +25,7 @@ class StringFormatter
         { 
             $result = $dtF->diff($dtT)->format('%m month ago');
         }
-        else if ($interval->d > 0)
+        else if ($interval->d > 1)
         { 
             $result = $dtF->diff($dtT)->format('%a days ago');
         }
@@ -33,7 +33,7 @@ class StringFormatter
         { 
             $result = $dtF->diff($dtT)->format('%a day ago');
         }
-        else if ($interval->h > 0)
+        else if ($interval->h > 1)
         { 
             $result = $dtF->diff($dtT)->format('%h hours ago');
         }
@@ -41,7 +41,7 @@ class StringFormatter
         { 
             $result = $dtF->diff($dtT)->format('%h hour ago');
         }
-        else if ($interval->i > 0)
+        else if ($interval->i > 1)
         { 
             $result = $dtF->diff($dtT)->format('%i minutes ago');
         }
@@ -49,13 +49,17 @@ class StringFormatter
         { 
             $result = $dtF->diff($dtT)->format('%i minute ago');
         }
-        else if ($interval->s > 0)
+        else if ($interval->s > 1)
         { 
             $result = $dtF->diff($dtT)->format('%s seconds ago');
         }
         else if ($interval->s !== 0)
         { 
             $result = $dtF->diff($dtT)->format('%s second ago');
+        }
+        else
+        {
+            $result = "Just now";
         }
         return $result;
     }
