@@ -1,4 +1,25 @@
 @extends('layouts.user') @section('content')
+<div id="confirmationModal" class="modal row">
+    <!-- Modal content -->
+    <div class="modal-content col-md-6 col-sm-8 col-xs-10" style="background-color: #eee;" id="confirmationModalContent">
+            <span class="close">&times;</span>
+            <div class="row">
+                <div class="col-xs-12">
+                    <span id="confirmationMessage"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-6">
+                    <button type="button" class="button" id="cancelButton">
+                        <span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span> Cancel
+                    </button>
+                </div>
+                <div class="col-xs-6">
+                    <a id="confirmationButtonLink"><button type="button" class="button" id="confirmationButton"></button></a>
+                </div>
+            </div>
+    </div>
+</div>
 <div class="col-lg-12">
     <div class="field">
         <h1>Listing Form</h1>
@@ -160,7 +181,7 @@
             <input type="hidden" name="listingID" id="listingID" value="{{ $listing->listingID }}" />
             <div class="row">
                 <div class="col-sm-4">
-                    <button type="submit" class="button" formaction="{{ route('user-deleteListing') }}" disabled="true" id="deleteButton">
+                    <button type="button" class="button" id="deleteButton" disabled="true">
                         <span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Delete
                     </button>
                 </div>
@@ -191,6 +212,33 @@
             var obj = { Title: title, Url: url };
             history.pushState(obj, obj.Title, obj.Url);
         }
+    }
+    
+    function deleteListing(element)
+    {
+        displayLoadingModal("Deleting listing...");
+        var listingID = $("#listingID").val();
+        $.ajax({
+            type: "POST",
+            url: "{{ route('user-deleteListing') }}",
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            data: {
+                listingID: listingID,
+                dontSetSessionVariable: true
+            },
+            success: function(response) {
+                if (response)
+                {
+                    window.location.replace("{{ route('user-myListings') }}");
+                }
+                else
+                {
+                    displayErrorModal("Failed to delete listing. Please try again later.");
+                }
+            }
+        });
     }
     
     $(document).ready(function() {
@@ -297,6 +345,14 @@
         {
             $("#deleteButton").prop('disabled', false);
         }
+            
+        $("#deleteButton").click(function() {
+            $("#confirmationModal").css("display", "block");
+            $("#confirmationButton").html("Delete Listing");
+            $("#confirmationButton").attr("onclick", "deleteListing(this);");
+            $("#confirmationMessage").text("Are you sure you want to delete this? Doing so will remove the listing permanently.");
+            $("#messageTextArea").css("display", "none");
+        })
     });
 
     function previewsAdded() {

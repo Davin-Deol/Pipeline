@@ -151,7 +151,8 @@
                                 <ul class="dropdown-menu">
                                     <li><a href="{{ route('user-myListings') }}">View Listings</a></li>
                                     <li><a href="{{ route('user-connections') }}">Connections</a></li>
-                                    <li><a href="{{ route('user-listingForm') }}">Create Listing</a></li>
+                                    <li><a href="{{ route('user-listingForm') }}">
+                                            <span class="glyphicon glyphicon-plus-sign"></span> Create Listing</a></li>
                                 </ul>
                             </li>
                             @if ((Auth::user()->type == "admin") || (Auth::user()->type == "demo-admin"))
