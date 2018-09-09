@@ -78,9 +78,6 @@ class AdminController extends UserController
                     }
                     
                     $request->session()->put('success', 'Successfuly posted listing and the creator was notified.');
-                    
-                    
-                    
                     return route('admin-listingsPendingReview');
                 }
             }

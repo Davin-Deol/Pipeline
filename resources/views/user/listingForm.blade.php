@@ -160,7 +160,7 @@
             <input type="hidden" name="listingID" id="listingID" value="{{ $listing->listingID }}" />
             <div class="row">
                 <div class="col-sm-4">
-                    <button type="submit" class="button" formaction="{{ route('user-deleteListing') }}">
+                    <button type="submit" class="button" formaction="{{ route('user-deleteListing') }}" disabled="true" id="deleteButton">
                         <span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Delete
                     </button>
                 </div>
@@ -264,6 +264,7 @@
                             $("#listingID").val(response["data"]);
                             displaySuccessModal("Saved listing");
                             ChangeUrl("Listing Form", "{{ route('user-listingForm') }}/" + response["data"]);
+                            $("#deleteButton").prop('disabled', false);
                         }
                     }
                     else
@@ -291,6 +292,11 @@
             var url = "{{ route('user-saveListing', ['forReview' => true]) }}";
             submitForm(url, true);
         });
+            
+        if ($("#listingID").val())
+        {
+            $("#deleteButton").prop('disabled', false);
+        }
     });
 
     function previewsAdded() {

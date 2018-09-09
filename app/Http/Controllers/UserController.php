@@ -570,7 +570,7 @@ class UserController extends Controller
     
     public function deleteListing(Request $request)
     {
-        $flashSessionData = "";
+        $sessionData = "";
         if ($request->isMethod('post')) 
         {
             $data = array();
@@ -578,6 +578,11 @@ class UserController extends Controller
             $listingID = $request->input('listingID');
 
             $listing = Listings::find($listingID);
+            
+            if (is_null($listing))
+            {
+                return redirect()->route('user-myListings');
+            }
             
             if (($listing->userId == Auth::user()->userId) || (Auth::user()->type == "admin"))
             {
@@ -589,7 +594,7 @@ class UserController extends Controller
                 {
                     if ($request->input('dontSetSessionVariable') === null)
                     {
-                        $flashSessionData = 'Successfuly deleted listing.';
+                        $sessionData = 'Successfuly deleted listing.';
                     }
                 }
                 else
@@ -612,9 +617,9 @@ class UserController extends Controller
                         });
                     }
                     
-                    $flashSessionData = 'Successfuly deleted listing and the creator was notified.';
+                    $sessionData = 'Successfuly deleted listing and the creator was notified.';
                 }
-                $request->session()->put('success', $flashSessionData);
+                $request->session()->put('success', $sessionData);
                 return redirect()->route('user-myListings');
             }
         }
