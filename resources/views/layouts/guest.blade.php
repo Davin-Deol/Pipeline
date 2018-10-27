@@ -24,11 +24,11 @@
                         <ul class="nav navbar-nav" id="nav">
                             <li>
                                 <a href="{{ route('guest-home') }}#howItWorksSection">
-                                        {{ $data['index_rowOne_header'] }}<span class="sr-only"></span></a>
+                                        {{ $navigation['rowOne_header'] }}<span class="sr-only"></span></a>
                             </li>
                             <li>
                                 <a href="{{ route('guest-home') }}#aboutSection">
-                                        {{ $data['index_rowTwo_header'] }}<span class="sr-only"></span></a>
+                                        {{ $navigation['rowTwo_header'] }}<span class="sr-only"></span></a>
                             </li>
                         </ul>
                         
@@ -197,12 +197,12 @@
                     <h6 class="text-uppercase font-weight-bold">Useful links</h6>
                     <p>
                         <a href="{{ route('guest-home') }}#howItWorksSection">
-                            {{ $data['index_rowOne_header'] }}
+                            {{ $navigation['rowOne_header'] }}
                         </a>
                     </p>
                     <p>
                         <a href="{{ route('guest-home') }}#aboutSection">
-                            {{ $data['index_rowTwo_header'] }}
+                            {{ $navigation['rowTwo_header'] }}
                         </a>
                     </p>
                     <hr class="visible-xs dark">
