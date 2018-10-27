@@ -43,6 +43,7 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 <script src="{{ asset('public/js/Animated-Text-Underlines-jQuery-linkUnderline/jquery.linkunderanim.js') }}"></script>
 <script src="{{ asset('public/slick-1.8.0/slick/slick.js') }}"></script>
+<script src="{{ asset('public/js/cookieConsent.js') }}"></script>
 <script>
     $(document).ready(function() {
         $(".nav").linkUnderlineAnim({

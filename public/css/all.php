@@ -176,6 +176,15 @@ input[type=file]+label {
     margin: 0.5em;
 }
 
+#cookiePopup {
+    background-color: #EEE;
+    border-bottom: 1px solid #DDD;
+    padding: 1%;
+    position: fixed;
+    top: 0;
+    z-index: 3;
+}
+
 .modalImage {
     align-items: center;
     background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */

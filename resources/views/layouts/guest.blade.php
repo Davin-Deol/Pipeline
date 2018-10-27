@@ -8,16 +8,31 @@
 
 <body>
     <div class="container-fluid">
+        
+        @if (!$dataForAllViews['UserHasDismissedCookieWarning'])
+            <div class="row" id="cookiePopup">
+                <div class="col-md-10 col-sm-9">
+                    <p>This website uses cookies in order to ensure that we bring our users the optimum experience. For more information, please read our <a href="{{ route('guest-cookiePolicy') }}" target="_blank">Cookie Policy</a> as well as our <a href="{{ route('guest-termsAndConditions') }}" target="_blank">Terms and Conditions</a>. Note that by continuing to use this website, you consent to all our policies.</p>
+                </div>
+                <div class="col-md-2 col-sm-3">
+                    <button type="button" name="cookieConsent" id="cookieConsent" value="Yes" class="button">
+                        <span class="glyphicon glyphicon-ok" aria-hidden="true"></span> I Understand
+                    </button>
+                </div>
+            </div>
+            <div class="row" id="invisibleBarBehindCookiePopup">
+            </div>
+        @endif
         <div class="row">
             <nav class="navbar navbar-default" style="margin-bottom: 0;">
                 <div class="container-fluid">
                     <div class="navbar-header">
                         <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-                                <span class="sr-only">Toggle navigation</span>
-                                <span class="icon-bar"></span>
-                                <span class="icon-bar"></span>
-                                <span class="icon-bar"></span>
-                            </button>
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
                         <a href="{{ route('guest-home') }}"><span class="navbar-brand">{{ config('app.name') }}</span></a>
                     </div>
                     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">

@@ -19,8 +19,10 @@ use Illuminate\Support\Facades\View as View;
 class GuestController extends Controller
 {
     private $stringsXML;
-    public function __construct(Interest $interests, Users $users, ResetPasswordLinks $resetPasswordLinks, Requests $requests, RequestToInterests $requestToInterests, SignUpLinks $signUpLinks)
+    public function __construct(Request $request, Interest $interests, Users $users, ResetPasswordLinks $resetPasswordLinks, Requests $requests, RequestToInterests $requestToInterests, SignUpLinks $signUpLinks)
     {
+        parent::__construct($request);
+        
         $this->interests = $interests->all();
         $this->users = $users->all();
         $this->resetPasswordLinks = $resetPasswordLinks->all();

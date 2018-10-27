@@ -7,7 +7,17 @@ use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\View as View;
+
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
+    
+    protected $dataForAllViews;
+    public function __construct(Request $request) {
+        $dataForAllViews = array();
+        $dataForAllViews['UserHasDismissedCookieWarning'] = $request->hasCookie('CookieWarningDismissed');
+        View::share('dataForAllViews', $dataForAllViews);
+    }
 }
