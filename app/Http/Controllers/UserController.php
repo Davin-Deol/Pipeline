@@ -27,8 +27,10 @@ use App\MyLibrary\DirectoryManager as DirectoryManager;
 class UserController extends Controller
 {
     private $user;
-    public function __construct(Currency $currency, Interest $interest, InvestmentType $investmentType, Jurisdiction $jurisdiction, Listings $listings, ListingToImages $listingToImages, Users $users, Request $request)
+    public function __construct(Request $request, Currency $currency, Interest $interest, InvestmentType $investmentType, Jurisdiction $jurisdiction, Listings $listings, ListingToImages $listingToImages, Users $users)
     {
+        parent::__construct($request);
+        
         $this->currency = $currency->all();
         $this->interest = $interest->all();
         $this->investmentType = $investmentType->all();
