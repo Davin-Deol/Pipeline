@@ -8,27 +8,28 @@
 
 <body>
     <div class="container-fluid">
+        @include('include.cookieWarning')
         <div class="row">
             <nav class="navbar navbar-default" style="margin-bottom: 0;">
                 <div class="container-fluid">
                     <div class="navbar-header">
                         <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-                                <span class="sr-only">Toggle navigation</span>
-                                <span class="icon-bar"></span>
-                                <span class="icon-bar"></span>
-                                <span class="icon-bar"></span>
-                            </button>
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
                         <a href="{{ route('guest-home') }}"><span class="navbar-brand">{{ config('app.name') }}</span></a>
                     </div>
                     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                         <ul class="nav navbar-nav" id="nav">
                             <li>
                                 <a href="{{ route('guest-home') }}#howItWorksSection">
-                                        {{ $data['index_rowOne_header'] }}<span class="sr-only"></span></a>
+                                        {{ $navigation['rowOne_header'] }}<span class="sr-only"></span></a>
                             </li>
                             <li>
                                 <a href="{{ route('guest-home') }}#aboutSection">
-                                        {{ $data['index_rowTwo_header'] }}<span class="sr-only"></span></a>
+                                        {{ $navigation['rowTwo_header'] }}<span class="sr-only"></span></a>
                             </li>
                         </ul>
                         
@@ -197,12 +198,12 @@
                     <h6 class="text-uppercase font-weight-bold">Useful links</h6>
                     <p>
                         <a href="{{ route('guest-home') }}#howItWorksSection">
-                            {{ $data['index_rowOne_header'] }}
+                            {{ $navigation['rowOne_header'] }}
                         </a>
                     </p>
                     <p>
                         <a href="{{ route('guest-home') }}#aboutSection">
-                            {{ $data['index_rowTwo_header'] }}
+                            {{ $navigation['rowTwo_header'] }}
                         </a>
                     </p>
                     <hr class="visible-xs dark">

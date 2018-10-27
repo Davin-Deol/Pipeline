@@ -109,6 +109,7 @@
 
 <body>
     <div class="container-fluid">
+        @include('include.cookieWarning')
         <div class="row">
             <nav class="navbar navbar-expand-xl">
                 <div class="container-fluid">

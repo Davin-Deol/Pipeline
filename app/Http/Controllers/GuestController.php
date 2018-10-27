@@ -14,16 +14,33 @@ use App\Requests as Requests;
 use App\RequestToInterests as RequestToInterests;
 use App\SignUpLinks as SignUpLinks;
 
+use Illuminate\Support\Facades\View as View;
+
 class GuestController extends Controller
 {
-    public function __construct(Interest $interests, Users $users, ResetPasswordLinks $resetPasswordLinks, Requests $requests, RequestToInterests $requestToInterests, SignUpLinks $signUpLinks)
+    private $stringsXML;
+    public function __construct(Request $request, Interest $interests, Users $users, ResetPasswordLinks $resetPasswordLinks, Requests $requests, RequestToInterests $requestToInterests, SignUpLinks $signUpLinks)
     {
+        parent::__construct($request);
+        
         $this->interests = $interests->all();
         $this->users = $users->all();
         $this->resetPasswordLinks = $resetPasswordLinks->all();
         $this->requests = $requests->all();
         $this->requestToInterests = $requestToInterests->all();
         $this->signUpLinks = $signUpLinks->all();
+        
+        $this->stringsXML = simplexml_load_file('./resources/values/strings.xml');
+        
+        $navigation = array();
+        $navigation["rowOne_header"] = $this->stringsXML->loggedOut->index->rowOne->title;
+        $navigation["rowTwo_header"] = $this->stringsXML->loggedOut->index->rowTwo->title;
+        
+        $listOfInterests = array();
+        $listOfInterests = $this->interests->where('interest', '!=' , 'None of the Above');
+        
+        View::share('navigation', $navigation);
+        View::share('listOfInterests', $listOfInterests);
     }
     
     /**
@@ -31,22 +48,15 @@ class GuestController extends Controller
      */
     public function home()
     {
-        $stringsXML = simplexml_load_file('./resources/values/strings.xml');
-        
         $data = array();
-        $listOfInterests = array();
         
         $data["title"] = "Home";
-        $data["index_rowOne_header"] = $stringsXML->loggedOut->index->rowOne->title;
-        $data["index_rowOne_body"] = stripslashes(htmlspecialchars_decode($stringsXML->loggedOut->index->rowOne->body));
+        $data["index_rowOne_body"] = stripslashes(htmlspecialchars_decode($this->stringsXML->loggedOut->index->rowOne->body));
         $data["index_rowOne_image"] = glob("public/img/Index/Row-One_Image.*")[0];
-        $data["index_rowTwo_header"] = $stringsXML->loggedOut->index->rowTwo->title;
-        $data["index_rowTwo_body"] = stripslashes(htmlspecialchars_decode($stringsXML->loggedOut->index->rowTwo->body));
+        $data["index_rowTwo_body"] = stripslashes(htmlspecialchars_decode($this->stringsXML->loggedOut->index->rowTwo->body));
         $data["index_rowTwo_image"] = glob("public/img/Index/Row-Two_Image.*")[0];
         
-        $listOfInterests = $this->interests->where('interest', '!=' , 'None of the Above');
-        
-        return view('guest/home', compact('data', 'listOfInterests'));
+        return view('guest/home', compact('data'));
     }
     
     /**
@@ -55,41 +65,29 @@ class GuestController extends Controller
     public function credits()
     {
         $coloursXML = simplexml_load_file('./resources/values/colours.xml');
-        $stringsXML = simplexml_load_file('./resources/values/strings.xml');
         
         $data = array();
-        $listOfInterests = array();
         
         $data["title"] = "Credits";
         $data["backgroundColour"] = $coloursXML->loggedOut->credits->backgroundColour;
         
-        $data["index_rowOne_header"] = $stringsXML->loggedOut->index->rowOne->title;
-        $data["index_rowTwo_header"] = $stringsXML->loggedOut->index->rowTwo->title;
-        $data["credits"] = stripslashes(htmlspecialchars_decode($stringsXML->loggedOut->credits->body));
+        $data["credits"] = stripslashes(htmlspecialchars_decode($this->stringsXML->loggedOut->credits->body));
         
-        $listOfInterests = $this->interests->where('interest', '!=' , 'None of the Above');
-        
-        return view('guest/credits', compact('data', 'listOfInterests'));
+        return view('guest/credits', compact('data'));
     }
     
     public function termsAndConditions()
     {
         $coloursXML = simplexml_load_file('./resources/values/colours.xml');
-        $stringsXML = simplexml_load_file('./resources/values/strings.xml');
         
         $data = array();
-        $listOfInterests = array();
         
         $data["title"] = "Credits";
         $data["backgroundColour"] = $coloursXML->loggedOut->credits->backgroundColour;
         
-        $data["index_rowOne_header"] = $stringsXML->loggedOut->index->rowOne->title;
-        $data["index_rowTwo_header"] = $stringsXML->loggedOut->index->rowTwo->title;
-        $listOfInterests = $this->interests->where('interest', '!=' , 'None of the Above');
+        $data["termsAndConditions"] = stripslashes(htmlspecialchars_decode($this->stringsXML->loggedOut->termsAndConditions));
         
-        $data["termsAndConditions"] = stripslashes(htmlspecialchars_decode($stringsXML->loggedOut->termsAndConditions));
-        
-        return view('guest/termsAndConditions', compact('data', 'listOfInterests'));
+        return view('guest/termsAndConditions', compact('data'));
     }
     
     /**
@@ -304,24 +302,15 @@ class GuestController extends Controller
     {
         if ($request->isMethod('post')) 
         {
-            $stringsXML = simplexml_load_file('./resources/values/strings.xml');
-            
             $data = array();
             $data["title"] = "Reset Password";
-            $data["index_rowOne_header"] = $stringsXML->loggedOut->index->rowOne->title;
-            $data["index_rowTwo_header"] = $stringsXML->loggedOut->index->rowTwo->title;
-            
-            $listOfInterests = array();
-            $listOfInterests = $this->interests->where('interest', '!=' , 'None of the Above');
-            
-            
             $data["link"] = $request->input('link');
             $data["email"] = $request->input('email');
             $listOfLinks = new ResetPasswordLinks();
                             
             if ($listOfLinks->linkExists($data["link"]))
             {
-                return view('guest/resetPassword', compact('data', 'listOfInterests'));
+                return view('guest/resetPassword', compact('data'));
             }
             else
             {
@@ -371,38 +360,24 @@ class GuestController extends Controller
     
     public function cookiePolicy()
     {
-        $stringsXML = simplexml_load_file('./resources/values/strings.xml');
         $data = array();
         $data["title"] = "Cookies";
-        $data["index_rowOne_header"] = $stringsXML->loggedOut->index->rowOne->title;
-        $data["index_rowTwo_header"] = $stringsXML->loggedOut->index->rowTwo->title;
-        $listOfInterests = $this->interests->where('interest', '!=' , 'None of the Above');
-        
-        $data["cookiePolicy"] = stripslashes(htmlspecialchars_decode($stringsXML->loggedOut->cookies));
-        return view('guest/cookiePolicy', compact('data', 'listOfInterests'));
+        $data["cookiePolicy"] = stripslashes(htmlspecialchars_decode($this->stringsXML->loggedOut->cookies));
+        return view('guest/cookiePolicy', compact('data'));
     }
     
     public function signUp(Request $request)
     {
         if ($request->isMethod('post')) 
         {
-            $stringsXML = simplexml_load_file('./resources/values/strings.xml');
-            
             $data = array();
             $data["title"] = "Reset Password";
-            $data["index_rowOne_header"] = $stringsXML->loggedOut->index->rowOne->title;
-            $data["index_rowTwo_header"] = $stringsXML->loggedOut->index->rowTwo->title;
-            
-            $listOfInterests = array();
-            $listOfInterests = $this->interests->where('interest', '!=' , 'None of the Above');
-            
-            
             $data["signUpLink"] = $request->input('signUpLink');
             $data["email"] = $request->input('email');
                             
             if (SignUpLinks::find($data["link"]))
             {
-                return view('guest/signUp', compact('data', 'listOfInterests'));
+                return view('guest/signUp', compact('data'));
             }
             else
             {

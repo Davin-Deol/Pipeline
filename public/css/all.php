@@ -176,6 +176,15 @@ input[type=file]+label {
     margin: 0.5em;
 }
 
+#cookiePopup {
+    background-color: #EEE;
+    border-bottom: 1px solid #DDD;
+    padding: 1%;
+    position: fixed;
+    top: 0;
+    z-index: 3;
+}
+
 .modalImage {
     align-items: center;
     background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
@@ -201,10 +210,14 @@ input[type=file]+label {
     height: 100%; /* Full height */
     overflow: auto; /* Enable scroll if needed */
     /* background-color: rgb(0,0,0); Fallback color */
-    /* background-color: rgba(0,0,0,0.4); Black w/ opacity */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
     font-weight: 400;
     font-size: 1.2em;
     border 2px solid transparent;
+}
+
+#successMessageModal, #errorMessageModal {
+    background-color: rgba(0,0,0,0);
 }
 
 #successModalContent {

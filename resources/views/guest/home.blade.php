@@ -16,7 +16,7 @@
         </div>
         <div class="col-lg-8 col-md-6 col-sm-6 fadeIn fadeEnterLeft">
             <h3>
-                {{ $data['index_rowOne_header'] }}
+                {{ $navigation['rowOne_header'] }}
             </h3>
             {!! $data['index_rowOne_body'] !!}
         </div>
@@ -25,7 +25,7 @@
         <!-- Label for the section -->
         <div class="col-lg-8 col-md-6 col-sm-6 fadeIn fadeEnterRight">
             <h3>
-                {{ $data['index_rowTwo_header'] }}
+                {{ $navigation['rowTwo_header'] }}
             </h3>
             {!! $data['index_rowTwo_body'] !!}
         </div>
