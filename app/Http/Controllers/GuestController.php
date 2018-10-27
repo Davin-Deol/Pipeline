@@ -18,8 +18,6 @@ use Illuminate\Support\Facades\View as View;
 
 class GuestController extends Controller
 {
-    private $navigation;
-    private $listOfInterests;
     private $stringsXML;
     public function __construct(Interest $interests, Users $users, ResetPasswordLinks $resetPasswordLinks, Requests $requests, RequestToInterests $requestToInterests, SignUpLinks $signUpLinks)
     {
@@ -32,15 +30,15 @@ class GuestController extends Controller
         
         $this->stringsXML = simplexml_load_file('./resources/values/strings.xml');
         
-        $this->navigation = array();
-        $this->navigation["rowOne_header"] = $this->stringsXML->loggedOut->index->rowOne->title;
-        $this->navigation["rowTwo_header"] = $this->stringsXML->loggedOut->index->rowTwo->title;
+        $navigation = array();
+        $navigation["rowOne_header"] = $this->stringsXML->loggedOut->index->rowOne->title;
+        $navigation["rowTwo_header"] = $this->stringsXML->loggedOut->index->rowTwo->title;
         
-        $this->listOfInterests = array();
-        $this->listOfInterests = $this->interests->where('interest', '!=' , 'None of the Above');
+        $listOfInterests = array();
+        $listOfInterests = $this->interests->where('interest', '!=' , 'None of the Above');
         
-        View::share('navigation', $this->navigation);
-        View::share('listOfInterests', $this->listOfInterests);
+        View::share('navigation', $navigation);
+        View::share('listOfInterests', $listOfInterests);
     }
     
     /**
