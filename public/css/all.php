@@ -182,7 +182,7 @@ input[type=file]+label {
     padding: 1%;
     position: fixed;
     top: 0;
-    z-index: 3;
+    z-index: 1;
 }
 
 .modalImage {
