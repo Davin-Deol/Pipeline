@@ -29,7 +29,7 @@ class AdminController extends UserController
 {
     public function __construct(Currency $currency, Interest $interest, InvestmentType $investmentType, Jurisdiction $jurisdiction, Listings $listings, ListingToImages $listingToImages, Users $users, Request $request, Requests $requests, SignUpLinks $signUpLinks)
     {
-        parent::__construct($currency, $interest, $investmentType, $jurisdiction, $listings, $listingToImages, $users, $request, $signUpLinks);
+        parent::__construct($request, $currency, $interest, $investmentType, $jurisdiction, $listings, $listingToImages, $users, $request, $signUpLinks);
     }
     
     public function listingsPendingReview()
