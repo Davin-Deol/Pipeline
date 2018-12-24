@@ -43,14 +43,6 @@ class UserController extends Controller
         View::share('user', Auth::user());
     }
     
-    public function changeSearchKey(Request $request)
-    {
-        if ($request->isMethod('post'))
-        {
-            $request->session()->flash('searchKey', $request->input("searchKey"));
-        }
-    }
-    
     public function browseListings(Request $request)
     {
         $data = array();

@@ -4,6 +4,7 @@
     @include('include.head')
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script src="{{ asset('public/js/jquery.ui.touch-punch.js') }}"></script>
+    <script src="{{ asset('public/js/js.cookie.js') }}"></script>
     <script>
         var fadeDuration = 1000;
         var modalDisplayDuration = 1200;
@@ -52,21 +53,9 @@
             });
             
             $( "#searchKey" ).change(function() {
-                var searchKey = $(this).val();
-                $.ajax({
-                    type: "POST",
-                    url: "{{ route('user-changeSearchKey') }}",
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    data: {
-                        searchKey: searchKey
-                    },
-                    success: function(response) {
-                        // Do nothing...
-                    }
-                });
+                Cookies.set('searchKey', $(this).val(), { expires: 1 });
             });
+            $("#searchKey").val(Cookies.get('searchKey'));
             
             window.onclick = function(event) {
                 if ((event.target == document.getElementById('successMessageModal'))
@@ -132,10 +121,7 @@
                                 <form method="post" action="{{ route('user-browseListings') }}" class="navbar-form navbar-left">
                                     {{ csrf_field() }}
                                     <div class="input-group">
-                                        <input type="text" class="form-control" placeholder="Search" name="searchKey" id="searchKey" 
-                                               value=@if (Session::has('searchKey'))
-                                                    "{{ Session::get('searchKey') }}"
-                                               @endif>
+                                        <input type="text" class="form-control" placeholder="Search" name="searchKey" id="searchKey">
                                         <div class="input-group-btn">
                                             <button class="btn btn-default" type="submit">
                                             <i class="glyphicon glyphicon-search"></i>
