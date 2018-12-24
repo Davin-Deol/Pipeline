@@ -186,7 +186,7 @@
                                 </a>
                                 <ul class="dropdown-menu">
                                     <li><a href="{{ route('user-profile') }}">Profile</a></li>
-                                    <li><a href="{{ route('user-manageAccount') }}">Manage Account</a></li>
+                                    <li><a href="{{ route('user-settings') }}">Settings</a></li>
                                     <li>
                                         <a href="{{ route('user-logout') }}">
                                             <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span> Logout

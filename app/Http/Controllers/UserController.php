@@ -159,19 +159,36 @@ class UserController extends Controller
         return redirect()->route('guest-home');
     }
     
-    public function manageAccount()
+    public function settings(Request $request)
     {
         $data = array();
-        
-        $data["title"] = "Manage Account";
-        
-        $seconds = filemtime("public/img/NDAs/" . Auth::user()->NDA);
-        $data["NDALastModified"] = StringFormatter::getDifferenceBetweenDateTimeAndNow($seconds);
-        
-        $birthday = new \DateTime(Auth::user()->birthday);
-        $birthday = $birthday->format('Y-m-d');
-        
-        return view('user/manageAccount', compact('data', 'birthday'));
+        if ($request->isMethod('post'))
+        {
+            switch ($request->input('category'))
+            {
+                case ("changePassword"):
+                    return view('user/settings_Categories/changePassword', compact('data', 'birthday'));
+                    break;
+                case ("nda"):
+                    $seconds = filemtime("public/img/NDAs/" . Auth::user()->NDA);
+                    $data["NDALastModified"] = StringFormatter::getDifferenceBetweenDateTimeAndNow($seconds);
+                    return view('user/settings_Categories/nda', compact('data', 'birthday'));
+                    break;
+                case ("profile"):
+                    $birthday = new \DateTime(Auth::user()->birthday);
+                    $birthday = $birthday->format('Y-m-d');
+                    return view('user/settings_Categories/profile', compact('data', 'birthday'));
+                    break;
+                default:
+                    break;
+            }
+        }
+        else
+        {        
+            $data["title"] = "Settings";
+
+            return view('user/settings', compact('data'));
+        }
     }
     
     public function submitNDA(Request $request)

@@ -68,7 +68,8 @@ Route::group(['middleware' => 'auth'], function () {
     });
     
     Route::get('/profile', 'UserController@profile')->name('user-profile');
-    Route::get('/manageAccount', 'UserController@manageAccount')->name('user-manageAccount');
+    Route::get('/settings', 'UserController@settings')->name('user-settings');
+    Route::post('/settings', 'UserController@settings')->name('user-settings');
     Route::post('/submitNDA', 'UserController@submitNDA')->name('user-submitNDA');
     Route::post('/submitChangePassword', 'UserController@submitChangePassword')->name('user-submitChangePassword');
     Route::post('/submitUpdateAccount', 'UserController@submitUpdateAccount')->name('user-submitUpdateAccount');
