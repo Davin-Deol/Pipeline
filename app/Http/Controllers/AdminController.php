@@ -369,34 +369,62 @@ class AdminController extends UserController
         }
     }
     
-    public function manageWebsite()
+    public function manageWebsite(Request $request)
     {
-        $data = array();
-        $data["title"] = "Manage Website";
-        
-        $stringsXML = simplexml_load_file('./resources/values/strings.xml');
-        $coloursXML = simplexml_load_file('./resources/values/colours.xml');
-        
-        $data["primaryColour"] = $coloursXML->all->colourPrimary;
-        $data["textColourOnPrimary"] = $coloursXML->all->textColourOnPrimary;
-        $data["backgroundColourTransparency"] = $coloursXML->all->backgroundColourTransparency;
-        $data["creditsBackgroundColour"] = $coloursXML->loggedOut->credits->backgroundColour;
-        
-        $data["indexImages"] = array();
-        $i = 0;
-        foreach (glob("./public/img/Index/Row-*.*") as $filename) {
-            $data["indexImages"][$i++] = $filename;
+        if ($request->isMethod('post'))
+        {
+            $stringsXML = simplexml_load_file('./resources/values/strings.xml');
+            $coloursXML = simplexml_load_file('./resources/values/colours.xml');
+            
+            switch ($request->input('category'))
+            {
+                case ("cookies"):
+                    $data["cookies"] =  $stringsXML->loggedOut->cookies;
+                    return view('admin/manageWebsite_Categories/cookies', compact('data'));
+                    break;
+                case ("credits"):                    
+                    $data["creditsBackgroundColour"] = $coloursXML->loggedOut->credits->backgroundColour;
+                    $data["credits"] =  $stringsXML->loggedOut->credits->body;
+                    
+                    return view('admin/manageWebsite_Categories/credits', compact('data'));
+                    break;
+                case ("homepage"):
+                    $data["indexImages"] = array();
+                    $i = 0;
+                    foreach (glob("./public/img/Index/Row-*.*") as $filename) {
+                        $data["indexImages"][$i++] = $filename;
+                    }
+
+                    $data["rowOneHeader"] = $stringsXML->loggedOut->index->rowOne->title;
+                    $data["rowOneBody"] = stripslashes(htmlspecialchars_decode($stringsXML->loggedOut->index->rowOne->body));
+                    $data["rowTwoHeader"] = $stringsXML->loggedOut->index->rowTwo->title;
+                    $data["rowTwoBody"] = stripslashes(htmlspecialchars_decode($stringsXML->loggedOut->index->rowTwo->body));
+                    
+                    return view('admin/manageWebsite_Categories/homepage', compact('data'));
+                    break;
+                case ("nda"):
+                    return view('admin/manageWebsite_Categories/nda', compact('data'));
+                    break;
+                case ("termsAndConditions"):
+                    $data["termsAndConditions"] =  $stringsXML->loggedOut->termsAndConditions;
+                    return view('admin/manageWebsite_Categories/termsAndConditions', compact('data'));
+                    break;
+                case ("theme"):
+                    $data["primaryColour"] = $coloursXML->all->colourPrimary;
+                    $data["textColourOnPrimary"] = $coloursXML->all->textColourOnPrimary;
+                    $data["backgroundColourTransparency"] = $coloursXML->all->backgroundColourTransparency;
+                    return view('admin/manageWebsite_Categories/theme', compact('data'));
+                    break;
+                default:
+                    break;
+            }
         }
-        
-        $data["rowOneHeader"] = $stringsXML->loggedOut->index->rowOne->title;
-        $data["rowOneBody"] = stripslashes(htmlspecialchars_decode($stringsXML->loggedOut->index->rowOne->body));
-        $data["rowTwoHeader"] = $stringsXML->loggedOut->index->rowTwo->title;
-        $data["rowTwoBody"] = stripslashes(htmlspecialchars_decode($stringsXML->loggedOut->index->rowTwo->body));
-        $data["credits"] =  $stringsXML->loggedOut->credits->body;
-        $data["cookies"] =  $stringsXML->loggedOut->cookies;
-        $data["termsAndConditions"] =  $stringsXML->loggedOut->termsAndConditions;
-        
-        return view('admin/manageWebsite', compact('data'));
+        else
+        {
+            $data = array();
+            $data["title"] = "Manage Website";
+            return view('admin/manageWebsite', compact('data'));
+        }
     }
     
     public function updateTheme(Request $request)
