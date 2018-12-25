@@ -438,6 +438,74 @@ label {
 
 
 
+.label-cbx {
+    user-select: none;
+    cursor: pointer;
+    margin-bottom: 0;
+    font-size: 1em;
+    line-height: 25px;
+}
+
+.label-cbx input:checked+.checkbox {
+    border-color: #136cb2;
+}
+
+.label-cbx input:checked+.checkbox svg path {
+    fill: #136cb2;
+}
+
+.label-cbx input:checked+.checkbox svg polyline {
+    stroke-dashoffset: 0;
+}
+
+.label-cbx:hover .checkbox svg path {
+    stroke-dashoffset: 0;
+}
+
+.label-cbx .checkbox {
+    float: left;
+    margin: 0.2em 10px 0px;
+    border: 2px solid #AAA;
+    border-radius: 3px;
+    height: 1.6em;
+    /*width: 1.3em;*/
+}
+
+.label-cbx .checkbox svg path {
+    z-index: 1;
+    fill: none;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-dasharray: 3.8em;
+    stroke-dashoffset: 3.8em;
+}
+
+.label-cbx .checkbox svg polyline {
+    fill: none;
+    stroke: #FFF;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    height: 1.3em;
+    width: 1.3em;
+    transition: all 0.3s ease;
+}
+
+.label-cbx>span {
+    pointer-events: none;
+    vertical-align: middle;
+}
+
+.invisible {
+    display: none;
+}
+
+svg {
+    width: 1.3em;
+    height: 1.3em;
+}
+
 <?php
 $detect = new Mobile_Detect;
 if (!$detect->isMobile() || $detect->isTablet()) { ?>

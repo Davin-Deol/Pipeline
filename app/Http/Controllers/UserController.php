@@ -57,6 +57,11 @@ class UserController extends Controller
             $data["searchKeyUsed"] = $searchKey;
         }
         
+        $currencies = $this->currency->all();
+        $interests = $this->interest->all();
+        $investmentTypes = $this->investmentType->all();
+        $jurisdictions = $this->jurisdiction->all();
+        
         $listings = Listings::with('listingImages')
             ->where('status', "posted")
             ->where(function ($query) use ($searchKey) {
@@ -67,7 +72,7 @@ class UserController extends Controller
             ->orderBy('lastUpdated', 'DESC')
             ->get();
         
-        return view('user/browseListings', compact('data', 'listings'));
+        return view('user/browseListings', compact('data', 'listings', 'currencies', 'interests', 'investmentTypes', 'jurisdictions'));
     }
     
     public function saveUsersListing(Request $request)
