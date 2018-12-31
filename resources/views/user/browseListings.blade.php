@@ -1,37 +1,41 @@
 @extends('layouts.user') @section('content')
-<div class="row field" id="filters" style="cursor: pointer;">
-    <h1 id="filtersToggle">Filters <span id="filtersToggleIcon" class="glyphicon glyphicon-plus" style="font-size: 0.8em; float: right;"></span></h1>
-    <div class="col-xs-12">
-        <form  class="form-horizontal" action="" method="POST" enctype="multipart/form-data" id="filtersContent" style="display: none;">
+<style>
+    .label-cbx input:checked+.checkbox svg path {
+        fill: white;
+    }
+    polyline {
+        stroke: #FFF;
+    }
+</style>
+<div class="row attachToNav">
+    <div class="row" id="filtersToggle" style="width: 70%; margin: 0 auto; cursor: pointer;">
+        <h3 style="margin-top: 10px; text-align: center;">
+            Filters <span id="filtersToggleIcon" class="glyphicon glyphicon-plus" style="font-size: 0.8em; float: right;"></span>
+        </h3>
+    </div>
+    <div class="row">
+        <form action="" method="POST" id="filtersContent" style="display: none; width: 70%; margin: 0 auto;">
             <div class="row">
-                <h3>Price Range</h3>
-                <div class="col-xs-4">
-                    <select name="filterPriceRange" id="filterPriceRange">
-                        @foreach ($currencies as $currency)
-                        <option value="{{ $currency->currency }}">{{ $currency->currency }}</option>
-                        @endforeach
-                    </select>
+                <b>Price Range</b><br />
+                <div class="col-sm-4 col-xs-6">
+                    <input name="minPrice" id="minPrice" type="number" min="0" max="99999999999" placeholder=" from" />
                 </div>
-                <div class="col-xs-4">
-                    <input name="minPrice" id="minPrice" type="number" min="0" max="99999999999" placeholder="min" />
-                </div>
-
-                <div class="col-xs-4">
-                    <input name="maxPrice" id="maxPrice" type="number" min="0" max="99999999999" placeholder="max" />
+                <div class="col-sm-4 col-xs-6">
+                    <input name="maxPrice" id="maxPrice" type="number" min="0" max="99999999999" placeholder=" to" />
                 </div>
             </div>
             <div class="row">
-                <h3>Interests</h3>
-                <div class="col-lg-4 col-sm-6">
+                <b>Interests</b><br />
+                <div class="col-sm-4 col-xs-12">
                     @php ($i = 0)
                     @foreach ($interests as $interest)
                     @if (($i == (ceil(count($interests) / 3))) || ($i == (ceil(count($interests) / 3) * 2)))
                 </div>
-                <div class="col-lg-4 col-sm-6">
+                <div class="col-sm-4 col-xs-12">
                     @endif
                     <label for="interest{{ $i }}" class="label-cbx">
-                        <input id="interest{{ $i }}" type="checkbox" class="invisible" name="interests[]" value="{{ $interest->interest }}">
-                        <div class="checkbox">
+                        <input id="interest{{ $i }}" type="checkbox" class="invisible" name="interests[]" value="{{ $interest->interest }}" checked>
+                        <div class="checkbox" style="padding-top: 0;">
                             <svg viewBox="0 0 20 20">
                                 <path d="M3,1 L17,1 L17,1 C18.1045695,1 19,1.8954305 19,3 L19,17 L19,17 C19,18.1045695 18.1045695,19 17,19 L3,19 L3,19 C1.8954305,19 1,18.1045695 1,17 L1,3 L1,3 C1,1.8954305 1.8954305,1 3,1 Z"></path>
                                 <polyline points="4 11 8 15 16 6"></polyline>
@@ -45,17 +49,17 @@
                 </div>
             </div>
             <div class="row">
-                <h3>Investment Types</h3>
-                <div class="col-lg-4 col-sm-6">
+                <b>Investment Types</b><br />
+                <div class="col-sm-4 col-xs-12">
                     @php ($i = 0)
                     @foreach ($investmentTypes as $investmentType)
                     @if (($i == (ceil(count($investmentTypes) / 3))) || ($i == (ceil(count($investmentTypes) / 3) * 2)))
                 </div>
-                <div class="col-lg-4 col-sm-6">
+                <div class="col-sm-4 col-xs-12">
                     @endif
                     <label for="investmentType{{ $i }}" class="label-cbx">
-                        <input id="investmentType{{ $i }}" type="checkbox" class="invisible" name="investmentTypes[]" value="{{ $investmentType->investmentType }}">
-                        <div class="checkbox">
+                        <input id="investmentType{{ $i }}" type="checkbox" class="invisible" name="investmentTypes[]" value="{{ $investmentType->investmentType }}" checked>
+                        <div class="checkbox" style="padding-top: 0;">
                             <svg viewBox="0 0 20 20">
                                 <path d="M3,1 L17,1 L17,1 C18.1045695,1 19,1.8954305 19,3 L19,17 L19,17 C19,18.1045695 18.1045695,19 17,19 L3,19 L3,19 C1.8954305,19 1,18.1045695 1,17 L1,3 L1,3 C1,1.8954305 1.8954305,1 3,1 Z"></path>
                                 <polyline points="4 11 8 15 16 6"></polyline>
@@ -69,17 +73,17 @@
                 </div>
             </div>
             <div class="row">
-                <h3>Jurisdictions</h3>
-                <div class="col-lg-4 col-sm-6">
+                <b>Jurisdictions</b><br />
+                <div class="col-sm-4 col-xs-12">
                     @php ($i = 0)
                     @foreach ($jurisdictions as $jurisdiction)
                     @if (($i == (ceil(count($jurisdictions) / 3))) || ($i == (ceil(count($jurisdictions) / 3) * 2)))
                 </div>
-                <div class="col-lg-4 col-sm-6">
+                <div class="col-sm-4 col-xs-12">
                     @endif
                     <label for="jurisdiction{{ $i }}" class="label-cbx">
-                        <input id="jurisdiction{{ $i }}" type="checkbox" class="invisible" name="jurisdictions[]" value="{{ $jurisdiction->jurisdiction }}">
-                        <div class="checkbox">
+                        <input id="jurisdiction{{ $i }}" type="checkbox" class="invisible" name="jurisdictions[]" value="{{ $jurisdiction->jurisdiction }}" checked>
+                        <div class="checkbox" style="padding-top: 0;">
                             <svg viewBox="0 0 20 20">
                                 <path d="M3,1 L17,1 L17,1 C18.1045695,1 19,1.8954305 19,3 L19,17 L19,17 C19,18.1045695 18.1045695,19 17,19 L3,19 L3,19 C1.8954305,19 1,18.1045695 1,17 L1,3 L1,3 C1,1.8954305 1.8954305,1 3,1 Z"></path>
                                 <polyline points="4 11 8 15 16 6"></polyline>
@@ -92,9 +96,9 @@
                     @endforeach
                 </div>
             </div>
-            <div class="row">
-                <div class="col-xs-12">
-                    <button type="submit" class="btn btn-default button">Apply</button>
+            <div class="row" style="margin-bottom: 1em;">
+                <div class="col-md-3 col-sm-4 col-xs-12" style="float: right;">
+                    <button type="button" class="btn btn-default button" name="apply">Apply</button>
                 </div>
             </div>
         </form>
@@ -160,8 +164,7 @@
                 $("#filtersToggleIcon").removeClass("glyphicon-minus");
                 $("#filtersToggleIcon").addClass("glyphicon-plus");
             }
-            $("#filtersContent").slideToggle("slow", function() {
-            });
+            $("#filtersContent").slideToggle(300, function() {});
         });
         $(".field:not(:first)").draggable({
             axis: "x",
@@ -170,6 +173,14 @@
             revert: "invalid",
             revertDuration: 100,
             scroll: false
+        });
+        $("form :input").change(function() {
+            //alert($(this).prop("name"));
+            if ($(this).prop("checked") == true) {
+
+            } else {
+
+            }
         });
         $('.noMoreListings').draggable("disable");
         var numberOfSavedListings = $('.field').length - 2;

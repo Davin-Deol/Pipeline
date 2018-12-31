@@ -435,6 +435,24 @@ label {
 .icon-bar {
     border: 1px solid <?php echo $textColourOnPrimary; ?>;
 }
+.attachToNav {
+    background-color: rgb(<?php echo convertHexToRGB($colourPrimary, true); ?>);
+    color: white;
+    margin-bottom: 1em;
+    margin-top: -20px;
+}
+.attachToNav .label-cbx input:checked+.checkbox svg path {
+    fill: white;
+}
+.attachToNav .label-cbx .checkbox svg polyline {
+    stroke: rgb(<?php echo convertHexToRGB($colourPrimary, true); ?>);
+}
+.attachToNav .label-cbx input:checked+.checkbox {
+    border-color: white;
+}
+.attachToNav select, .attachToNav input {
+    color: black;
+}
 
 
 
