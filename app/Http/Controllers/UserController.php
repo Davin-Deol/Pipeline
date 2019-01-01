@@ -53,7 +53,6 @@ class UserController extends Controller
         if ($request->isMethod('post'))
         {
             $searchKey = $request->input("searchKey");
-            $request->session()->put('searchKey', $searchKey);
             $data["searchKeyUsed"] = $searchKey;
         }
         
@@ -73,6 +72,48 @@ class UserController extends Controller
             ->get();
         
         return view('user/browseListings', compact('data', 'listings', 'currencies', 'interests', 'investmentTypes', 'jurisdictions'));
+    }
+    
+    public function browseListings_listingLayout(Request $request)
+    {
+        if ($request->isMethod('post'))
+        {
+            $searchKey = $request->cookie('searchKey');
+            /*
+            $data["category"] = $request->input('category');
+            $data["subCategory"] = $request->input('subCategory');
+            */
+            $minPrice = ($request->input('minPrice') !== null) ? $request->input('minPrice') : 0;
+            $maxPrice = ($request->input('maxPrice') !== null) ? $request->input('maxPrice') : 99999999999;
+            $interests = $request->input('interests');
+            $investmentTypes = $request->input('investmentTypes');
+            $jurisdictions = $request->input('jurisdictions');
+            $offset = $request->input('offset');
+            
+            $listings = Listings::with('listingImages')
+                ->where('status', "posted")
+                ->where(function ($query) use ($searchKey) {
+                        $query->where('name', 'LIKE', "%" . $searchKey . "%")
+                            ->orWhere('introduction', 'LIKE', "%" . $searchKey . "%")
+                            ->orWhere('additionalDetails', 'LIKE', "%" . $searchKey . "%");
+                    })
+                ->where('priceBracketMin', '>=', $minPrice)
+                ->where('priceBracketMax', '<=', $maxPrice)
+                ->whereIn('subCategory', $interests)
+                ->whereIn('investmentType', $investmentTypes)
+                ->whereIn('jurisdiction', $jurisdictions)
+                ->orderBy('lastUpdated', 'DESC')
+                ->offset($offset)
+                ->limit(10)
+                ->get();
+        }
+        
+        return response()
+            ->json([
+                'count' => count($listings),
+                'data' => view('user/browseListings_listingLayout', compact('data', 'listings'))->render()
+            ]);
+        return view('user/browseListings_listingLayout', compact('data', 'listings'));
     }
     
     public function saveUsersListing(Request $request)

@@ -27,6 +27,7 @@ Route::post('/signUpSubmission', 'GuestController@signUpSubmission')->name('gues
 Route::group(['middleware' => 'auth'], function () {
     Route::post('/changeSearchKey', 'UserController@changeSearchKey')->name('user-changeSearchKey');
     Route::match(['get', 'post'], '/browseListings', 'UserController@browseListings')->name('user-browseListings');
+    Route::post('/browseListings_listingLayout', 'UserController@browseListings_listingLayout')->name('user-browseListings_listingLayout');
     Route::post('/saveUsersListing', 'UserController@saveUsersListing')->name('user-saveUsersListing');
 
     Route::get('/savedListings', 'UserController@savedListings')->name('user-savedListings');

@@ -10,7 +10,7 @@
 <div class="row attachToNav">
     <div class="row" id="filtersToggle" style="width: 70%; margin: 0 auto; cursor: pointer;">
         <h3 style="margin-top: 10px; text-align: center;">
-            Filters <span id="filtersToggleIcon" class="glyphicon glyphicon-plus" style="font-size: 0.8em; float: right;"></span>
+            <span id="filtersToggleIcon" class="glyphicon glyphicon-plus" style="font-size: 0.8em;"></span> Filters
         </h3>
     </div>
     <div class="row">
@@ -98,42 +98,15 @@
             </div>
             <div class="row" style="margin-bottom: 1em;">
                 <div class="col-md-3 col-sm-4 col-xs-12" style="float: right;">
-                    <button type="button" class="btn btn-default button" name="apply">Apply</button>
+                    <button type="button" class="btn btn-default button" name="apply" id="apply">Apply</button>
                 </div>
             </div>
+            <input type="hidden" name="offset" id="offset" value="0" />
         </form>
     </div>
 </div>
 @if (count($listings))
-@foreach ($listings as $listing)
-<div class="row field" id="{{ $listing->listingID }}">
-    @include('include.listingSummary')
-    <div class="row">
-        @if ($listing->userId == $user->userId)
-        <div class="col-xs-6">
-            <a href="{{ route('user-reviewListing', ['listingID' => $listing->listingID]) }}" class="btn btn-default button">
-                <span class="glyphicon glyphicon-search" aria-hidden="true"></span> Review
-            </a>
-        </div>
-        <div class="col-xs-6">
-            <button type="button" class="discardListing btn btn-default button" name="Discard" value="{{ $listing->listingID }}">Discard &rarr;</button>
-        </div>
-        @else
-        <div class="col-xs-4">
-            <button type="button" class="saveListing btn btn-default button" name="Save" value="{{ $listing->listingID }}">&larr; Save</button>
-        </div>
-        <div class="col-xs-4">
-            <a href="{{ route('user-reviewListing', ['listingID' => $listing->listingID]) }}" class="btn btn-default button">
-                <span class="glyphicon glyphicon-search" aria-hidden="true"></span> Review
-            </a>
-        </div>
-        <div class="col-xs-4">
-            <button type="button" class="discardListing btn btn-default button" name="Discard" value="{{ $listing->listingID }}">Discard &rarr;</button>
-        </div>
-        @endif
-    </div>
-</div>
-@endforeach
+<span id="listings"></span>
 <div id="outOfSavedListings" class="row field noMoreListings" style="display:none;">
     <div class="col-lg-12">
         <h1>There are no more listings at this time</h1>
@@ -155,6 +128,11 @@
 <script>
     $(document).ready(function() {
         var filtersExpanded = false;
+        var numberOfListings = 0;
+        var startPoint = 0;
+        var endPoint = 0;
+        var numberOfListingsLoaded = 0;
+
         $("#filtersToggle").on('click', function() {
             filtersExpanded = !filtersExpanded;
             if (filtersExpanded) {
@@ -166,80 +144,21 @@
             }
             $("#filtersContent").slideToggle(300, function() {});
         });
-        $(".field:not(:first)").draggable({
-            axis: "x",
-            delay: 300,
-            shouldPreventDefault: true,
-            revert: "invalid",
-            revertDuration: 100,
-            scroll: false
+        $("#apply").click(function() {
+            $("#listings").html("");
+            numberOfListings = 0;
+            numberOfListingsLoaded = 0;
+            loadMoreListings(0);
         });
-        $("form :input").change(function() {
-            //alert($(this).prop("name"));
-            if ($(this).prop("checked") == true) {
-
-            } else {
-
-            }
-        });
-        $('.noMoreListings').draggable("disable");
-        var numberOfSavedListings = $('.field').length - 2;
+        loadMoreListings(0);
+        //var numberOfListings = $('.field').length - 2;
 
         function decrementNumberOfListings() {
-            numberOfSavedListings--;
-            if (numberOfSavedListings == 0) {
+            numberOfListings--;
+            if (numberOfListings == 0) {
                 $("#outOfSavedListings").css("display", "block");
             }
         }
-        $(".saveListing").click(function() {
-            var listingId = $(this).attr("value");
-            saveListing(listingId);
-        });
-        $(".discardListing").click(function() {
-            var listingId = $(this).attr("value");
-            discardListing(listingId);
-        });
-        var startPoint = 0;
-        var endPoint = 0;
-        $(".field:not(:first)").on('mousedown', function(e) {
-            try {
-                startPoint = e.originalEvent.changedTouches[0].clientX;
-            } catch (err) {
-                startPoint = e.pageX;
-            }
-        });
-
-        $(".field:not(:first)").on('mouseup', function(e) {
-            if (($(this).hasClass("noMoreListings")) == true) {
-                return;
-            }
-            try {
-                endPoint = e.originalEvent.changedTouches[0].clientX;
-            } catch (err) {
-                endPoint = e.pageX;
-            }
-
-            var distanceMoved = 0;
-            var swipeRight = false;
-            if (startPoint < endPoint) {
-                distanceMoved = endPoint - startPoint;
-                swipeRight = true;
-            } else {
-                distanceMoved = startPoint - endPoint;
-                swipeRight = false;
-            }
-            if (distanceMoved >= ($(document).width() / 3)) {
-                var listingId = $(this).attr("id");
-                if (swipeRight) {
-                    $(this).draggable("disable");
-                    discardListing(listingId);
-                } else {
-                    saveListing(listingId);
-                }
-            }
-            startPoint = 0;
-            endPoint = 0;
-        });
 
         function saveListing(listingId) {
             $.ajax({
@@ -267,6 +186,98 @@
                 $("#" + listingId).remove();
             });
             decrementNumberOfListings();
+        }
+
+        $(window).scroll(function() {
+            if ($(window).scrollTop() + $(window).height() == $(document).height()) {
+                loadMoreListings(0);
+            }
+        });
+
+        function loadMoreListings(index) {
+            displayLoadingModal("Loading listings...");
+            $.ajax({
+                type: "POST",
+                url: "{{ route('user-browseListings_listingLayout') }}",
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                processData: false,
+                contentType: false,
+                data: new FormData($('#filtersContent')[0]),
+                success: function(response) {
+                    closeAllModals();
+                    $("#listings").append(response["data"]);
+                    implementSlick();
+                    numberOfListings += response["count"];
+                    numberOfListingsLoaded += response["count"];
+
+                    if (numberOfListings) {
+                        $("#outOfSavedListings").css("display", "none");
+                    }
+
+                    $(".field:not(:last)").draggable({
+                        axis: "x",
+                        delay: 300,
+                        shouldPreventDefault: true,
+                        revert: "invalid",
+                        revertDuration: 100,
+                        scroll: false
+                    });
+
+                    $(".saveListing").click(function() {
+                        var listingId = $(this).attr("value");
+                        saveListing(listingId);
+                    });
+                    $(".discardListing").click(function() {
+                        var listingId = $(this).attr("value");
+                        discardListing(listingId);
+                    });
+
+                    $(".field:not(:last)").on('mousedown', function(e) {
+                        try {
+                            startPoint = e.originalEvent.changedTouches[0].clientX;
+                        } catch (err) {
+                            startPoint = e.pageX;
+                        }
+                    });
+
+                    $(".field:not(:last)").on('mouseup', function(e) {
+                        if (($(this).hasClass("noMoreListings")) == true) {
+                            return;
+                        }
+                        try {
+                            endPoint = e.originalEvent.changedTouches[0].clientX;
+                        } catch (err) {
+                            endPoint = e.pageX;
+                        }
+
+                        var distanceMoved = 0;
+                        var swipeRight = false;
+                        if (startPoint < endPoint) {
+                            distanceMoved = endPoint - startPoint;
+                            swipeRight = true;
+                        } else {
+                            distanceMoved = startPoint - endPoint;
+                            swipeRight = false;
+                        }
+                        if (distanceMoved >= ($(document).width() / 3)) {
+                            var listingId = $(this).attr("id");
+                            if (swipeRight) {
+                                $(this).draggable("disable");
+                                discardListing(listingId);
+                            } else {
+                                saveListing(listingId);
+                            }
+                        }
+                        startPoint = 0;
+                        endPoint = 0;
+                    });
+                    
+
+                    $("#offset").val(numberOfListingsLoaded);
+                }
+            });
         }
     });
 

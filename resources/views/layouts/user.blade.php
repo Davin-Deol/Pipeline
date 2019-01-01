@@ -5,6 +5,8 @@
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script src="{{ asset('public/js/jquery.ui.touch-punch.js') }}"></script>
     <script src="{{ asset('public/js/js.cookie.js') }}"></script>
+</head>
+
     <script>
         var fadeDuration = 1000;
         var modalDisplayDuration = 1200;
@@ -44,6 +46,18 @@
                 });
             }, modalDisplayDuration);
         }
+            
+        function implementSlick() {
+            var numberOfSlides = 4;
+
+            $('.slider-nav').slick({
+                infinite: true,
+                slidesToShow: numberOfSlides,
+                slidesToScroll: numberOfSlides,
+            });
+            
+            $(".squareImage").height($(".squareImage").width());
+        }
         
         $(document).ready(function() {
             $(".squareImage").height($(".squareImage").width());
@@ -71,13 +85,7 @@
                 closeAllModals();
             });
             
-            var numberOfSlides = 4;
-            
-            $('.slider-nav').slick({
-                infinite: true,
-                slidesToShow: numberOfSlides,
-                slidesToScroll: numberOfSlides,
-            });
+            implementSlick();
             
             $(".reviewImageMain").height($(".reviewImageMain").width());
             
@@ -94,8 +102,6 @@
             @endif
         });
     </script>
-</head>
-
 <body>
     <div class="container-fluid">
         @include('include.cookieWarning')
