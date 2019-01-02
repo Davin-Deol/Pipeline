@@ -202,11 +202,26 @@
             decrementNumberOfListings();
         }
 
+        var toggleMoreListings = function() {
+            $(window).scroll(function() {
+                if ($(window).scrollTop() + $(window).height() == $(document).height()) {
+                    loadMoreListings();
+                    // Unbind the event
+                    $(window).unbind("scroll");
+                    // Call the function after 2 second delay
+                    setTimeout(toggleMoreListings, 2000);
+                }
+            });
+        };
+        toggleMoreListings();
+        
+        /*
         $(window).scroll(function() {
             if ($(window).scrollTop() + $(window).height() == $(document).height()) {
                 loadMoreListings();
             }
         });
+        */
 
         function loadMoreListings() {
             displayLoadingModal("Loading listings...");
@@ -289,26 +304,6 @@
                         startPoint = 0;
                         endPoint = 0;
                     });
-                    
-                    /*
-                    var numberOfSlides = 4;
-
-                    for (var i = numberOfPriorListings; i < $('.slider-nav').length; i++) {
-                        $('.slider-nav')[i].slick({
-                            infinite: true,
-                            slidesToShow: numberOfSlides,
-                            slidesToScroll: numberOfSlides,
-                        });
-                    }
-                    
-                    $('.slider-nav').slick({
-                        infinite: true,
-                        slidesToShow: numberOfSlides,
-                        slidesToScroll: numberOfSlides,
-                    });
-                    
-                    $(".squareImage").height($(".squareImage").width());
-                    */
                     
                     implementSlick();
                 }
