@@ -5,6 +5,7 @@
 
 <link href="{{ asset('public/slick-1.8.0/slick/slick.css') }}" rel="stylesheet" />
 <link href="{{ asset('public/slick-1.8.0/slick/slick-theme.css') }}" rel="stylesheet" />
+<!--<link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>-->
 
 <link rel="apple-touch-icon" sizes="57x57" href="{{ asset('public/img/Favicon/apple-icon-57x57.png') }}">
 <link rel="apple-touch-icon" sizes="60x60" href="{{ asset('public/img/Favicon/apple-icon-60x60.png') }}">
@@ -42,7 +43,8 @@
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 <script src="{{ asset('public/js/Animated-Text-Underlines-jQuery-linkUnderline/jquery.linkunderanim.js') }}"></script>
-<script src="{{ asset('public/slick-1.8.0/slick/slick.js') }}"></script>
+<!--<script src="{{ asset('public/slick-1.8.0/slick/slick.js') }}"></script>-->
+<script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
 <script src="{{ asset('public/js/cookieConsent.js') }}"></script>
 <script>
     $(document).ready(function() {

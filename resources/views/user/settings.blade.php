@@ -1,42 +1,30 @@
 @extends('layouts.user') @section('content')
-<script src="{{ asset('public/js/nicEdit/nicEdit.js') }}"></script>
-<script type="text/javascript">
-    bkLib.onDomLoaded(function() {
-        nicEditors.allTextAreas()
-    });
-
-</script>
-<style>
-    #sectionsToUpdate select {
-        text-align: center;
-    }
-</style>
 
 <div class="field" id="updateCategories">
     <h1>
     <select name="sectionsToUpdate" id="sectionsToUpdate">
-        <optgroup label="Guest Pages">
-            <option value="cookies">Cookie Policy</option>
-            <option value="credits">Credits</option>
-            <option value="homepage" selected>Homepage</option>
-            <option value="termsAndConditions">Terms and Conditions</option>
-        </optgroup>
-        <optgroup label="General">
-            <option value="theme">Theme</option>
-        </optgroup>
-        <optgroup label="Legal">
+        <optgroup label="Account">
+            <option value="changePassword" selected>Change Password</option>
+            <option value="profile">Profile</option>
+            
+            @if ($user->NDAStatus != "approved")
             <option value="nda">NDA</option>
+            @endif
+            
         </optgroup>
     </select>
     </h1>
 </div>
 
-<span id="fields">
-</span>
 
+<div class="row">
+    <div class="col-lg-12">
+        <span id="fields">
+        </span>
+    </div>
+</div>
 <script>
     $(document).ready(function() {
-
         displayUpdateFields($("#updateCategories option:selected").val());
         $("#updateCategories").change(function() {
             displayUpdateFields($("#updateCategories option:selected").val());
@@ -45,7 +33,7 @@
         function displayUpdateFields(category) {
             $.ajax({
                 type: "POST",
-                url: "{{ route('admin-manageWebsite') }}",
+                url: "{{ route('user-settings') }}",
                 data: {
                     category: category
                 },
@@ -56,7 +44,6 @@
                 success: function(response) {
                     if (response) {
                         $("#fields").html(response);
-                        nicEditors.allTextAreas();
                     } else {
                         displayErrorModal("Failed to send request. Please try again later.");
                     }
@@ -64,6 +51,5 @@
             });
         }
     });
-
 </script>
 @endsection

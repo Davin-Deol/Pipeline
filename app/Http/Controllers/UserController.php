@@ -43,14 +43,6 @@ class UserController extends Controller
         View::share('user', Auth::user());
     }
     
-    public function changeSearchKey(Request $request)
-    {
-        if ($request->isMethod('post'))
-        {
-            $request->session()->flash('searchKey', $request->input("searchKey"));
-        }
-    }
-    
     public function browseListings(Request $request)
     {
         $data = array();
@@ -61,9 +53,13 @@ class UserController extends Controller
         if ($request->isMethod('post'))
         {
             $searchKey = $request->input("searchKey");
-            $request->session()->put('searchKey', $searchKey);
             $data["searchKeyUsed"] = $searchKey;
         }
+        
+        $currencies = $this->currency->all();
+        $interests = $this->interest->all();
+        $investmentTypes = $this->investmentType->all();
+        $jurisdictions = $this->jurisdiction->all();
         
         $listings = Listings::with('listingImages')
             ->where('status', "posted")
@@ -75,7 +71,49 @@ class UserController extends Controller
             ->orderBy('lastUpdated', 'DESC')
             ->get();
         
-        return view('user/browseListings', compact('data', 'listings'));
+        return view('user/browseListings', compact('data', 'listings', 'currencies', 'interests', 'investmentTypes', 'jurisdictions'));
+    }
+    
+    public function browseListings_listingLayout(Request $request)
+    {
+        if ($request->isMethod('post'))
+        {
+            $searchKey = $request->cookie('searchKey');
+            /*
+            $data["category"] = $request->input('category');
+            $data["subCategory"] = $request->input('subCategory');
+            */
+            $minPrice = ($request->input('minPrice') !== null) ? $request->input('minPrice') : 0;
+            $maxPrice = ($request->input('maxPrice') !== null) ? $request->input('maxPrice') : 99999999999;
+            $interests = ($request->input('interests') !== null) ? $request->input('interests') : array();
+            $investmentTypes = ($request->input('investmentTypes') !== null) ? $request->input('investmentTypes') : array();
+            $jurisdictions = ($request->input('jurisdictions') !== null) ? $request->input('jurisdictions'): array();
+            $offset = ($request->input('offset') !== null) ? $request->input('offset') : 0;
+            
+            $listings = Listings::with('listingImages')
+                ->where('status', "posted")
+                ->where(function ($query) use ($searchKey) {
+                        $query->where('name', 'LIKE', "%" . $searchKey . "%")
+                            ->orWhere('introduction', 'LIKE', "%" . $searchKey . "%")
+                            ->orWhere('additionalDetails', 'LIKE', "%" . $searchKey . "%");
+                    })
+                ->where('priceBracketMin', '>=', $minPrice)
+                ->where('priceBracketMax', '<=', $maxPrice)
+                ->whereIn('subCategory', $interests)
+                ->whereIn('investmentType', $investmentTypes)
+                ->whereIn('jurisdiction', $jurisdictions)
+                ->orderBy('lastUpdated', 'DESC')
+                ->offset($offset)
+                ->limit(10)
+                ->get();
+        }
+        
+        return response()
+            ->json([
+                'count' => count($listings),
+                'data' => view('user/browseListings_listingLayout', compact('data', 'listings'))->render()
+            ]);
+        return view('user/browseListings_listingLayout', compact('data', 'listings'));
     }
     
     public function saveUsersListing(Request $request)
@@ -159,19 +197,36 @@ class UserController extends Controller
         return redirect()->route('guest-home');
     }
     
-    public function manageAccount()
+    public function settings(Request $request)
     {
         $data = array();
-        
-        $data["title"] = "Manage Account";
-        
-        $seconds = filemtime("public/img/NDAs/" . Auth::user()->NDA);
-        $data["NDALastModified"] = StringFormatter::getDifferenceBetweenDateTimeAndNow($seconds);
-        
-        $birthday = new \DateTime(Auth::user()->birthday);
-        $birthday = $birthday->format('Y-m-d');
-        
-        return view('user/manageAccount', compact('data', 'birthday'));
+        if ($request->isMethod('post'))
+        {
+            switch ($request->input('category'))
+            {
+                case ("changePassword"):
+                    return view('user/settings_Categories/changePassword', compact('data', 'birthday'));
+                    break;
+                case ("nda"):
+                    $seconds = filemtime("public/img/NDAs/" . Auth::user()->NDA);
+                    $data["NDALastModified"] = StringFormatter::getDifferenceBetweenDateTimeAndNow($seconds);
+                    return view('user/settings_Categories/nda', compact('data', 'birthday'));
+                    break;
+                case ("profile"):
+                    $birthday = new \DateTime(Auth::user()->birthday);
+                    $birthday = $birthday->format('Y-m-d');
+                    return view('user/settings_Categories/profile', compact('data', 'birthday'));
+                    break;
+                default:
+                    break;
+            }
+        }
+        else
+        {        
+            $data["title"] = "Settings";
+
+            return view('user/settings', compact('data'));
+        }
     }
     
     public function submitNDA(Request $request)

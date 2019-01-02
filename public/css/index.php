@@ -117,6 +117,7 @@ a {
 .alternativeTwoBtn {
     float: right;
 }
+/*
 
 .label-cbx {
     user-select: none;
@@ -185,7 +186,7 @@ svg {
     width: 1.3em;
     height: 1.3em;
 }
-
+*/
 @-webkit-keyframes cardEnter {
     0%,
     20%,

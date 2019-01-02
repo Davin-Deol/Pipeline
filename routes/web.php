@@ -27,6 +27,7 @@ Route::post('/signUpSubmission', 'GuestController@signUpSubmission')->name('gues
 Route::group(['middleware' => 'auth'], function () {
     Route::post('/changeSearchKey', 'UserController@changeSearchKey')->name('user-changeSearchKey');
     Route::match(['get', 'post'], '/browseListings', 'UserController@browseListings')->name('user-browseListings');
+    Route::post('/browseListings_listingLayout', 'UserController@browseListings_listingLayout')->name('user-browseListings_listingLayout');
     Route::post('/saveUsersListing', 'UserController@saveUsersListing')->name('user-saveUsersListing');
 
     Route::get('/savedListings', 'UserController@savedListings')->name('user-savedListings');
@@ -58,6 +59,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('/denyNDA', 'AdminController@denyNDA')->name('admin-denyNDA');
         Route::post('/approveNDA', 'AdminController@approveNDA')->name('admin-approveNDA');
         Route::get('/manageWebsite', 'AdminController@manageWebsite')->name('admin-manageWebsite');
+        Route::post('/manageWebsite', 'AdminController@manageWebsite')->name('admin-manageWebsite');
         Route::post('/updateTheme', 'AdminController@updateTheme')->name('admin-updateTheme');
         Route::post('/updateHomepage', 'AdminController@updateHomepage')->name('admin-updateHomepage');
         Route::post('/updateCredits', 'AdminController@updateCredits')->name('admin-updateCredits');
@@ -67,7 +69,8 @@ Route::group(['middleware' => 'auth'], function () {
     });
     
     Route::get('/profile', 'UserController@profile')->name('user-profile');
-    Route::get('/manageAccount', 'UserController@manageAccount')->name('user-manageAccount');
+    Route::get('/settings', 'UserController@settings')->name('user-settings');
+    Route::post('/settings', 'UserController@settings')->name('user-settings');
     Route::post('/submitNDA', 'UserController@submitNDA')->name('user-submitNDA');
     Route::post('/submitChangePassword', 'UserController@submitChangePassword')->name('user-submitChangePassword');
     Route::post('/submitUpdateAccount', 'UserController@submitUpdateAccount')->name('user-submitUpdateAccount');
