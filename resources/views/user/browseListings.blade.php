@@ -97,7 +97,13 @@
                 </div>
             </div>
             <div class="row" style="margin-bottom: 1em;">
-                <div class="col-md-3 col-sm-4 col-xs-12" style="float: right;">
+                <div class="col-md-offset-3 col-md-3 col-sm-4 col-xs-12">
+                    <button type="button" class="btn btn-default button" name="clear" id="clear">Clear</button>
+                </div>
+                <div class="col-md-3 col-sm-4 col-xs-12">
+                    <button type="reset" class="btn btn-default button" name="reset" id="reset">Reset</button>
+                </div>
+                <div class="col-md-3 col-sm-4 col-xs-12">
                     <button type="button" class="btn btn-default button" name="apply" id="apply">Apply</button>
                 </div>
             </div>
@@ -144,13 +150,18 @@
             }
             $("#filtersContent").slideToggle(300, function() {});
         });
+        $("#clear").click(function() {
+            $('#filtersContent :input').not(':button, :submit, :reset, :hidden, :checkbox, :radio').val('');
+            $('#filtersContent :checkbox, :radio').prop('checked', false);
+        });
         $("#apply").click(function() {
-            $("#listings").html("");
+            $("#listings").empty();
             numberOfListings = 0;
             numberOfListingsLoaded = 0;
-            loadMoreListings(0);
+            $("#offset").val(0);
+            loadMoreListings();
         });
-        loadMoreListings(0);
+        loadMoreListings();
         //var numberOfListings = $('.field').length - 2;
 
         function decrementNumberOfListings() {
@@ -190,11 +201,11 @@
 
         $(window).scroll(function() {
             if ($(window).scrollTop() + $(window).height() == $(document).height()) {
-                loadMoreListings(0);
+                loadMoreListings();
             }
         });
 
-        function loadMoreListings(index) {
+        function loadMoreListings() {
             displayLoadingModal("Loading listings...");
             $.ajax({
                 type: "POST",
@@ -208,9 +219,10 @@
                 success: function(response) {
                     closeAllModals();
                     $("#listings").append(response["data"]);
-                    implementSlick();
                     numberOfListings += response["count"];
                     numberOfListingsLoaded += response["count"];
+                    $("#offset").val(numberOfListingsLoaded);
+                    
 
                     if (numberOfListings) {
                         $("#outOfSavedListings").css("display", "none");
@@ -274,8 +286,7 @@
                         endPoint = 0;
                     });
                     
-
-                    $("#offset").val(numberOfListingsLoaded);
+                    implementSlick();
                 }
             });
         }

@@ -85,10 +85,10 @@ class UserController extends Controller
             */
             $minPrice = ($request->input('minPrice') !== null) ? $request->input('minPrice') : 0;
             $maxPrice = ($request->input('maxPrice') !== null) ? $request->input('maxPrice') : 99999999999;
-            $interests = $request->input('interests');
-            $investmentTypes = $request->input('investmentTypes');
-            $jurisdictions = $request->input('jurisdictions');
-            $offset = $request->input('offset');
+            $interests = ($request->input('interests') !== null) ? $request->input('interests') : array();
+            $investmentTypes = ($request->input('investmentTypes') !== null) ? $request->input('investmentTypes') : array();
+            $jurisdictions = ($request->input('jurisdictions') !== null) ? $request->input('jurisdictions'): array();
+            $offset = ($request->input('offset') !== null) ? $request->input('offset') : 0;
             
             $listings = Listings::with('listingImages')
                 ->where('status', "posted")
