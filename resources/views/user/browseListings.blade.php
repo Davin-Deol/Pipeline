@@ -167,7 +167,10 @@
         function decrementNumberOfListings() {
             numberOfListings--;
             if (numberOfListings == 0) {
-                $("#outOfSavedListings").css("display", "block");
+                loadMoreListings();
+                if (numberOfListings == 0) {
+                    $("#outOfSavedListings").css("display", "block");
+                }
             }
         }
 
