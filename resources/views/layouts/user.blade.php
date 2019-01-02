@@ -49,8 +49,8 @@
             
         function implementSlick() {
             var numberOfSlides = 4;
-
-            $('.slider-nav').slick({
+                
+            $('.slider-nav').not('.slick-initialized').slick({
                 infinite: true,
                 slidesToShow: numberOfSlides,
                 slidesToScroll: numberOfSlides,

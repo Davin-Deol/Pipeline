@@ -221,6 +221,7 @@
                 data: new FormData($('#filtersContent')[0]),
                 success: function(response) {
                     closeAllModals();
+                    var numberOfPriorListings = $('.slider-nav').length;
                     $("#listings").append(response["data"]);
                     numberOfListings += response["count"];
                     numberOfListingsLoaded += response["count"];
@@ -288,6 +289,26 @@
                         startPoint = 0;
                         endPoint = 0;
                     });
+                    
+                    /*
+                    var numberOfSlides = 4;
+
+                    for (var i = numberOfPriorListings; i < $('.slider-nav').length; i++) {
+                        $('.slider-nav')[i].slick({
+                            infinite: true,
+                            slidesToShow: numberOfSlides,
+                            slidesToScroll: numberOfSlides,
+                        });
+                    }
+                    
+                    $('.slider-nav').slick({
+                        infinite: true,
+                        slidesToShow: numberOfSlides,
+                        slidesToScroll: numberOfSlides,
+                    });
+                    
+                    $(".squareImage").height($(".squareImage").width());
+                    */
                     
                     implementSlick();
                 }
