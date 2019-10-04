@@ -210,14 +210,14 @@
                 </div>
                 <div class="col-sm-6 col-md-4 col-lg-4 col-xl-4 mx-auto mb-md-0 mb-4">
                     <h6 class="text-uppercase font-weight-bold">Contact</h6>
-                    <p><img src="{{ asset('public/img/Index/Email-Icon.png') }}" style="width: 1.3em; margin-right: 0.3em; margin-top: -0.2em;" />daniel@pipeline-listings.com</p>
+                    <p><img src="{{ asset('public/img/Index/Email-Icon.png') }}" style="width: 1.3em; margin-right: 0.3em; margin-top: -0.2em;" />daniel@pipeline.online</p>
                     <hr class="visible-xs dark">
                 </div>
             </div>
 
         </div>
         <div class="footer-copyright text-center py-3">© 2018 Copyright:
-            <a href="http://pipeline-listings.ca/"> Pipeline-Listings.ca</a> | <a href="{{ route('guest-credits') }}">Credits</a> | <a href="{{ route('guest-cookiePolicy') }}">Cookies</a> | <a href="{{ route('guest-termsAndConditions') }}">Terms and Conditions</a>
+            <a href="http://pipeline.online"> Pipeline.Online</a> | <a href="{{ route('guest-credits') }}">Credits</a> | <a href="{{ route('guest-cookiePolicy') }}">Cookies</a> | <a href="{{ route('guest-termsAndConditions') }}">Terms and Conditions</a>
         </div>
     </footer>
 </body>
