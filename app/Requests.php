@@ -15,8 +15,8 @@ class Requests extends Model
     
     public static function findByEmail($userEmail)
     {
-        $user = DB::table('requests as r')
-            ->where(DB::raw('BINARY `email`'), $userEmail)
+        $user = DB::table('Requests as r')
+            ->where(DB::raw('BINARY `email`'), "$userEmail")
             ->first();
         return $user;
     }

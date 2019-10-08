@@ -71,6 +71,6 @@ class Users extends AuthUser
             $userEmails[] = $user->email;
         }
         
-        return $users;
+        return $userEmails;
     }
 }

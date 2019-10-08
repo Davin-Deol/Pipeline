@@ -218,7 +218,7 @@ class GuestController extends Controller
             
             if (!$validator->fails())
             {
-                $user = Users::findByEmail($data["email"]);
+                $user = Users::findByEmail($data['email']);
                 if (is_null($user))
                 {
                     $request = Requests::findByEmail($data["email"]);
@@ -252,7 +252,6 @@ class GuestController extends Controller
                     }
                     else
                     {
-
                         Requests::where('email', $data["email"])
                             ->update([
                                 'fullName' => $data["fullName"],
@@ -260,11 +259,11 @@ class GuestController extends Controller
                                 'individualOrOrganization' => $data["individualOrOrganization"],
                                 'whenSent' => date("Y-m-d H:i:s"),
                             ]);
-                        RequestToInterests::where('requestID', $requestId)->delete();
+                        RequestToInterests::where('requestID', $request->requestID)->delete();
                         foreach ($data["interests"] as $interest)
                         {
                             $newRequestToInterests = new RequestToInterests();
-                            $newRequestToInterests->requestID = $requestId;
+                            $newRequestToInterests->requestID = $request->requestID;
                             $newRequestToInterests->interest = $interest;
                             $newRequestToInterests->save();
                         }
@@ -375,7 +374,7 @@ class GuestController extends Controller
             $data["signUpLink"] = $request->input('signUpLink');
             $data["email"] = $request->input('email');
                             
-            if (SignUpLinks::find($data["link"]))
+            if (SignUpLinks::find($data["signUpLink"]))
             {
                 return view('guest/signUp', compact('data'));
             }

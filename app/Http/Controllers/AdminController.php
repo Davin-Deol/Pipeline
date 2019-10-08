@@ -135,7 +135,7 @@ class AdminController extends UserController
                     }
                     else
                     {
-                        Mail::send('emails.requestApproved', ['request' => $request], function ($m) use ($request)
+                        Mail::send('emails.requestApproved', ['request' => $request, 'signUpLink' => $signUpLink], function ($m) use ($request)
                         {
                             $m->to($request->email, $request->fullName)->subject("Your Request To Join Pipeline Was Approved!");
                         });
@@ -165,14 +165,14 @@ class AdminController extends UserController
             if (!$validator->fails())
             {
                 $request = Requests::find($data["requestID"]);
-                
+
                 $request->whenSent = StringFormatter::getDifferenceBetweenDateTimeAndNow(strtotime($request->whenSent));
-                                
+
                 if (!is_null($request))
                 {
                     RequestToInterests::where('requestID', $data["requestID"])->delete();
                     Requests::find($data["requestID"])->delete();
-                    
+
                     if (config('app.debug'))
                     {
                         Mail::send('emails.requestDenied', ['request' => $request, 'data' => $data], function ($m) use ($request)
