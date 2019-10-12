@@ -365,23 +365,20 @@ class GuestController extends Controller
         return view('guest/cookiePolicy', compact('data'));
     }
     
-    public function signUp(Request $request)
+    public function signUp($signUpLink = null)
     {
-        if ($request->isMethod('post')) 
+        $data = array();
+        $data["title"] = "Reset Password";
+        $data["signUpLink"] = $signUpLink;
+        $signUpObject = SignUpLinks::with('request')->find($data["signUpLink"]);
+        if ($signUpObject)
         {
-            $data = array();
-            $data["title"] = "Reset Password";
-            $data["signUpLink"] = $request->input('signUpLink');
-            $data["email"] = $request->input('email');
-                            
-            if (SignUpLinks::find($data["signUpLink"]))
-            {
-                return view('guest/signUp', compact('data'));
-            }
-            else
-            {
-                return redirect()->route('guest-home');
-            }
+            $data["email"] = $signUpObject->request->email;
+            return view('guest/signUp', compact('data'));
+        }
+        else
+        {
+            return redirect()->route('guest-home');
         }
     }
     

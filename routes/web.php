@@ -21,7 +21,7 @@ Route::post('/resetPassword', 'GuestController@resetPassword')->name('guest-rese
 Route::post('/resetPasswordSubmission', 'GuestController@resetPasswordSubmission')->name('guest-resetPasswordSubmission');
 Route::get('/cookiePolicy', 'GuestController@cookiePolicy')->name('guest-cookiePolicy');
 
-Route::post('/signUp', 'GuestController@signUp')->name('guest-signUp');
+Route::get('/signUp/{signUpLink}', 'GuestController@signUp')->name('guest-signUp');
 Route::post('/signUpSubmission', 'GuestController@signUpSubmission')->name('guest-signUpSubmission');
 
 Route::group(['middleware' => 'auth'], function () {
