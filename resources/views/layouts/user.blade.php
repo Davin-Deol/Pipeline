@@ -157,6 +157,7 @@
                                         <li><a href="{{ route('admin-listingsPendingReview') }}">Listings Pending Review</a></li>
                                         <li><a href="{{ route('admin-requests') }}">Requests</a></li>
                                         <li><a href="{{ route('admin-ndasPendingReview') }}">NDAs Pending Review</a></li>
+                                        <li><a href="{{ route('admin-listOfUsers') }}">List of Users</a></li>
                                         <li><a href="{{ route('admin-manageWebsite') }}">Manage Website</a></li>
                                     </ul>
                                 </li>

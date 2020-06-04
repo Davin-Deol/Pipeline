@@ -258,6 +258,8 @@ class GuestController extends Controller
                                 'linkedInURL' => $data["linkedInURL"],
                                 'individualOrOrganization' => $data["individualOrOrganization"],
                                 'whenSent' => date("Y-m-d H:i:s"),
+                                'readStatus' => null,
+                                'inviteSent' => null,
                             ]);
                         RequestToInterests::where('requestID', $request->requestID)->delete();
                         foreach ($data["interests"] as $interest)
@@ -414,6 +416,7 @@ class GuestController extends Controller
 
                 if (!is_null($signUpLink))
                 {
+                    
                     $newUser = Users::create([
                         'userId' => Guid::create(),
                         'email' => $signUpLink->request->email,
@@ -422,6 +425,7 @@ class GuestController extends Controller
                         'linkedInURL' => $signUpLink->request->linkedInURL,
                         'individualOrOrganization' => $signUpLink->request->individualOrOrganization
                     ]);
+                    RequestToInterests::where('requestID', $signUpLink->requestID)->delete();
                     $request = Requests::find($signUpLink->requestID);
                     $signUpLink->delete();
                     $request->delete();

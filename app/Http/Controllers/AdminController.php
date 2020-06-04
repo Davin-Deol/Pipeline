@@ -368,6 +368,13 @@ class AdminController extends UserController
             }
         }
     }
+
+    public function listOfUsers()
+    {
+            $data = array();
+            $data["title"] = "List of Users";
+            return view('admin/listOfUsers', compact('data'));
+    }
     
     public function manageWebsite(Request $request)
     {

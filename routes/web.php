@@ -58,6 +58,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/ndasPendingReview', 'AdminController@ndasPendingReview')->name('admin-ndasPendingReview');
         Route::post('/denyNDA', 'AdminController@denyNDA')->name('admin-denyNDA');
         Route::post('/approveNDA', 'AdminController@approveNDA')->name('admin-approveNDA');
+        Route::get('/listOfUsers', 'AdminController@listOfUsers')->name('admin-listOfUsers');
         Route::get('/manageWebsite', 'AdminController@manageWebsite')->name('admin-manageWebsite');
         Route::post('/manageWebsite', 'AdminController@manageWebsite')->name('admin-manageWebsite');
         Route::post('/updateTheme', 'AdminController@updateTheme')->name('admin-updateTheme');
