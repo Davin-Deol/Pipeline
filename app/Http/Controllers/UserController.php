@@ -177,17 +177,62 @@ class UserController extends Controller
         return view('user/myListings', compact('data', 'listings'));
     }
     
-    public function profile(Request $request)
+    public function profile($userId = null)
     {
         $data = array();
         $data['title'] = "Profile";
         
-        $statistics = array(
-            'Listings' => Listings::getUsersListingsStatistics(Auth::user()->userId),
-            'Connections' => Connections::getUsersConnectionsStatistics(Auth::user()->userId),
-        );
+        $viewable = false;
+
+        if ($userId)
+        {
+            $profileUser = Users::find($userId);
+
+            if (!($profileUser))
+            {
+                abort(404);
+            }
+
+            if ((Auth::user()->type == "admin") || (Auth::user()->type == "demo-admin"))
+            {
+                $viewable = true;
+            }
+            else
+            {
+                $connections = Connections::where(
+                    function ($query) {
+                        $query->where('interestedPartyId', Auth::user()->userId)
+                            ->orWhere('creatorId', Auth::user()->userId);
+                    })->where('status', 'approved')
+                    ->get();
+                if ($connections->count())
+                {
+                    $viewable = true;
+                }
+            }
+
+            if ($viewable == false)
+            {
+                abort(404);
+            }
+
+            $statistics = array(
+                'Listings' => Listings::getUsersListingsStatistics($userId),
+                'Connections' => Connections::getUsersConnectionsStatistics($userId),
+            );
+
+        }
+        else
+        {
+
+            $profileUser = Auth::user();
+            $statistics = array(
+                'Listings' => Listings::getUsersListingsStatistics(Auth::user()->userId),
+                'Connections' => Connections::getUsersConnectionsStatistics(Auth::user()->userId),
+            );
+        }
         
-        return view('user/profile', compact('user', 'data', 'statistics'));
+        return view('user/profile', compact('user', 'data', 'statistics', 'profileUser'));
     }
     
     public function logout(Request $request)

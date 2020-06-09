@@ -374,19 +374,28 @@ class AdminController extends UserController
      * 
      * @return the list of users page
      */
-    public function listOfUsers()
+    public function listOfUsers($offset = 1, $limit = 10)
     {
         // Prepare data required in all pages
         $data = array();
         $data["title"] = "List of Users";
 
-        $users = Users::select('email', 'fullName', 'profileImage', 'NDAStatus'
+        $users = Users::select('userId', 'email', 'fullName', 'profileImage', 'NDAStatus'
             ,'phoneNumber', 'linkedInURL')
-            ->orderBy('creationDate', 'asc')
-            ->limit(1)
+            ->orderBy('fullName', 'asc')
+            ->limit($limit)
+            ->offset(($offset - 1) * $limit)
             ->get();
 
-        return view('admin/listOfUsers', compact('data', 'users'));
+        $count = Users::select('userId')
+            ->count();
+
+        if (($users->count() == 0) && ($offset > 1))
+        {
+            return redirect()->route('admin-listOfUsers', ['offset' => $offset - 1, 'limit' => $limit]);
+        }
+
+        return view('admin/listOfUsers', compact('data', 'users', 'offset', 'limit', 'count'));
     }
 
     public function getUsers(Request $request)

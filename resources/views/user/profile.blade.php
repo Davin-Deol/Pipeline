@@ -4,22 +4,22 @@
         <div class="field">
             <div class="row" style="text-align: center;">
                 <div class="col-xs-12">
-                    @if ($user->profileImage)
-                        <div style="background-image: url('{{ asset('public/img/Profile-Images/' . $user->profileImage) }}'); width: 33%; padding-top: 33%; margin: 0 auto; border-radius: 100%; background-size: cover; background-position: center; border: 1px solid #DDD;"></div>
+                    @if ($profileUser->profileImage)
+                        <div style="background-image: url('{{ asset('public/img/Profile-Images/' . $profileUser->profileImage) }}'); width: 33%; padding-top: 33%; margin: 0 auto; border-radius: 100%; background-size: cover; background-position: center; border: 1px solid #DDD;"></div>
                     @else
                         <div style="background-image: url('{{ asset('public/img/Profile-Images/Default-User-Profile-Image.png') }}'); width: 33%; padding-top: 33%; margin: 0 auto; border-radius: 100%; background-size: cover; background-position: center; border: 1px solid #DDD;">
                         </div>
                     @endif
-                    <br /><h1>{{ $user->fullName }}</h1>
+                    <br /><h1>{{ $profileUser->fullName }}</h1>
                 </div>
             </div>
             <hr>
             <div class="row">
-                @if ($user->location)
+                @if ($profileUser->location)
                     <div class="col-sm-6 col-xs-12">
-                        <p><span class="glyphicon glyphicon-map-marker secondary" aria-hidden="true"></span> {{ $user->location }}</p><br />
+                        <p><span class="glyphicon glyphicon-map-marker secondary" aria-hidden="true"></span> {{ $profileUser->location }}</p><br />
                         @php
-                            $datetime1 = new DateTime($user->birthday);
+                            $datetime1 = new DateTime($profileUser->birthday);
                             $datetime2 = new DateTime();
                             $interval = $datetime1->diff($datetime2);
                         @endphp
@@ -27,19 +27,19 @@
                     </div>
                 @endif
 
-                @if ($user->birthday > 0)
+                @if ($profileUser->birthday > 0)
                     <div class="col-sm-6 col-xs-12">
-                        <p><span class="glyphicon glyphicon-envelope secondary" aria-hidden="true"></span> {{ $user->email }}</p><br />
-                        @if ($user->linkedInURL)
-                            <p><a href="{{ $user->linkedInURL }}" target="_blank"><img src="{{ asset('public/img/Icons/LinkedInLogo.png') }}" style="width: 1em; height: 1em;"/> LinkedIn</a></p>
+                        <p><span class="glyphicon glyphicon-envelope secondary" aria-hidden="true"></span> {{ $profileUser->email }}</p><br />
+                        @if ($profileUser->linkedInURL)
+                            <p><a href="{{ $profileUser->linkedInURL }}" target="_blank"><img src="{{ asset('public/img/Icons/LinkedInLogo.png') }}" style="width: 1em; height: 1em;"/> LinkedIn</a></p>
                         @endif
                     </div>
                 @endif
             </div>
-            @if ($user->bio)
+            @if ($profileUser->bio)
             <div class="row">
                 <div class="col-xs-12">
-                    <p>{{ $user->bio }}</p>
+                    <p>{{ $profileUser->bio }}</p>
                 </div>
             </div>
             @endif

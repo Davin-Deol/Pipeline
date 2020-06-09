@@ -58,7 +58,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/ndasPendingReview', 'AdminController@ndasPendingReview')->name('admin-ndasPendingReview');
         Route::post('/denyNDA', 'AdminController@denyNDA')->name('admin-denyNDA');
         Route::post('/approveNDA', 'AdminController@approveNDA')->name('admin-approveNDA');
-        Route::get('/listOfUsers', 'AdminController@listOfUsers')->name('admin-listOfUsers');
+        Route::get('/listOfUsers/{offset?}/{limit?}', 'AdminController@listOfUsers')->name('admin-listOfUsers');
         Route::get('/manageWebsite', 'AdminController@manageWebsite')->name('admin-manageWebsite');
         Route::post('/manageWebsite', 'AdminController@manageWebsite')->name('admin-manageWebsite');
         Route::post('/updateTheme', 'AdminController@updateTheme')->name('admin-updateTheme');
@@ -69,7 +69,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('/updateNDA', 'AdminController@updateNDA')->name('admin-updateNDA');
     });
     
-    Route::get('/profile', 'UserController@profile')->name('user-profile');
+    Route::get('/profile/{userId?}', 'UserController@profile')->name('user-profile');
     Route::get('/settings', 'UserController@settings')->name('user-settings');
     Route::post('/settings', 'UserController@settings')->name('user-settings');
     Route::post('/submitNDA', 'UserController@submitNDA')->name('user-submitNDA');

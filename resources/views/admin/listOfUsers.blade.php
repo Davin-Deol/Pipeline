@@ -1,63 +1,166 @@
 @extends('layouts.user') @section('content')
     <div class="row field">
-    <div class="table-responsive">
-        <table class="table table-striped table-sm">
-          <thead>
-            <tr>
-              <th>Profile Image</th>
-              <th>Full Name</th>
-              <th>Email</th>
-              <th>Phone Number</th>
-              <th>NDA Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            @foreach($users as $user)
-            <tr>
-              <td>img</td>
-              <td>{{ $user->fullName }}</td>
-              <td>{{ $user->email }}</td>
-              <td>
-                @if($user->phoneNumber)
-                    {{ $user->phoneNumber }}
+        <nav aria-label="...">
+            <ul class="pagination pagination-sm">
+                @if ($offset == 1)
+                    <li class="page-item disabled"><a class="page-link" href="#" tabindex="-1">Previous</a>
                 @else
-                    n/a
+                    <li class="page-item"><a class="page-link" href="{{ route('admin-listOfUsers', ['offset' => ($offset - 1), 'limit' => $limit]) }}" tabindex="-1">Previous</a>
                 @endif
-                </td>
-              <td>{{ $user->NDAStatus }}</td>
-            </tr>
-            @endforeach
-          </tbody>
-        </table>
-      </div>
-    </div>
-    @foreach($users as $user)
-            <div class="col-md-4">
-                <div class="card mb-4 shadow-sm">
-                    @if ($user->profileImage)   
-                    <div class="reviewImageMain reviewImage squareImage" style="background-image:url('{{ asset('public/img/Profile-Images/' . $user['profileImage']) }}');background-size:cover;background-position:center; border: 1px solid #DDD;"></div>
+                @for ($i = 1; $i < (($count / $limit) + 1); $i += 1)
+                    @if ($i == $offset)
+                        <li class="page-item active">
                     @else
-                    <div class="reviewImageMain reviewImage squareImage" style="background-image:url('{{ asset('public/img/Profile-Images/Default-User-Profile-Image.png') }}');background-size:cover;background-position:center; border: 1px solid #DDD;"></div>
+                        <li class="page-item">
                     @endif
-                    <div class="card-body">
-                        <h3 class="card-text">{{ $user->fullName }}</h3>
-                        <p><span class="glyphicon glyphicon-envelope secondary" aria-hidden="true"></span> {{ $user->email }}</p>
-                        @if ($user->phoneNumber)
-                        <p><span class="glyphicon glyphicon-phone secondary" aria-hidden="true"></span> {{ $user->phoneNumber }}</p>
+                    <a class="page-link" href="{{ route('admin-listOfUsers', ['offset' => $i, 'limit' => $limit]) }}">{{ $i }}</a>
+                    </li>
+                @endfor
+                @if (($offset == ((int) ($count / $limit))) || ($limit > $users->count()))
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#">Next</a>
+                    </li>
+                @else
+                    <li class="page-item">
+                        <a class="page-link" href="{{ route('admin-listOfUsers', ['offset' => ($offset + 1), 'limit' => $limit]) }}">Next</a>
+                    </li>
+                @endif
+            </ul>
+        </nav>
+        <nav aria-label="...">
+        <ul class="pagination pagination-sm">
+            @if ($limit == 10)
+                <li class="page-item active">
+            @else
+                <li class="page-item">
+            @endif
+                <a class="page-link" href="{{ route('admin-listOfUsers', ['offset' => $offset, 'limit' => 10]) }}" tabindex="-1">10</a>
+            </li>
+            @if ($limit == 25)
+                <li class="page-item active">
+            @else
+                <li class="page-item">
+            @endif
+                <a class="page-link" href="{{ route('admin-listOfUsers', ['offset' => $offset, 'limit' => 25]) }}">25</a>
+            </li>
+            @if ($limit == 50)
+                <li class="page-item active">
+            @else
+                <li class="page-item">
+            @endif
+                <a class="page-link" href="{{ route('admin-listOfUsers', ['offset' => $offset, 'limit' => 50]) }}">50</a>
+            </li>
+            @if ($limit == ($count * 2))
+                <li class="page-item active">
+            @else
+                <li class="page-item">
+            @endif
+                <a class="page-link" href="{{ route('admin-listOfUsers', ['offset' => $offset, 'limit' => ($count * 2)]) }}">all</a>
+            </li>
+        </ul>
+        </nav>
+        <div class="table-responsive">
+            <table class="table table-striped table-sm">
+            <thead>
+                <tr>
+                <th>Profile Image</th>
+                <th>Full Name</th>
+                <th>Email</th>
+                <th>Phone Number</th>
+                <th>NDA Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($users as $user)
+                <tr>
+                    <td>
+                        @if ($user->profileImage)   
+                        <div class="reviewImageMain reviewImage squareImage" style="background-image:url('{{ asset('public/img/Profile-Images/' . $user['profileImage']) }}');background-size:cover;background-position:center; border: 1px solid #DDD;"></div>
+                        @else
+                        <div class="reviewImageMain reviewImage squareImage" style="background-image:url('{{ asset('public/img/Profile-Images/Default-User-Profile-Image.png') }}');background-size:cover;background-position:center; border: 1px solid #DDD;"></div>
                         @endif
-                        <p class="card-text">NDA: {{ $user->NDAStatus }}</p>
-                        @if ($user->linkedInURL)
-                            <p></p>
+                    </td>
+                    <td>
+                        <a href="{{ route('user-profile', ['userId' => $user->userId]) }}">
+                            {{ $user->fullName }}
+                        </a>
+                    </td>
+                    <td>
+                            {{ $user->email }}
+                    </td>
+                    <td>
+                        @if($user->phoneNumber)
+                            {{ $user->phoneNumber }}
+                        @else
+                            n/a
                         @endif
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div class="btn-group">
-                                <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-                                <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-                            </div>
-                            <small class="text-muted">9 mins</small>
-                        </div>
-                    </div>
-                </div>
-            </div>
-    @endforeach
+                    </td>
+                    <td>
+                        {{ $user->NDAStatus }}
+                    </td>
+                </tr>
+                @endforeach
+            </tbody>
+            </table>
+        </div>
+        <nav aria-label="...">
+            <ul class="pagination pagination-sm">
+                @if ($offset == 1)
+                    <li class="page-item disabled"><a class="page-link" href="#" tabindex="-1">Previous</a>
+                @else
+                    <li class="page-item"><a class="page-link" href="{{ route('admin-listOfUsers', ['offset' => ($offset - 1), 'limit' => $limit]) }}" tabindex="-1">Previous</a>
+                @endif
+                @for ($i = 1; $i < (($count / $limit) + 1); $i += 1)
+                    @if ($i == $offset)
+                        <li class="page-item active">
+                    @else
+                        <li class="page-item">
+                    @endif
+                    <a class="page-link" href="{{ route('admin-listOfUsers', ['offset' => $i, 'limit' => $limit]) }}">{{ $i }}</a>
+                    </li>
+                @endfor
+                @if (($offset == ((int) ($count / $limit))) || ($limit > $users->count()))
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#">Next</a>
+                    </li>
+                @else
+                    <li class="page-item">
+                        <a class="page-link" href="{{ route('admin-listOfUsers', ['offset' => ($offset + 1), 'limit' => $limit]) }}">Next</a>
+                    </li>
+                @endif
+            </ul>
+        </nav>
+        <nav aria-label="...">
+        <ul class="pagination pagination-sm">
+            @if ($limit == 10)
+                <li class="page-item active">
+            @else
+                <li class="page-item">
+            @endif
+                <a class="page-link" href="{{ route('admin-listOfUsers', ['offset' => $offset, 'limit' => 10]) }}" tabindex="-1">10</a>
+            </li>
+            @if ($limit == 25)
+                <li class="page-item active">
+            @else
+                <li class="page-item">
+            @endif
+                <a class="page-link" href="{{ route('admin-listOfUsers', ['offset' => $offset, 'limit' => 25]) }}">25</a>
+            </li>
+            @if ($limit == 50)
+                <li class="page-item active">
+            @else
+                <li class="page-item">
+            @endif
+                <a class="page-link" href="{{ route('admin-listOfUsers', ['offset' => $offset, 'limit' => 50]) }}">50</a>
+            </li>
+            @if ($limit == ($count * 2))
+                <li class="page-item active">
+            @else
+                <li class="page-item">
+            @endif
+                <a class="page-link" href="{{ route('admin-listOfUsers', ['offset' => $offset, 'limit' => ($count * 2)]) }}">all</a>
+            </li>
+        </ul>
+        </nav>
+    </div>
 @endsection
