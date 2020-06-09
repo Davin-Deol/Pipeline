@@ -369,11 +369,29 @@ class AdminController extends UserController
         }
     }
 
+    /**
+     * This pages displays the summary of every user on the website
+     * 
+     * @return the list of users page
+     */
     public function listOfUsers()
     {
-            $data = array();
-            $data["title"] = "List of Users";
-            return view('admin/listOfUsers', compact('data'));
+        // Prepare data required in all pages
+        $data = array();
+        $data["title"] = "List of Users";
+
+        $users = Users::select('email', 'fullName', 'profileImage', 'NDAStatus'
+            ,'phoneNumber', 'linkedInURL')
+            ->orderBy('creationDate', 'asc')
+            ->limit(1)
+            ->get();
+
+        return view('admin/listOfUsers', compact('data', 'users'));
+    }
+
+    public function getUsers(Request $request)
+    {
+
     }
     
     public function manageWebsite(Request $request)
