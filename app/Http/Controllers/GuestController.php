@@ -156,7 +156,7 @@ class GuestController extends Controller
                 $listOfUsers = new Users();
                 $user = $listOfUsers->findByEmail($data["email"]);
 
-                if (count($user))
+                if ($user)
                 {
                     $listOfLinks = new ResetPasswordLinks();
                     do

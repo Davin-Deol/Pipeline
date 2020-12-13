@@ -39,7 +39,8 @@ class UserController extends Controller
         $this->listingToImages = $listingToImages->all();
         $this->users = $users->all();
         
-        //Auth::user() = Users::find($request->session()->get('userId'));        
+        //Auth::user() = Users::find($request->session()->get('userId'));  
+        $this->user = Auth::user();      
         View::share('user', Auth::user());
     }
     
@@ -76,6 +77,7 @@ class UserController extends Controller
     
     public function browseListings_listingLayout(Request $request)
     {
+        $data = [];
         if ($request->isMethod('post'))
         {
             $searchKey = $request->cookie('searchKey');
@@ -181,6 +183,8 @@ class UserController extends Controller
     {
         $data = array();
         $data['title'] = "Profile";
+        $this->user = Auth::user();
+        $user = Auth::user();
         
         $viewable = false;
 
@@ -231,7 +235,7 @@ class UserController extends Controller
                 'Connections' => Connections::getUsersConnectionsStatistics(Auth::user()->userId),
             );
         }
-        
+        // Flag
         return view('user/profile', compact('user', 'data', 'statistics', 'profileUser'));
     }
     
