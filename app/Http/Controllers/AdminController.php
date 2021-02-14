@@ -215,25 +215,37 @@ class AdminController extends UserController
                 {
                     $data["message"] = nl2br($data["message"]);
                     
-                    if (config('app.debug'))
-                    {
-                        Mail::send('emails.defaultEmail', ['request' => $request, 'data' => $data], function ($m) use ($request)
+                    try {
+                        if (config('app.debug'))
                         {
-                            $m->to('davindeol@gmail.com', 'Davin Deol')->subject("Message From Pipeline Regarding Your Request To Join");
-                        });
-                    }
-                    else
-                    {
-                        Mail::send('emails.defaultEmail', ['request' => $request], function ($m) use ($request)
+                            Mail::send('emails.defaultEmail', ['request' => $request, 'data' => $data], function ($m) use ($request)
+                            {
+                                $m->to($request->email, $request->fullName)->subject("Message From Pipeline Regarding Your Request To Join");
+                            });
+                        }
+                        else
                         {
-                            $m->to($request->email, $request->fullName)->subject("Message From Pipeline Regarding Your Request To Join");
-                        });
-                    }
+                            Mail::send('emails.defaultEmail', ['request' => $request, 'data' => $data], function ($m) use ($request)
+                            {
+                                $m->to($request->email, $request->fullName)->subject("Message From Pipeline Regarding Your Request To Join");
+                            });
+                        }
+    
+                        $request->readStatus = "";
+                        $request->save();
+                        if (count(Mail::failures()) > 0) {
+                            $failures[] = $mail_to_user;
+                            return 'Failed: ' . $mail_to_user;
+                        }
+                        return route('admin-requests');
+                    } catch (Exception $e) {
 
-                    $request->readStatus = "";
-                    $request->save();
+                        if (count(Mail::failures()) > 0) {
+                            $failures[] = $mail_to_user;
+                            return 'Failed: ' . $mail_to_user;
+                        }
+                    }
                     
-                    return route('admin-requests');
                 }
             }
         }

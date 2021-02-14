@@ -183,7 +183,11 @@ class GuestController extends Controller
                         Mail::send('emails.resetPassword', ['guid' => $guid, 'user' => $user], function ($m) use ($user) {
                             $m->to($user->email, $user->fullName)->subject('Reset Pipeline Password');
                         });
+                        return "true";
                     }
+                }
+                else
+                {
                 }
             }
         }

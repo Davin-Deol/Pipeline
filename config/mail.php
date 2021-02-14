@@ -29,7 +29,7 @@ return [
     |
     */
 
-    'host' => env('MAIL_HOST', 'sendmail'),
+    'host' => env('MAIL_HOST', 'smtp.gmail.com'),
 
     /*
     |--------------------------------------------------------------------------
@@ -43,6 +43,7 @@ return [
     */
 
     'port' => env('MAIL_PORT', 587),
+    // 'port' => env('MAIL_PORT', 465),
 
     /*
     |--------------------------------------------------------------------------
@@ -56,8 +57,8 @@ return [
     */
 
     'from' => [
-        'address' => env('MAIL_FROM_ADDRESS', 'dennispetke@pipeline.com'),
-        'name' => env('MAIL_FROM_NAME', 'Dennis Petke'),
+        'address' => env('MAIL_FROM_ADDRESS', 'do_not_reply@pipeline-listings.com'),
+        'name' => env('MAIL_FROM_NAME', 'Pipeline'),
     ],
 
     /*
@@ -84,9 +85,17 @@ return [
     |
     */
 
+    // 'username' => env('MAIL_USERNAME', 'davindeol@gmail.com'),
+
+    // 'password' => env('MAIL_PASSWORD', 'tbhqzfinndjfqknt'),
+
+    // 'username' => env('MAIL_USERNAME', '_mainaccount@pipeline-listings.com'),
+
+    // 'password' => env('MAIL_PASSWORD', '@llianceGrow7'),
+
     'username' => env('MAIL_USERNAME', 'davindeol@gmail.com'),
 
-    'password' => env('MAIL_PASSWORD', 'tbhqzfinndjfqknt'),
+    'password' => env('MAIL_PASSWORD', 'voupkwlpcetuoysb'),
 
     /*
     |--------------------------------------------------------------------------
@@ -119,5 +128,13 @@ return [
             resource_path('views/vendor/mail'),
         ],
     ],
+
+    // 'stream' => [
+    //     'ssl' => [
+    //         'verify_peer' => false,
+    //         'verify_peer_name' => false,
+    //         'allow_self_signed' => true,
+    //     ],
+    // ],
 
 ];
